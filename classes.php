@@ -109,6 +109,7 @@ class Product{
 	public $productDescription;
 	public $unitPrice;//in cents
 	public $unitOfMeasure;
+	public $productType;
 	
 	
 	function __construct($db,$code){
@@ -117,6 +118,27 @@ class Product{
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$code);
 		
+		
+		$result=$query->execute()->fetchAll();
+		
+		if($result==null){
+			
+			$this->productCode=null;
+			$this->productDescription=null;
+			$this->unitPrice=null;//in cents
+			$this->unitOfMeasure=null;
+			$this->productType=null;
+			
+		}
+		
+		
+		$firstResult=$result[0];
+		
+		foreach ($firstResult as $item){
+		
+			//TODO: get data from table
+		
+		}
 		
 	}
 	
