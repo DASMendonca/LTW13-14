@@ -18,7 +18,7 @@ class Customer implements savable{
 	public $permission;
 	
 	
-	function __construct($db,$id){
+	function fetchFromDB($db,$id){
 		
 		$stmt="Select * from customer where customerID=?;";
 		$query=$db->prepare($stmt);
@@ -105,7 +105,7 @@ class Address implements savable{
 	public $country;
 	
 	
-	function __construct($db,$id){
+	function fetchFromDB($db,$id){
 		
 		$stmt= "Select * from Address where AddressID=?;";
 		$query=$db->prepare($stmt);
@@ -186,7 +186,7 @@ class Product implements savable{
 	public $productTypeID;
 	
 	
-	function __construct($db,$code){
+	function fetchFromDB($db,$code){
 		
 		$stmt= "Select * from Product where produuctCode=?";
 		$query=$db->prepare($stmt);
@@ -262,7 +262,7 @@ class ProductType implements savable{
 	public $typeDescription;
 	public $taxID;
 	
-	function __construct($db,$id){
+	function fetchFromDB($db,$id){
 		
 		$stmt= "Select * from ProductType where ProductTypeID=?";
 		$query=$db->prepare($stmt);
@@ -326,7 +326,7 @@ class Tax implements savable{
 	public $taxID;
 	public $value;
 	
-	function __construct($db,$id) {
+	function fetchFromDB($db,$id) {
 		
 		$stmt="Select * from Tax where TaxID=?;";
 		$query=$db->prepare($stmt);
