@@ -7,7 +7,7 @@ interface savable
 	public function saveToDB($db);
 }
 
-class Costumer implements savable{
+class Customer implements savable{
 	
 	public $costumerID;
 	public $costumerTaxID;
