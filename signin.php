@@ -7,9 +7,9 @@ $password = $_GET['password'];
 $db = new PDO('sqlite:./database.sqlite');
 $stmt="SELECT * FROM Customer WHERE Email=? AND Password=?;";
 
-$email= "admin@ois.com";
+/*$email= "admin@ois.com";
 $password= "admin";
-
+*/
 $query=$db->prepare($stmt);
 $query->bindParam(1,$email);
 $query->bindParam(2,$password);
@@ -31,4 +31,7 @@ else{
 	 session_start();
 	   $_SESSION['customer'] = $email;
 	   $_SESSION['pwd'] = $password;
+	   header("Location: onlineInvoiceSystem.html?msg=signedin");
+		die();
 }
+?>
