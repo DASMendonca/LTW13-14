@@ -26,7 +26,7 @@ class Customer implements savable{
 		
 		$result=$query->execute()->fetchAll();
 		
-		if($result==null || $result.count()!=1){
+		if($result==null || count($result)!=1){
 			
 			$this->customerID=null;
 			$this->customerTaxID=null;
@@ -114,7 +114,7 @@ class Address implements savable{
 		$query->execute();
 		$result=$query->fetchAll();
 		
-		if($result==null || $result.count()!=1){
+		if($result==null || count($result)!=1){
 			$this->AddressID=null;
 			$this->detail=null;
 			$this->city=null;
@@ -195,7 +195,7 @@ class Product implements savable{
 		
 		$result=$query->execute()->fetchAll();
 		
-		if($result==null || $result.count()!=1){
+		if($result==null || count($result)!=1){
 			
 			$this->productCode=null;
 			$this->productDescription=null;
@@ -272,7 +272,7 @@ class ProductType implements savable{
 		$query->execute();
 		$result=$query->fetchAll();
 		
-		if($result==null || $result.count()!=1){
+		if($result==null || count($result)!=1){
 				
 			$this->typeID=null;
 			$this->typeDescription=null;
@@ -303,7 +303,7 @@ class ProductType implements savable{
 		
 		
 	}
-	function __saveToDB($db){
+	function saveToDB($db){
 		
 		if($this->typeDescription==null || $this->taxID==null)return;
 		
@@ -320,7 +320,7 @@ class ProductType implements savable{
 }
 
 
-abstract class Tax implements savable{
+class Tax implements savable{
 	
 	
 	public $taxID;
@@ -336,7 +336,7 @@ abstract class Tax implements savable{
 		$result=$query->fetchAll();
 		//TODO: do this separation 
 		
-		if($result==null || result.count()!=1){
+		if($result==null || count($result)!=1){
 			
 			$this->taxID=null;
 			$this->value=null;
