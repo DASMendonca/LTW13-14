@@ -1,11 +1,6 @@
 <!DOCTYPE HTML>
 <?php 
-	session_start(); 
-
-	if(isset($_SESSION['email']) && isset($_SESSION['pwd'])){
-		header("Location: signupform.php");
-		die();
-	}
+	@session_start(); 
 ?>
 
 
@@ -18,6 +13,12 @@
 
 
 	<body>
+		<?php
+			if(isset($_SESSION['email']) && isset($_SESSION['pwd'])){
+		header("Location: signupform.php");
+		die();
+	}
+	?>
 		<form action="signin.php" method="GET">
 			<input type="email" value="email" name="email"><br>
 			<input type="password" value="password" name="password"><br>
