@@ -9,9 +9,9 @@ interface savable
 
 class Customer implements savable{
 	
-	public $costumerID;
-	public $costumerTaxID;
-	public $costumerName;
+	public $customerID;
+	public $customerTaxID;
+	public $customerName;
 	public $addressID;
 	public $email;
 	public $password;
@@ -20,7 +20,7 @@ class Customer implements savable{
 	
 	function __construct($db,$id){
 		
-		$stmt="Select * from Costumer where CostumerID=?;";
+		$stmt="Select * from customer where customerID=?;";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$id);
 		
@@ -28,9 +28,9 @@ class Customer implements savable{
 		
 		if($result==null || $result.count()!=1){
 			
-			$this->costumerID=null;
-			$this->costumerTaxID=null;
-			$this->costumerName=null;
+			$this->customerID=null;
+			$this->customerTaxID=null;
+			$this->customerName=null;
 			$this->address=null;
 			$this->email=null;
 			$this->password=null;
@@ -40,9 +40,9 @@ class Customer implements savable{
 		
 		$result=$result[0];
 		
-		$this->costumerID=$result[0];
-		$this->costumerTaxID=$result[1];
-		$this->costumerName=$result[2];
+		$this->customerID=$result[0];
+		$this->customerTaxID=$result[1];
+		$this->customerName=$result[2];
 		$this->email=$result[3];
 		$this->password=$result[4];
 		$this->permission=$result[5];
@@ -52,11 +52,11 @@ class Customer implements savable{
 	
 	function __construct($TaxID,$Name,$addID,$email,$pw,$permissions){
 		
-		$this->costumerID=null;
-		if($TaxID>=0)$this->costumerTaxID=$TaxID;//TODO: maybe use a validating function later
-		else $this->costumerTaxID=null;
+		$this->customerID=null;
+		if($TaxID>=0)$this->customerTaxID=$TaxID;//TODO: maybe use a validating function later
+		else $this->customerTaxID=null;
 
-		$this->costumerName=$Name;
+		$this->customerName=$Name;
 		
 		if($addID>=0) $this->addressID=$addID;
 		else $this->addressID=null;
@@ -73,14 +73,14 @@ class Customer implements savable{
 	
 	function saveToDB($db){
 		
-		if($this->costumerTaxID==null || $this->costumerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
+		if($this->customerTaxID==null || $this->customerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into Costumer (CostumerTaxID,CostumerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
+		$stmt="Insert into customer (customerTaxID,customerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
-		$query->bindParam(1,$this->costumerTaxID);
-		$query->bindParam(2,$this->costumerName);
+		$query->bindParam(1,$this->customerTaxID);
+		$query->bindParam(2,$this->customerName);
 		$query->bindParam(3,$this->email);
 		$query->bindParam(4,$this->addressID);
 		$query->bindParam(5,$this->password);
@@ -372,5 +372,19 @@ class Tax implements savable{
 		
 	}
 	
+	
+	static function getEntriesConformingTo($taxID,$value){
+		
+		if($taxID!=null && $value!=null){
+			$stmt="Select * from Tax where taxID ";
+			
+			//TODO: continue here
+		}
+		
+		
+		
+	}
 }
+
+
 ?>
