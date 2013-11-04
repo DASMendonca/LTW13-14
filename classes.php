@@ -320,7 +320,7 @@ class ProductType implements savable{
 }
 
 
-class Tax implements savable{
+abstract class Tax implements savable{
 	
 	
 	public $taxID;
