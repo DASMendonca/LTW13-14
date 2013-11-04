@@ -4,8 +4,8 @@ $email = $_GET['email'];
 $password = $_GET['password'];
 
 
-$db = new PDO('sqlite:database.sqlite');
-$stmt="SELECT * FROM Costumer WHERE Email=? AND Password=?;";
+$db = new PDO('sqlite:./database.sqlite');
+$stmt="SELECT * FROM Customer WHERE Email=? AND Password=?;";
 
 $email= "admin@ois.com";
 $password= "admin";
@@ -14,8 +14,8 @@ $query=$db->prepare($stmt);
 $query->bindParam(1,$email);
 $query->bindParam(2,$password);
 
-$result=$query->execute();
-$result=$result->fetchAll();
+$query->execute();
+$result=$query->fetchAll();
 
 if(!$result){
 	?>
