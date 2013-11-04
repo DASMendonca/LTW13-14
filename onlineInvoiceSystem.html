@@ -14,7 +14,7 @@
 
 	<body>
 		<?php
-			if(isset($_SESSION['email']) && isset($_SESSION['pwd'])){
+			if(isset($_SESSION['customer']) && isset($_SESSION['pwd'])){
 		header("Location: signupform.php");
 		die();
 	}

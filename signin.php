@@ -31,7 +31,7 @@ else{
 	 session_start();
 	   $_SESSION['customer'] = $email;
 	   $_SESSION['pwd'] = $password;
-	   header("Location: onlineInvoiceSystem.html?msg=signedin");
+	   header("Location: mainPage.html");
 		die();
 }
 ?>
