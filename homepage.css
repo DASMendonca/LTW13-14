@@ -1,0 +1,36 @@
+body {
+	background-image:url('./pictures/loginBg.jpg');
+	background-repeat:no-repeat;
+	background-size: cover; 
+	}
+
+
+form{
+	width:100%;
+	height:100%;
+	
+}
+
+#formDiv{
+	
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 200px;
+    height: 100px;
+	
+}
+
+input[type=email]{
+	
+	border: 0px solid;
+	
+	width:100%;
+	height:30%;
+	font-size:200%;
+	
+	background: rgba(59, 89, 152, 1);
+	
+}
