@@ -1,6 +1,9 @@
 <?php 
 
 
+class NotFoundException extends Exception {};
+class DBInconsistencyException extends Exception {};
+
 
 interface savable
 {
@@ -26,6 +29,7 @@ class Customer implements savable{
 		
 		$result=$query->execute()->fetchAll();
 		
+
 		if($result==null || count($result)!=1){
 			
 			$this->customerID=null;
@@ -37,15 +41,16 @@ class Customer implements savable{
 			$this->permission=null;
 			return;
 		}
+
+		if($result==null)throw new NotFoundException();
+		else if ($result.count()!=1) throw new DBInconsistencyException();
+
 		
-		$result=$result[0];
 		
-		$this->customerID=$result[0];
-		$this->customerTaxID=$result[1];
-		$this->customerName=$result[2];
-		$this->email=$result[3];
-		$this->password=$result[4];
-		$this->permission=$result[5];
+
+		$this->loadFromResult($result[0]);
+		
+
 		
 		
 	}
@@ -70,6 +75,22 @@ class Customer implements savable{
 		
 	}
 	
+	function __construct($db,$email,$password){
+		
+		$stmt="Select * from Costumer where Email=? AND password=?;";
+		$query=$db->prepare($stmt);
+		$query->bindParam(1,$email);
+		$query->bindParam(2,$password);
+		
+		$result=$query->execute()->fetchAll();
+		
+		if($result==null)throw new NotFoundException();
+		else if ($result.count()!=1) throw new DBInconsistencyException();
+		
+		$this->loadFromResult($result[0]);
+		
+		
+	}
 	
 	function saveToDB($db){
 		
@@ -89,6 +110,16 @@ class Customer implements savable{
 		
 		return $query->execute();
 		
+		
+	}
+	
+	function loadFromResult($result){
+		$this->costumerID=$result[0];
+		$this->costumerTaxID=$result[1];
+		$this->costumerName=$result[2];
+		$this->email=$result[3];
+		$this->password=$result[4];
+		$this->permission=$result[5];
 		
 	}
 	
