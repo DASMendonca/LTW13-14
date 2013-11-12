@@ -1,36 +1,21 @@
-body {
-	background-image:url('./pictures/loginBg.jpg');
-	background-repeat:no-repeat;
-	background-size: cover; 
-	}
 
-
-form{
-	width:100%;
-	height:100%;
-	
+html {
+	background-image:url('image.png');
+	background-repeat: repeat-y;
+	background-color:#000;
+	margin-left: auto;
+    margin-right: auto;
+    width: 40em
 }
 
-#formDiv{
-	
-	position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -50px;
-    width: 200px;
-    height: 100px;
-	
+body{
+	margin-left:250px;
+	margin-top:350px;	
 }
 
-input[type=email]{
-	
-	border: 0px solid;
-	
-	width:100%;
-	height:30%;
-	font-size:200%;
-	
-	background: rgba(59, 89, 152, 1);
-	
+h1{
+    font-size: 30px;
+	color: RED;
+	font-family:"Cooper Black";
+	margin-left:20px;	
 }
