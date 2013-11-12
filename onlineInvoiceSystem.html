@@ -8,7 +8,9 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="homepage.css">
-		<title>Online Invoice System</title>		
+		<title>Online Invoice System</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+		<script type="text/javascript" src='login.js'></script>		
 	</head>
 
 
@@ -22,12 +24,12 @@
 
 		
 		<div id="formDiv">
-		<form action="signin.php" method="GET">
+		<form action="signin.php" method="GET" id="loginForm">
 			<h1>LOGIN: </h1>
 
-			<input type="email" value="email" name="email"><br>
-			<input type="password" value="password" name="password"><br>
-			<input type="submit" value="Sign In">
+			<input type="email" value="email" name="email" id="emailInput"><br>
+			<input type="password" value="password" name="password" id="pwInput"><br>
+			<input type="button" value="Sign In" id="SignInButton">
 			<input type="button" value="Sign Up"/>
 		</form>
 		</div>

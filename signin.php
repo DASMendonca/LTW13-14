@@ -1,37 +1,31 @@
 <?php
 
+include 'classes.php';
+
 $email = $_GET['email'];
 $password = $_GET['password'];
 
 
 $db = new PDO('sqlite:./database.sqlite');
 $stmt="SELECT * FROM Customer WHERE Email=? AND Password=?;";
+$costumer= Customer::fromDB_Email_Pw($db, $email, $password);
 
-/*$email= "admin@ois.com";
-$password= "admin";
-*/
-$query=$db->prepare($stmt);
-$query->bindParam(1,$email);
-$query->bindParam(2,$password);
+try {
+	$costumer= Customer::fromDB_Email_Pw($db, $email, $password);
+	session_start();
+	$_SESSION['costumer']= $costumer;
+	header("Location: mainPage.html");
+	die();
+} 
+catch (NotFoundException $e) {//case where there is no such a user
 
-$query->execute();
-$result=$query->fetchAll();
 
-if(!$result){
-	?>
-	<script type="text/javascript">
-		function(){
-			alert("Wrong User and/or Password");
-		}
-	</script>
-	<?php
+}
+catch (DBInconsistencyException $e) {//case where ther 
 }
 
-else{
-	 session_start();
-	   $_SESSION['customer'] = $email;
-	   $_SESSION['pwd'] = $password;
-	   header("Location: mainPage.html");
-		die();
-}
+
+
+
+
 ?>

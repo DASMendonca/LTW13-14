@@ -21,7 +21,7 @@ class Customer implements savable{
 	public $permission;
 	
 	
-	function fetchFromDB($db,$id){
+	static function fromDB_ID($db,$id){
 		
 		$stmt="Select * from customer where customerID=?;";
 		$query=$db->prepare($stmt);
@@ -67,7 +67,7 @@ class Customer implements savable{
 		else $this->addressID=null;
 		
 		$this->email=$email;
-		$this->password=pw;
+		$this->password=$pw;
 		$this->permission=$permissions;//TODO: maybe validate these permissions
 		
 		
@@ -75,19 +75,24 @@ class Customer implements savable{
 		
 	}
 	
-	function __construct($db,$email,$password){
+	static function fromDB_Email_Pw($db,$email,$password){
 		
-		$stmt="Select * from Costumer where Email=? AND password=?;";
+		$obj=new Customer(null,null,null,null,null,null);
+		
+		$stmt="Select * from Customer where Email=? AND password=?;";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$email);
 		$query->bindParam(2,$password);
 		
-		$result=$query->execute()->fetchAll();
+		$query->execute();
+		$result=$query->fetchAll();
 		
 		if($result==null)throw new NotFoundException();
-		else if ($result.count()!=1) throw new DBInconsistencyException();
+		else if (count($result)!=1) throw new DBInconsistencyException();
 		
-		$this->loadFromResult($result[0]);
+		$obj->loadFromResult($result[0]);
+		
+		return $obj;
 		
 		
 	}
@@ -114,12 +119,13 @@ class Customer implements savable{
 	}
 	
 	function loadFromResult($result){
-		$this->costumerID=$result[0];
-		$this->costumerTaxID=$result[1];
-		$this->costumerName=$result[2];
+		$this->customerID=$result[0];
+		$this->customerTaxID=$result[1];
+		$this->customerName=$result[2];
 		$this->email=$result[3];
-		$this->password=$result[4];
-		$this->permission=$result[5];
+		$this->addressID=$result[4];
+		$this->password=$result[5];
+		$this->permission=$result[6];
 		
 	}
 	
@@ -136,7 +142,7 @@ class Address implements savable{
 	public $country;
 	
 	
-	function fetchFromDB($db,$id){
+	function fromDB_ID($db,$id){
 		
 		$stmt= "Select * from Address where AddressID=?;";
 		$query=$db->prepare($stmt);
@@ -217,7 +223,7 @@ class Product implements savable{
 	public $productTypeID;
 	
 	
-	function fetchFromDB($db,$code){
+	function fromDB_ID($db,$code){
 		
 		$stmt= "Select * from Product where produuctCode=?";
 		$query=$db->prepare($stmt);
@@ -293,7 +299,7 @@ class ProductType implements savable{
 	public $typeDescription;
 	public $taxID;
 	
-	function fetchFromDB($db,$id){
+	function fromDB_ID($db,$id){
 		
 		$stmt= "Select * from ProductType where ProductTypeID=?";
 		$query=$db->prepare($stmt);
@@ -357,7 +363,7 @@ class Tax implements savable{
 	public $taxID;
 	public $value;
 	
-	function fetchFromDB($db,$id) {
+	function fromDB_ID($db,$id) {
 		
 		$stmt="Select * from Tax where TaxID=?;";
 		$query=$db->prepare($stmt);
