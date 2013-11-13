@@ -8,6 +8,7 @@ class DBInconsistencyException extends Exception {};
 interface savable
 {
 	public function saveToDB($db);
+	static public function getInstancesByFields($db,$fields);
 }
 
 class Customer implements savable{
@@ -118,6 +119,11 @@ class Customer implements savable{
 		
 	}
 	
+	
+	static public function getInstancesByFields($db,$fields){
+		
+	}
+	
 	function loadFromResult($result){
 		$this->customerID=$result[0];
 		$this->customerTaxID=$result[1];
@@ -211,6 +217,8 @@ class Address implements savable{
 		
 		
 	}
+
+	static public function getInstancesByFields($db,$fields){}
 }
 
 
@@ -291,8 +299,10 @@ class Product implements savable{
 		}
 		
 	}
-}
 
+	static public function getInstancesByFields($db,$fields){}
+}
+	
 class ProductType implements savable{
 	
 	public $typeID;
@@ -353,7 +363,7 @@ class ProductType implements savable{
 		
 	}
 	
-	
+	static public function getInstancesByFields($db,$fields){}
 }
 
 
@@ -362,36 +372,16 @@ class Tax implements savable{
 	
 	public $taxID;
 	public $value;
-	
-	function fromDB_ID($db,$id) {
-		
-		$stmt="Select * from Tax where TaxID=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
-		
-		$query->execute();
-		$result=$query->fetchAll();
-		//TODO: do this separation 
-		
-		if($result==null || count($result)!=1){
-			
-			$this->taxID=null;
-			$this->value=null;
-			return;
-		}
-		
-		$result=$result[0];//set result as only the first row
-		
-		$this->taxID=$result[0];
-		$this->value=$result[1];
-	}
+	public $description;
 	
 	
-	function __construct($value){
+	function __construct($value,$description){
 		
 		$this->taxID=null;
 		if($value>=0)$this->value=$value;
 		else $this->value=null;
+		$this->description=$description;
+		
 
 		
 	}
@@ -399,9 +389,10 @@ class Tax implements savable{
 	function saveToDB($db){
 		
 		if($this->value==null)return;//dont do nothing if it's not a valid tax
-		$stmt="Insert into Tax (TaxValue) Values(?);";
+		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->value);
+		$query->bindParam(2,$this->description);
 		
 		return $query->execute();
 		
@@ -410,18 +401,66 @@ class Tax implements savable{
 	}
 	
 	
-	static function getEntriesConformingTo($taxID,$value){
+
+
+	static public function getInstancesByFields($db,$fields){
 		
-		if($taxID!=null && $value!=null){
-			$stmt="Select * from Tax where taxID ";
-			
-			//TODO: continue here
-		}
+		$id=$fields["taxID"];
+		$value=$fields["value"];
+		
+		$params=array(
+			array("taxID",$fields["taxID"]),
+			array("value",$fields["value"])
+		);
+		
+		$query=constructSelect("Tax", $param,$db);
 		
 		
 		
 	}
 }
 
+
+function constructSelect($tableName,$parameters,$db){
+	
+	$stmt="Select * from $tableName";
+	
+	if($parameters==NULL || count($parameters)==0){
+		$query=$db->prepare($stmt.';');
+		return $query;
+	}
+	
+	$goodParams=array();
+	$pos=0;
+	foreach ($parameters as $elem){
+		if($elem[1]!=NULL){
+			$goodParams[$pos]=$elem; //if not empty add
+			$pos++;
+		}
+	}
+	
+	
+		$stmt.=" WHERE " ;
+		for($i=0;$i<count($goodParams)-1;$i++){//for everyone but the last
+			$elem=$goodParams[$i];
+			$stmt.=" $elem[0] = ? AND";
+		}
+		
+		$value=$goodParams[$i][0];
+		$stmt.=" $value = ?;";
+		$query=$db->prepare($stmt);
+		$place=1;
+		
+		for($i=0;$i<count($goodParams);$i++){
+			;
+			$query->bindParam($place,$goodParams[$i][1]);
+			$place++;
+		}
+
+		
+		$finished=$query->queryString;
+		
+	return $query;
+}
 
 ?>
