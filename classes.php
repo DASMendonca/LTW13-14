@@ -363,7 +363,10 @@ class ProductType implements savable{
 		
 	}
 	
-	static public function getInstancesByFields($db,$fields){}
+	static public function getInstancesByFields($db,$fields){
+		
+		
+	}
 }
 
 
@@ -375,9 +378,9 @@ class Tax implements savable{
 	public $description;
 	
 	
-	function __construct($value,$description){
+	function __construct($id,$value,$description){
 		
-		$this->taxID=null;
+		$this->taxID=$id;
 		if($value>=0)$this->value=$value;
 		else $this->value=null;
 		$this->description=$description;
@@ -409,11 +412,22 @@ class Tax implements savable{
 		$value=$fields["value"];
 		
 		$params=array(
-			array("taxID",$fields["taxID"]),
-			array("value",$fields["value"])
+			array("TaxID",$fields["TaxID"]),
+			array("TaxValue",$fields["TaxValue"])
 		);
 		
-		$query=constructSelect("Tax", $param,$db);
+		$query=constructSelect("Tax", $params,$db);
+		$query->execute();
+		$result=$query->fetchAll();
+		
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Tax($entry["TaxID"],$entry["TaxValue"],$entry["Description"]);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
 		
 		
 		
@@ -439,6 +453,10 @@ function constructSelect($tableName,$parameters,$db){
 		}
 	}
 	
+	if($goodParams==NULL || count($goodParams)==0){
+		$query=$db->prepare($stmt.';');
+		return $query;
+	}
 	
 		$stmt.=" WHERE " ;
 		for($i=0;$i<count($goodParams)-1;$i++){//for everyone but the last
