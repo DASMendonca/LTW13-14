@@ -148,43 +148,12 @@ class Address implements savable{
 	public $country;
 	
 	
-	function fromDB_ID($db,$id){
-		
-		$stmt= "Select * from Address where AddressID=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
-		
-		$query->execute();
-		$result=$query->fetchAll();
-		
-		if($result==null || count($result)!=1){
-			$this->AddressID=null;
-			$this->detail=null;
-			$this->city=null;
-			$this->postalCode1=null;
-			$this->postalCode2=null;
-			$this->country=null;
-			return;
-			
-		}
-		
-		$result=$result[0];
-		
-		//load data
-		$this->AddressID=$result[0];
-		$this->detail=$result[1];
-		$this->city=$result[2];
-		$this->postalCode1=$result[3];
-		$this->postalCode2=$result[4];
-		$this->country=$result[5];
-		
-		
-	}
+	
 
 	
-	function __construct($det,$theCity,$zip1,$zip2,$theCountry){
+	function __construct($id,$det,$theCity,$zip1,$zip2,$theCountry){
 		
-		$this->AddressID=null;
+		$this->AddressID=$id;
 		$this->detail=$det;
 		$this->city=$theCity;
 		
