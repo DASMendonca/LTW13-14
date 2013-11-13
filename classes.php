@@ -230,45 +230,9 @@ class Product implements savable{
 	public $unitOfMeasure;
 	public $productTypeID;
 	
-	
-	function fromDB_ID($db,$code){
+	function __construct($code,$descrip,$price,$unit,$typeID){
 		
-		$stmt= "Select * from Product where produuctCode=?";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$code);
-		
-		
-		$result=$query->execute()->fetchAll();
-		
-		if($result==null || count($result)!=1){
-			
-			$this->productCode=null;
-			$this->productDescription=null;
-			$this->unitPrice=null;//in cents
-			$this->unitOfMeasure=null;
-			$this->productTypeID=null;
-			
-		}
-		
-		
-		$result=$result[0];
-		
-		
-		$this->productCode=$result[0];
-		$this->productDescription=$result[1];
-		$this->unitPrice=$result[2];
-		$this->unitOfMeasure=$result[3];
-		$this->productTypeID=$result[4];
-		
-		
-		
-		
-	}
-
-	
-	function __construct($descrip,$price,$unit,$typeID){
-		
-		$this->productCode=null;
+		$this->productCode=$code;
 		$this->productDescription=$descrip;
 		
 		if($price>=0)$this->unitPrice=$price;
@@ -300,7 +264,32 @@ class Product implements savable{
 		
 	}
 
-	static public function getInstancesByFields($db,$fields){}
+	static public function getInstancesByFields($db,$fields){
+		
+		
+		$params=array(
+			array("ProductCode",$fields["ProductCode"]),
+			array("ProductDescription",$fields["ProductDescription"]),
+			array("UnitOfMeasure",$fields["UnitOfMeasure"]),
+			array("UnitPrice",$fields["UnitPrice"]),
+			array("ProductTypeID",$fields["ProductTypeID"])		
+		);
+		
+		$query=constructSelect("Product", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
+			$instances[$i]=$instance;
+			
+		}
+		
+		return $instances;
+		
+	}
 }
 	
 class ProductType implements savable{
@@ -309,34 +298,9 @@ class ProductType implements savable{
 	public $typeDescription;
 	public $taxID;
 	
-	function fromDB_ID($db,$id){
-		
-		$stmt= "Select * from ProductType where ProductTypeID=?";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
 		
 		
-		$query->execute();
-		$result=$query->fetchAll();
-		
-		if($result==null || count($result)!=1){
-				
-			$this->typeID=null;
-			$this->typeDescription=null;
-			$this->taxID=null;
-				
-		}
-		
-		
-		$result=$result[0];
-		
-		$this->typeID=$result[0];
-		$this->typeDescription=$result[1];
-		$this->taxID=$result[2];
-		
-		
-		
-	}
+	
 	function __construct($typeID, $typeDescription,$theTaxID){
 		
 		$this->typeID=$typeID;
