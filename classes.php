@@ -337,19 +337,13 @@ class ProductType implements savable{
 		
 		
 	}
-	function __construct($name,$theTaxID){
+	function __construct($typeID, $typeDescription,$theTaxID){
 		
-		$this->typeID=null;
-		$this->typeDescription=$name;
-		$this->taxID=$theTaxID;
-		
-		
-		
-		
-		
-		
-		
+		$this->typeID=$typeID;
+		$this->typeDescription=$typeDescription;
+		$this->taxID=$theTaxID;		
 	}
+	
 	function saveToDB($db){
 		
 		if($this->typeDescription==null || $this->taxID==null)return;
@@ -365,7 +359,24 @@ class ProductType implements savable{
 	
 	static public function getInstancesByFields($db,$fields){
 		
+		$params=array(
+				array("ProductTypeID",$fields["ProductTypeID"]),
+				array("ProductTypeDescription",$fields["ProducTypeDescription"]),
+				array("TaxID", $fields["TaxID"])
+		);
 		
+		$query=constructSelect("ProductType", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new ProductType($entry["ProductTypeID"],$entry["ProductTypeDescription"],$entry["TaxID"]);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
 	}
 }
 
@@ -381,7 +392,7 @@ class Tax implements savable{
 	function __construct($id,$value,$description){
 		
 		$this->taxID=$id;
-		if($value>=0)$this->value=$value;
+		if($value>=0) $this->value=$value;
 		else $this->value=null;
 		$this->description=$description;
 		
@@ -398,9 +409,6 @@ class Tax implements savable{
 		$query->bindParam(2,$this->description);
 		
 		return $query->execute();
-		
-	
-		
 	}
 	
 	
@@ -416,7 +424,7 @@ class Tax implements savable{
 			array("Description", $fields["Description"])
 		);
 		
-		$query=constructSelect("Tax", $params,$db);
+		$query=constructSelect("Tax", $params, $db);
 		$query->execute();
 		$result=$query->fetchAll();
 		
