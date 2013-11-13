@@ -408,12 +408,12 @@ class Tax implements savable{
 
 	static public function getInstancesByFields($db,$fields){
 		
-		$id=$fields["taxID"];
-		$value=$fields["value"];
+		
 		
 		$params=array(
 			array("TaxID",$fields["TaxID"]),
-			array("TaxValue",$fields["TaxValue"])
+			array("TaxValue",$fields["TaxValue"]),
+			array("Description", $fields["Description"])
 		);
 		
 		$query=constructSelect("Tax", $params,$db);
