@@ -21,13 +21,13 @@
 	<div id="topmenu">
 		<ul>
 			<?php
-				if(!isset($_SESSION['customer']) && !isset($_SESSION['pwd'])){
+				if(!isset($_SESSION['customer']) ){
 			?> 
 			<li>Login:</li>
 			<li>
 				<form action="signin.php" method="GET" id="loginForm">
-					<input type="email" placeholder="email" name="emailInput" id="emailInput"> 
-					<input type="password" placeholder="password" name="pwInput" id="pwInput"> 
+					<input type="email" placeholder="email" name="Email" id="emailInput"> 
+					<input type="password" placeholder="password" name="Password" id="pwInput"> 
 					<input type="button" action="signin.php" value="Sign In" id="SignInButton">
 				</form>
 			</li>
@@ -36,7 +36,7 @@
 				}
 			?>
 			<li>Products</li>
-			<?php if(isset($_SESSION['customer']) && isset($_SESSION['pwd'])){
+			<?php if(isset($_SESSION['customer']) ){
 			?>
 			<li>Invoices</li>
 			<li>Clients</li>

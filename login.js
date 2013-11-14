@@ -18,7 +18,7 @@ function askIfLoginIsOk(){
 	$.ajax({
         url : "loginAjax.php",
         dataType : "json",
-        data : {"email":email,"password":pw},
+        data : {"Email":email,"Password":pw},
         success : function(data){
            if($.isEmptyObject(data))alert("Invalid user and/or password.");
            else $('#loginForm').submit();

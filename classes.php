@@ -3,6 +3,9 @@
 
 class NotFoundException extends Exception {};
 class DBInconsistencyException extends Exception {};
+class BadParameterException extends Exception {};
+class BadOpException extends Exception {};
+class BadNumberArgsException extends Exception {};
 
 
 interface savable
@@ -65,17 +68,16 @@ class Customer implements savable{
 	
 	static public function getInstancesByFields($db,$fields){
 		
+		$i=0;
+		$params=array();
+		if(isset($fields["CustomerID"])) $params[$i]=array("CustomerID",$fields["CustomerID"]);
+		if(isset($fields["CustomerTaxID"])) $params[$i++]=array("CustomerTaxID",$fields["CustomerTaxID"]);
+		if(isset($fields["CustomerName"])) $params[$i++]=array("CustomerName",$fields["CustomerName"]);
+		if(isset($fields["Email"])) $params[$i++]=array("Email",$fields["Email"]);
+		if(isset($fields["AddressID"])) $params[$i++]=array("AddressID",$fields["AddressID"]);
+		if(isset($fields["Password"])) $params[$i++]=array("Password",$fields["Password"]);
+		if(isset($fields["Permission"])) $params[$i++]=array("Permission",$fields["Permission"]);			
 		
-		$params=array(
-			array("CustomerID",$fields["CustomerID"]),
-			array("CustomerTaxID",$fields["CustomerTaxID"]),
-			array("CustomerName",$fields["CustomerName"]),
-			array("Email",$fields["Email"]),
-			array("AddressID",$fields["AddressID"]),
-			array("Password",$fields["Password"]),
-			array("Permission",$fields["Permission"])	
-						
-		);
 		
 		$query=constructSelect("Customer", $params, $db);
 		$query->execute();
@@ -277,6 +279,16 @@ class ProductType implements savable{
 				array("TaxID", $fields["TaxID"])
 		);
 		
+		
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"ProductTypeID")==0 || strcmp($entry[0],"ProductTypeDescription")==0 || strcmp($entry[0],"TaxID")==0)array_push($params, $entry);
+			else throw new BadParameterException();
+		}
+		
 		$query=constructSelect("ProductType", $params, $db);
 		$query->execute();
 		$result=$query->fetchAll();
@@ -311,7 +323,6 @@ class Tax implements savable{
 
 		
 	}
-	
 	function saveToDB($db){
 		
 		if($this->value==null)return;//dont do nothing if it's not a valid tax
@@ -322,19 +333,17 @@ class Tax implements savable{
 		
 		return $query->execute();
 	}
-	
-	
-
-
 	static public function getInstancesByFields($db,$fields){
 		
 		
+		$params=array();
 		
-		$params=array(
-			array("TaxID",$fields["TaxID"]),
-			array("TaxValue",$fields["TaxValue"]),
-			array("Description", $fields["Description"])
-		);
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"Description")==0)array_push($params, $entry);
+			else throw new BadParameterException();		
+		}
 		
 		$query=constructSelect("Tax", $params, $db);
 		$query->execute();
@@ -360,10 +369,23 @@ function getConditionStr($entry){
 	$op=$entry[2];
 	$fieldName=$entry[0];
 	
-	if($op=="equal")return $fieldName." = ? ";
-	else if($op=="max")return $fieldName." <= ? ";
-	else if($op=="min")return $fieldName." >= ? ";
-	else if($op=="range")return $fieldName." >= ? AND ".$fieldName." <= ? ";
+	if($op=="equal"){
+		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		return $fieldName." = ? ";	
+	}
+	else if($op=="max"){
+		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		return $fieldName." <= ? ";
+	}
+	else if($op=="min"){
+		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		return $fieldName." >= ? ";
+	}
+	else if($op=="range"){
+		if(count($entry[1])!=2)throw new BadNumberArgsException();
+		return $fieldName." BETWEEN ? AND ? ";
+	}
+	else throw new BadOpException();
 	
 	
 	
@@ -379,39 +401,34 @@ function constructSelect($tableName,$parameters,$db){
 		return $query;
 	}
 	
-	$goodParams=array();
-	$pos=0;
-	foreach ($parameters as $elem){
-		if($elem[1]!=NULL){
-			$goodParams[$pos]=$elem; //if not empty add
-			$pos++;
-		}
-	}
+
 	
-	if($goodParams==NULL || count($goodParams)==0){
-		$query=$db->prepare($stmt.';');
-		return $query;
+	$stmt.=" WHERE " ;
+	for($i=0;$i<count($parameters)-1;$i++){//for everyone but the last
+		$cond=getConditionStr($parameters[$i]);
+		$elem=$parameters[$i];
+		$stmt.=" $cond AND ";
 	}
-	
-		$stmt.=" WHERE " ;
-		for($i=0;$i<count($goodParams)-1;$i++){//for everyone but the last
-			$elem=$goodParams[$i];
-			$stmt.=" $elem[0] = ? AND";
-		}
 		
-		$value=$goodParams[$i][0];
-		$stmt.=" $value = ?;";
-		$query=$db->prepare($stmt);
-		$place=1;
+	$stmt.=getConditionStr($parameters[$i]);
+	$query=$db->prepare($stmt);
+	$place=1;
 		
-		for($i=0;$i<count($goodParams);$i++){
-			;
-			$query->bindParam($place,$goodParams[$i][1]);
+	for($i=0;$i<count($parameters);$i++){
+		
+		$entry=$parameters[$i];
+		$query->bindParam($place,$entry[1][0]);
+		$place++;
+		
+		if($entry[2]=="range"){
+			$query->bindParam($place,$entry[1][1]);
 			$place++;
-		}
+		} 
+		
+	}
 
 		
-		$finished=$query->queryString;
+	$finished=$query->queryString;
 		
 	return $query;
 }

@@ -2,31 +2,24 @@
 
 include 'classes.php';
 
-$email = $_REQUEST['emailInput'];
-$password = $_REQUEST['pwInput'];
+$email = $_REQUEST['Email'];
+$password = $_REQUEST['Password'];
 
 
 $db = new PDO('sqlite:./database.sqlite');
 $stmt="SELECT * FROM Customer WHERE Email=? AND Password=?;";
-$costumer= Customer::fromDB_Email_Pw($db, $email, $password);
+$costumers= Customer::getInstancesByFields($db,$_REQUEST);
 
-session_start();
-$_SESSION['customer']= $email;
-$_SESSION['pwd']= $password;
 
-try {
-	$costumer= Customer::fromDB_Email_Pw($db, $email, $password);
+if(count($costumers)==1){
 	session_start();
-	$_SESSION['costumer']= $costumer;
-	header("Location: onlineInvoiceSystem.php");
-	die();
-} 
-catch (NotFoundException $e) {//case where there is no such a user
+	$_SESSION['customer']= $costumers[0];
+	
+}
+
+header("Location: onlineInvoiceSystem.php");
 
 
-}
-catch (DBInconsistencyException $e) {//case where ther 
-}
 
 
 
