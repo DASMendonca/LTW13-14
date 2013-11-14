@@ -160,7 +160,7 @@ class Address implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0)array_push($params, $entry);
+			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City") || strcmp($entry[0],"PostalCode1") || strcmp($entry[0],"PostalCode2") || strcmp($entry[0],"Country")==0)array_push($params, $entry);
 			else throw new BadParameterException();
 		}
 		
