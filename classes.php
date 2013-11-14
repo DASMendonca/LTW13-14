@@ -155,6 +155,14 @@ class Address implements savable{
 				array("Country",$fields["Country"])
 		
 		);
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0)array_push($params, $entry);
+			else throw new BadParameterException();
+		}
 		
 		$query=constructSelect("Address", $params, $db);
 		$query->execute();
@@ -225,6 +233,17 @@ class Product implements savable{
 			array("ProductTypeID",$fields["ProductTypeID"])		
 		);
 		
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"ProductCode")==0 || strcmp($entry[0],"ProductDescription")==0 || strcmp($entry[0],"UnitOfMeasure")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"ProductTypeID")==0)array_push($params, $entry);
+			else throw new BadParameterException();
+		}
+		
+		
+		
 		$query=constructSelect("Product", $params, $db);
 		$query->execute();
 		$result=$query->fetchAll();
@@ -272,12 +291,6 @@ class ProductType implements savable{
 	}
 	
 	static public function getInstancesByFields($db,$fields){
-		
-		$params=array(
-				array("ProductTypeID",$fields["ProductTypeID"]),
-				array("ProductTypeDescription",$fields["ProducTypeDescription"]),
-				array("TaxID", $fields["TaxID"])
-		);
 		
 		
 		$params=array();
