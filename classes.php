@@ -22,43 +22,9 @@ class Customer implements savable{
 	public $permission;
 	
 	
-	static function fromDB_ID($db,$id){
+	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions){
 		
-		$stmt="Select * from customer where customerID=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
-		
-		$result=$query->execute()->fetchAll();
-		
-
-		if($result==null || count($result)!=1){
-			
-			$this->customerID=null;
-			$this->customerTaxID=null;
-			$this->customerName=null;
-			$this->address=null;
-			$this->email=null;
-			$this->password=null;
-			$this->permission=null;
-			return;
-		}
-
-		if($result==null)throw new NotFoundException();
-		else if ($result.count()!=1) throw new DBInconsistencyException();
-
-		
-		
-
-		$this->loadFromResult($result[0]);
-		
-
-		
-		
-	}
-	
-	function __construct($TaxID,$Name,$addID,$email,$pw,$permissions){
-		
-		$this->customerID=null;
+		$this->customerID=$ID;
 		if($TaxID>=0)$this->customerTaxID=$TaxID;//TODO: maybe use a validating function later
 		else $this->customerTaxID=null;
 
@@ -75,29 +41,6 @@ class Customer implements savable{
 		
 		
 	}
-	
-	static function fromDB_Email_Pw($db,$email,$password){
-		
-		$obj=new Customer(null,null,null,null,null,null);
-		
-		$stmt="Select * from Customer where Email=? AND password=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$email);
-		$query->bindParam(2,$password);
-		
-		$query->execute();
-		$result=$query->fetchAll();
-		
-		if($result==null)throw new NotFoundException();
-		else if (count($result)!=1) throw new DBInconsistencyException();
-		
-		$obj->loadFromResult($result[0]);
-		
-		return $obj;
-		
-		
-	}
-	
 	function saveToDB($db){
 		
 		if($this->customerTaxID==null || $this->customerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
@@ -122,17 +65,29 @@ class Customer implements savable{
 	
 	static public function getInstancesByFields($db,$fields){
 		
-	}
-	
-	function loadFromResult($result){
-		$this->customerID=$result[0];
-		$this->customerTaxID=$result[1];
-		$this->customerName=$result[2];
-		$this->email=$result[3];
-		$this->addressID=$result[4];
-		$this->password=$result[5];
-		$this->permission=$result[6];
 		
+		$params=array(
+			array("CustomerID",$fields["CustomerID"]),
+			array("CustomerTaxID",$fields["CustomerTaxID"]),
+			array("CustomerName",$fields["CustomerName"]),
+			array("Email",$fields["Email"]),
+			array("AddressID",$fields["AddressID"]),
+			array("Password",$fields["Password"]),
+			array("Permission",$fields["Permission"])	
+						
+		);
+		
+		$query=constructSelect("Customer", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"]);
+			$instances[$i]=$instance;
+		}
+
+		return $instances;
 	}
 	
 }
@@ -187,7 +142,31 @@ class Address implements savable{
 		
 	}
 
-	static public function getInstancesByFields($db,$fields){}
+	static public function getInstancesByFields($db,$fields){
+		
+		$params=array(
+				array("AddressID",$fields["AddressID"]),
+				array("AddressDetail",$fields["AddressDetail"]),
+				array("City",$fields["City"]),
+				array("PostalCode1",$fields["PostalCode1"]),
+				array("PostalCode2",$fields["PostalCode2"]),
+				array("Country",$fields["Country"])
+		
+		);
+		
+		$query=constructSelect("Address", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Address($entry["AddressID"], $entry["AddressDetail"], $entry["City"], $entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+		
+	}
 }
 
 
@@ -375,6 +354,21 @@ class Tax implements savable{
 	}
 }
 
+
+function getConditionStr($entry){
+	
+	$op=$entry[2];
+	$fieldName=$entry[0];
+	
+	if($op=="equal")return $fieldName." = ? ";
+	else if($op=="max")return $fieldName." <= ? ";
+	else if($op=="min")return $fieldName." >= ? ";
+	else if($op=="range")return $fieldName." >= ? AND ".$fieldName." <= ? ";
+	
+	
+	
+	
+}
 
 function constructSelect($tableName,$parameters,$db){
 	

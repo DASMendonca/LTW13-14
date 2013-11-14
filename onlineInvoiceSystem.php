@@ -21,7 +21,7 @@
 	<div id="topmenu">
 		<ul>
 			<?php
-				/*if(!isset($_SESSION['customer']) && isset($_SESSION['pwd'])){*/ 
+				if(!isset($_SESSION['customer']) && !isset($_SESSION['pwd'])){
 			?> 
 			<li>Login:</li>
 			<li>
@@ -32,8 +32,8 @@
 				</form>
 			</li>
 			<?php
-				/*die();
-				}*/
+				die();
+				}
 			?>
 			<li>Products</li>
 			<?php if(isset($_SESSION['customer']) && isset($_SESSION['pwd'])){
