@@ -68,15 +68,6 @@ class Customer implements savable{
 	
 	static public function getInstancesByFields($db,$fields){
 		
-		$i=0;
-		$params=array();
-		if(isset($fields["CustomerID"])) $params[$i]=array("CustomerID",$fields["CustomerID"]);
-		if(isset($fields["CustomerTaxID"])) $params[$i++]=array("CustomerTaxID",$fields["CustomerTaxID"]);
-		if(isset($fields["CustomerName"])) $params[$i++]=array("CustomerName",$fields["CustomerName"]);
-		if(isset($fields["Email"])) $params[$i++]=array("Email",$fields["Email"]);
-		if(isset($fields["AddressID"])) $params[$i++]=array("AddressID",$fields["AddressID"]);
-		if(isset($fields["Password"])) $params[$i++]=array("Password",$fields["Password"]);
-		if(isset($fields["Permission"])) $params[$i++]=array("Permission",$fields["Permission"]);
 
 		$params=array();
 		
@@ -160,15 +151,6 @@ class Address implements savable{
 
 	static public function getInstancesByFields($db,$fields){
 		
-		$params=array(
-				array("AddressID",$fields["AddressID"]),
-				array("AddressDetail",$fields["AddressDetail"]),
-				array("City",$fields["City"]),
-				array("PostalCode1",$fields["PostalCode1"]),
-				array("PostalCode2",$fields["PostalCode2"]),
-				array("Country",$fields["Country"])
-		
-		);
 		$params=array();
 		
 		
@@ -238,14 +220,6 @@ class Product implements savable{
 
 	static public function getInstancesByFields($db,$fields){
 		
-		
-		$params=array(
-			array("ProductCode",$fields["ProductCode"]),
-			array("ProductDescription",$fields["ProductDescription"]),
-			array("UnitOfMeasure",$fields["UnitOfMeasure"]),
-			array("UnitPrice",$fields["UnitPrice"]),
-			array("ProductTypeID",$fields["ProductTypeID"])		
-		);
 		
 		$params=array();
 		
