@@ -1,13 +1,11 @@
 
 $(document).ready(function() {
-// inicio uma requisição
+// inicio uma requisiÔøΩ‚Äπo
 	$("#SignInButton").click(
 			function(){
 				askIfLoginIsOk();	
 			}
-	
 	);
-    
 });
 
 
@@ -46,4 +44,13 @@ function askIfLoginIsOk(){
         }
     });//termina o ajax
 	
+}
+
+
+
+function loggedIn(){	
+	$(document).ready(function() {
+		// inicio uma requisiÔøΩ‚Äπo
+		$(".logged").css('visibility', 'visible');
+		});
 }
