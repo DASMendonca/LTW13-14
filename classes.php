@@ -76,7 +76,21 @@ class Customer implements savable{
 		if(isset($fields["Email"])) $params[$i++]=array("Email",$fields["Email"]);
 		if(isset($fields["AddressID"])) $params[$i++]=array("AddressID",$fields["AddressID"]);
 		if(isset($fields["Password"])) $params[$i++]=array("Password",$fields["Password"]);
-		if(isset($fields["Permission"])) $params[$i++]=array("Permission",$fields["Permission"]);			
+		if(isset($fields["Permission"])) $params[$i++]=array("Permission",$fields["Permission"]);
+
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
+			strcmp($entry[0],"CustomerName")==0 || strcmp($entry[0],"Email")==0 || 
+			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password") || 
+			strcmp($entry[0],"Permission")==0){
+				array_push($params, $entry);
+			}
+			else throw new BadParameterException();
+		}
 		
 		
 		$query=constructSelect("Customer", $params, $db);
