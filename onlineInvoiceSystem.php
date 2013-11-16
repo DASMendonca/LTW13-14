@@ -28,14 +28,13 @@
 				<form action="signin.php" method="GET" id="logForm">
 					<input type="email" placeholder="email" name="Email" id="emailInput"> 
 					<input type="password" placeholder="password" name="Password" id="pwInput"> 
-					<input type="button" action="signin.php" value="Sign In" id="SignInButton">
+					<input type="button" value="Sign In" id="SignInButton">
 				</form>
 			</li>
-			<?php
-				die();
+			<li>Products</li>
+				<?php
 				}
 			?>
-			<li>Products</li>
 			<?php if(isset($_SESSION['customer']) ){
 			?>
 			<li>Invoices</li>
@@ -46,7 +45,7 @@
 			</li>
 			
 			<?php 
-				die();
+				
 				}
 			?>
 		</ul>

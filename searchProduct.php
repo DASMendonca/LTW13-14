@@ -11,8 +11,8 @@
 
 <body>
 	<div>
-		<form id="prodSearch" class="bySearch">
-			<div>
+		<form id="search_form" class="bySearch" name="Products" method="GET">
+			<div id="ProductCode">
 				<select onchange="createExtraFields(0)">
 					<option selected="selected">Is</option>
 					<option class="extrafield">Between</option>
@@ -21,21 +21,22 @@
 				</select> <input type="number" class="inputfield"
 					name="ProductCode" placeholder="product code"> <br>
 			</div>
-			<div>
+			<div id="ProductDescription">
 				<input type="text" name="ProductDescription"
 					placeholder="name or description"> <br>
 			</div>
-			<div>
+			<div id="UnitPrice">
 				<select onchange="createExtraFields(1)">
 					<option selected="selected">Is</option>
 					<option class="extrafield">Between</option>
 					<option>Min</option>
 					<option>Max</option>
-				</select> <input name="UnitPrice" class="inputfield"
+				</select> 
+				<input name="UnitPrice" class="inputfield"
 					type="number" placeholder="price per unit"><br> 
-					<input type="button"
-					action="searchprdoresults.php" value="search">
 			</div>
+			<input type="button"
+					value="search" id="search_button">
 		</form>
 	</div>
 

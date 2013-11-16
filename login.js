@@ -6,6 +6,11 @@ $(document).ready(function() {
 				askIfLoginIsOk();	
 			}
 	);
+	$('#logForm input').keydown(function(e) {
+	    if (e.keyCode == 13) {
+	    	$("#SignInButton").click();
+	    }
+	});
 });
 
 
@@ -46,8 +51,7 @@ function askIfLoginIsOk(){
                 alert('Uncaught Error.\n' + jqXHR.responseText);
             }
         }
-    });//termina o ajax
-	
+    });//termina o ajax	
 }
 
 
