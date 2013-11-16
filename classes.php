@@ -1,11 +1,71 @@
 <?php 
+class GeneralException extends Exception{
+	
+	
+	public $error;
+	
+	function __construct($err){
+		$this->error=$err;	
+	}
+}
+class ApiException {
+	
+	public $code;
+	public $reason;
+	public $field;
+	
+	
+};
 
 
 class NotFoundException extends Exception {};
-class DBInconsistencyException extends Exception {};
-class BadParameterException extends Exception {};
-class BadOpException extends Exception {};
-class BadNumberArgsException extends Exception {};
+class DBInconsistencyException extends Exception {
+	
+	
+};
+class BadParameterException extends ApiException {
+	
+	function __construct($fieldName){
+		$this->code="424";
+		$this->reason="Unknow field name: $fieldName Provided";
+		
+	}
+
+	
+};
+class BadOpException extends ApiException {
+	
+	function __construct($op){
+		$code="423";
+		$reason="Unknown operation: $op specified";
+	}
+	
+};
+
+
+class Err_MissingParameter extends ApiException {
+	
+	function __construct($field){
+		$this->code="701";
+		$this->reason="Missing Parameter";
+		$this->field=$field;
+		
+	}
+}
+
+class Err_WrongNumberValues extends ApiException {
+	
+	function __construct($field){
+		
+		$this->code="702";
+		$this->reason="Wrong number of arguments";
+		$this->field=$field;
+		
+	}
+}
+
+
+
 
 
 interface savable
@@ -14,11 +74,13 @@ interface savable
 	static public function getInstancesByFields($db,$fields);
 }
 
+
+
 class Customer implements savable{
 	
-	public $customerID;
-	public $customerTaxID;
-	public $customerName;
+	public $CustomerID;
+	public $CustomerTaxID;
+	public $CompanyName;
 	public $addressID;
 	public $email;
 	public $password;
@@ -27,11 +89,11 @@ class Customer implements savable{
 	
 	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions){
 		
-		$this->customerID=$ID;
-		if($TaxID>=0)$this->customerTaxID=$TaxID;//TODO: maybe use a validating function later
-		else $this->customerTaxID=null;
+		$this->CustomerID=$ID;
+		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
+		else $this->CustomerTaxID=null;
 
-		$this->customerName=$Name;
+		$this->CompanyName=$Name;
 		
 		if($addID>=0) $this->addressID=$addID;
 		else $this->addressID=null;
@@ -46,14 +108,14 @@ class Customer implements savable{
 	}
 	function saveToDB($db){
 		
-		if($this->customerTaxID==null || $this->customerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
+		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into customer (customerTaxID,customerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
+		$stmt="Insert into customer (CustomerTaxID,CompanyName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
-		$query->bindParam(1,$this->customerTaxID);
-		$query->bindParam(2,$this->customerName);
+		$query->bindParam(1,$this->CustomerTaxID);
+		$query->bindParam(2,$this->CompanyName);
 		$query->bindParam(3,$this->email);
 		$query->bindParam(4,$this->addressID);
 		$query->bindParam(5,$this->password);
@@ -76,11 +138,11 @@ class Customer implements savable{
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
 			strcmp($entry[0],"CustomerName")==0 || strcmp($entry[0],"Email")==0 || 
-			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password") || 
+			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password")==0 || 
 			strcmp($entry[0],"Permission")==0){
 				array_push($params, $entry);
 			}
-			else throw new BadParameterException();
+			else throw new BadParameterException($entry[0]);
 		}
 		
 		
@@ -156,8 +218,8 @@ class Address implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City") || strcmp($entry[0],"PostalCode1") || strcmp($entry[0],"PostalCode2") || strcmp($entry[0],"Country")==0)array_push($params, $entry);
-			else throw new BadParameterException();
+			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0 || strcmp($entry[0],"PostalCode1")==0 || strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"Country")==0)array_push($params, $entry);
+			else throw new BadParameterException($entry[0]);
 		}
 		
 		$query=constructSelect("Address", $params, $db);
@@ -227,7 +289,7 @@ class Product implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"ProductCode")==0 || strcmp($entry[0],"ProductDescription")==0 || strcmp($entry[0],"UnitOfMeasure")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"ProductTypeID")==0)array_push($params, $entry);
-			else throw new BadParameterException();
+			else throw new BadParameterException($entry[0]);
 		}
 		
 		
@@ -287,7 +349,7 @@ class ProductType implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"ProductTypeID")==0 || strcmp($entry[0],"ProductTypeDescription")==0 || strcmp($entry[0],"TaxID")==0)array_push($params, $entry);
-			else throw new BadParameterException();
+			else throw new BadParameterException($entry[0]);
 		}
 		
 		$query=constructSelect("ProductType", $params, $db);
@@ -343,7 +405,7 @@ class Tax implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"Description")==0)array_push($params, $entry);
-			else throw new BadParameterException();		
+			else throw new BadParameterException($entry[0]);		
 		}
 		
 		$query=constructSelect("Tax", $params, $db);
@@ -371,22 +433,26 @@ function getConditionStr($entry){
 	$fieldName=$entry[0];
 	
 	if($op=="equal"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." = ? ";	
 	}
 	else if($op=="max"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." <= ? ";
 	}
 	else if($op=="min"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." >= ? ";
 	}
 	else if($op=="range"){
-		if(count($entry[1])!=2)throw new BadNumberArgsException();
+		if(count($entry[1])!=2)throw new WrongNumberValues($fieldName);
 		return $fieldName." BETWEEN ? AND ? ";
 	}
-	else throw new BadOpException();
+	else if($op=="contains"){
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
+		return $fieldName." LIKE '%?%' ";
+	}
+	else throw new BadOpException($entry[2]);
 	
 	
 	

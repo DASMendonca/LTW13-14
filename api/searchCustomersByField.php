@@ -1,9 +1,37 @@
 <?php
 
-//TODO set header type
-include 'classes.php';
+header('Content-type: application/json');
+include '../classes.php';
 
-$customers=Customer::getInstancesByFields($db, $_GET);
+$db = new PDO('sqlite:../database.sqlite');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-echo json_encode($customers);
+
+
+
+
+$customers=array();	
+try {
+	
+	if(!isset($_GET["field"])) throw new GeneralException(new Err_MissingParameter("field"));
+	if(!isset($_GET["value"])) throw new MissingParameterException("value");
+	if(!isset($_GET["op"])) throw new MissingParameterException("op");
+	
+	
+	$params=array(
+		array($_GET["field"],$_GET["value"],$_GET["op"])
+	);
+	
+	
+	$customers=Customer::getInstancesByFields($db, $params);
+	echo json_encode($customers);
+} catch (GeneralException $e) {
+	echo json_encode($e);
+}
+
+
+
+
+
 ?>
