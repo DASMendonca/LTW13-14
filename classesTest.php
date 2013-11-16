@@ -7,9 +7,8 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 $parameters=array(
-	array("TaxID",array(0,3),"range"),
-	array("TaxValue",array(13),"equal"),
+	array("ProductCode",array(2),"equal"),
 );
 
-$result=Tax::getInstancesByFields($db, $parameters);
+$result=Product::getInstancesByFields($db, $parameters);
 ?>
