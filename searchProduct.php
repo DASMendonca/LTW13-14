@@ -12,22 +12,30 @@
 <body>
 	<div>
 		<form id="prodSearch" class="bySearch">
-			<select onchange="createExtraFields(0)">
-				<option selected="selected">Is</option>
-				<option class="extrafield">Between</option>
-				<option>Min</option>
-				<option>Max</option>
-			</select> 
-			<input type="number" class="inputextrafield" name="ProductCode" placeholder="product code"> <br>
-			<input type="text" name="ProductDescription" placeholder="name or description"> <br>
-			<select onchange="createExtraFields(1)">
-				<option selected="selected">Is</option>
-				<option class="extrafield">Between</option>
-				<option>Min</option>
-				<option>Max</option>
-			 </select>
-			<input name="UnitPrice" class="inputextrafield" type="number" placeholder ="price per unit"><br>
-			<input type="button" action="searchprdoresults.php" value="search">
+			<div>
+				<select onchange="createExtraFields(0)">
+					<option selected="selected">Is</option>
+					<option class="extrafield">Between</option>
+					<option>Min</option>
+					<option>Max</option>
+				</select> <input type="number" class="inputfield"
+					name="ProductCode" placeholder="product code"> <br>
+			</div>
+			<div>
+				<input type="text" name="ProductDescription"
+					placeholder="name or description"> <br>
+			</div>
+			<div>
+				<select onchange="createExtraFields(1)">
+					<option selected="selected">Is</option>
+					<option class="extrafield">Between</option>
+					<option>Min</option>
+					<option>Max</option>
+				</select> <input name="UnitPrice" class="inputfield"
+					type="number" placeholder="price per unit"><br> 
+					<input type="button"
+					action="searchprdoresults.php" value="search">
+			</div>
 		</form>
 	</div>
 

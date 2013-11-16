@@ -49,7 +49,10 @@
 				die();
 				}
 			?>
-			
 		</ul>
+	</div>
+	
+	<div id="mainDiv">
+	Aqui vai ser usado ajax.
 	</div>
 </body>
