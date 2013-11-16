@@ -25,7 +25,7 @@
 			?> 
 			<li>Login:</li>
 			<li>
-				<form action="signin.php" method="GET" id="loginForm">
+				<form action="signin.php" method="GET" id="logForm">
 					<input type="email" placeholder="email" name="Email" id="emailInput"> 
 					<input type="password" placeholder="password" name="Password" id="pwInput"> 
 					<input type="button" action="signin.php" value="Sign In" id="SignInButton">
@@ -40,7 +40,7 @@
 			?>
 			<li>Invoices</li>
 			<li>Clients</li>
-			<li> <form action="logout.php" method="GET" id="loginForm">
+			<li> <form action="logout.php" method="GET" id="logForm">
 					<input type="submit" name="logout" value="logout" id="sair">
 				</form>
 			</li>
@@ -49,7 +49,10 @@
 				die();
 				}
 			?>
-			
 		</ul>
+	</div>
+	
+	<div id="mainDiv">
+	Aqui vai ser usado ajax.
 	</div>
 </body>

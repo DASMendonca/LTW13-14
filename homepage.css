@@ -18,11 +18,11 @@ body{
 	width:70%;
 }
 
-form{
+form#logform{
 	display:inline!important;
 }
 
-form input
+form#logform input
 {
 	display:inline;
 	width: 8em;
@@ -38,10 +38,6 @@ li
 display:inline;
 margin-left: 1%;
 }
-li.logged
-{
-	visibility: hidden;
-}
 
 #topmenu{
 	position:absolute;
@@ -49,7 +45,6 @@ li.logged
 	top:0;
 	left:0;
 	background-color:#ccc;
-	opacity: 0.9;
-	
+	opacity: 0.9;	
 }
 
