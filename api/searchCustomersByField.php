@@ -15,8 +15,8 @@ $customers=array();
 try {
 	
 	if(!isset($_GET["field"])) throw new GeneralException(new Err_MissingParameter("field"));
-	if(!isset($_GET["value"])) throw new MissingParameterException("value");
-	if(!isset($_GET["op"])) throw new MissingParameterException("op");
+	if(!isset($_GET["value"])) throw new GeneralException(new Err_MissingParameter("value"));
+	if(!isset($_GET["op"])) throw new GeneralException(new Err_MissingParameter("op"));
 	
 	
 	$params=array(

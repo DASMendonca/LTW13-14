@@ -8,7 +8,7 @@ class GeneralException extends Exception{
 		$this->error=$err;	
 	}
 }
-class ApiException {
+class ApiError {
 	
 	public $code;
 	public $reason;
@@ -19,31 +19,10 @@ class ApiException {
 
 
 class NotFoundException extends Exception {};
-class DBInconsistencyException extends Exception {
-	
-	
-};
-class BadParameterException extends ApiException {
-	
-	function __construct($fieldName){
-		$this->code="424";
-		$this->reason="Unknow field name: $fieldName Provided";
-		
-	}
-
-	
-};
-class BadOpException extends ApiException {
-	
-	function __construct($op){
-		$code="423";
-		$reason="Unknown operation: $op specified";
-	}
-	
-};
 
 
-class Err_MissingParameter extends ApiException {
+
+class Err_MissingParameter extends ApiError {
 	
 	function __construct($field){
 		$this->code="701";
@@ -53,7 +32,7 @@ class Err_MissingParameter extends ApiException {
 	}
 }
 
-class Err_WrongNumberValues extends ApiException {
+class Err_WrongNumberValues extends ApiError {
 	
 	function __construct($field){
 		
@@ -62,6 +41,27 @@ class Err_WrongNumberValues extends ApiException {
 		$this->field=$field;
 		
 	}
+}
+
+
+class Err_UnknownField extends ApiError{
+	
+	function __construct($fieldName){
+		$this->code="703";
+		$this->reason="Unknown field";
+		$this->field=$fieldName;
+		
+	}
+}
+
+class Err_UnknownOp extends ApiError{
+	
+	function __construct($fieldName){
+		$this->code="704";
+		$this->reason="Unknown operation";
+		$this->field=$fieldName;
+	}
+	
 }
 
 
@@ -74,6 +74,32 @@ interface savable
 	static public function getInstancesByFields($db,$fields);
 }
 
+
+
+class Invoice implements savable{
+	
+	public $InvoiceNO;
+	public $InvoiceDate;
+	public $CostumerID;
+	public $AddressID;
+	public $Line;
+	
+	function __construct(){
+		
+		
+		
+	}
+}
+
+class Line implements savable{
+	
+	public $LineNumber;
+	public $ProductCode;
+	public $Quantity;
+	public $UnitPrice;
+	
+	
+}
 
 
 class Customer implements savable{
@@ -142,7 +168,7 @@ class Customer implements savable{
 			strcmp($entry[0],"Permission")==0){
 				array_push($params, $entry);
 			}
-			else throw new BadParameterException($entry[0]);
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		
@@ -219,7 +245,7 @@ class Address implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0 || strcmp($entry[0],"PostalCode1")==0 || strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"Country")==0)array_push($params, $entry);
-			else throw new BadParameterException($entry[0]);
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		$query=constructSelect("Address", $params, $db);
@@ -289,7 +315,7 @@ class Product implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"ProductCode")==0 || strcmp($entry[0],"ProductDescription")==0 || strcmp($entry[0],"UnitOfMeasure")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"ProductTypeID")==0)array_push($params, $entry);
-			else throw new BadParameterException($entry[0]);
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		
@@ -349,7 +375,7 @@ class ProductType implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"ProductTypeID")==0 || strcmp($entry[0],"ProductTypeDescription")==0 || strcmp($entry[0],"TaxID")==0)array_push($params, $entry);
-			else throw new BadParameterException($entry[0]);
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		$query=constructSelect("ProductType", $params, $db);
@@ -371,15 +397,15 @@ class ProductType implements savable{
 class Tax implements savable{
 	
 	
-	public $taxID;
-	public $value;
+	public $TaxType;
+	public $TaxPercentage;
 	public $description;
 	
 	
 	function __construct($id,$value,$description){
 		
-		$this->taxID=$id;
-		if($value>=0) $this->value=$value;
+		$this->TaxType=$id;
+		if($value>=0) $this->TaxPercentage=$value;
 		else $this->value=null;
 		$this->description=$description;
 		
@@ -391,7 +417,7 @@ class Tax implements savable{
 		if($this->value==null)return;//dont do nothing if it's not a valid tax
 		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";
 		$query=$db->prepare($stmt);
-		$query->bindParam(1,$this->value);
+		$query->bindParam(1,$this->TaxPercentage);
 		$query->bindParam(2,$this->description);
 		
 		return $query->execute();
@@ -405,7 +431,7 @@ class Tax implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"Description")==0)array_push($params, $entry);
-			else throw new BadParameterException($entry[0]);		
+			else throw new GeneralException(new Err_UnknownField($entry[0]));		
 		}
 		
 		$query=constructSelect("Tax", $params, $db);
@@ -433,26 +459,26 @@ function getConditionStr($entry){
 	$fieldName=$entry[0];
 	
 	if($op=="equal"){
-		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." = ? ";	
 	}
 	else if($op=="max"){
-		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." <= ? ";
 	}
 	else if($op=="min"){
-		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." >= ? ";
 	}
 	else if($op=="range"){
-		if(count($entry[1])!=2)throw new WrongNumberValues($fieldName);
+		if(count($entry[1])!=2)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." BETWEEN ? AND ? ";
 	}
 	else if($op=="contains"){
-		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
-		return $fieldName." LIKE '%?%' ";
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
+		return $fieldName." LIKE ? ";
 	}
-	else throw new BadOpException($entry[2]);
+	else throw new GeneralException(new Err_UnknownOp($entry[2]));
 	
 	
 	
