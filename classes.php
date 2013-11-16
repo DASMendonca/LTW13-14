@@ -89,6 +89,14 @@ class Invoice implements savable{
 		
 		
 	}
+	
+	
+	public function saveToDB($db){
+		
+	}
+	static public function getInstancesByFields($db,$fields){
+		
+	}
 }
 
 class Line implements savable{
@@ -97,6 +105,9 @@ class Line implements savable{
 	public $ProductCode;
 	public $Quantity;
 	public $UnitPrice;
+	
+	public function saveToDB($db){}
+	static public function getInstancesByFields($db,$fields){}
 	
 	
 }
@@ -397,17 +408,17 @@ class ProductType implements savable{
 class Tax implements savable{
 	
 	
-	public $TaxType;
+	public $TaxID;
 	public $TaxPercentage;
-	public $description;
+	public $TaxType;
 	
 	
 	function __construct($id,$value,$description){
 		
-		$this->TaxType=$id;
+		$this->TaxID=$id;
 		if($value>=0) $this->TaxPercentage=$value;
 		else $this->TaxPercentage=null;
-		$this->description=$description;
+		$this->TaxType=$description;
 		
 
 		
@@ -418,7 +429,7 @@ class Tax implements savable{
 		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->TaxPercentage);
-		$query->bindParam(2,$this->description);
+		$query->bindParam(2,$this->TaxType);
 		
 		return $query->execute();
 	}
