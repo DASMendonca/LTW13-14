@@ -13,7 +13,7 @@ function createExtraFields(i){
 			new_id= new_id.concat(i);
 			var rem_elem = $(new_id);
 			console.log(rem_elem[0]);
-			if(rem_elem != null)
+			if(rem_elem != null && rem_elem.length > 0)
 				tiracenas(rem_elem[0], i);
 		}
 }
