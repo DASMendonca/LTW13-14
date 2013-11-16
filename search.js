@@ -78,12 +78,12 @@ function searchArrayConstruct(element){
 	//console.log(input_type);
 	
 	if(operation != "range"){ 
-		value.push($(input_type[0]).val());
+		value.push(parseInt($(input_type[0]).val()));
 		query_array.push(value);
 	}
 	else{
-		value.push($(input_type[0]).val());
-		value.push($(input_type[1]).val());
+		value.push(parseInt($(input_type[0]).val()));
+		value.push(parseInt($(input_type[1]).val()));
 		query_array.push(value);
 	}
 	
