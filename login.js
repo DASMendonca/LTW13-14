@@ -31,6 +31,7 @@ function askIfLoginIsOk(){
         success : function(data){
            if($.isEmptyObject(data))alert("Invalid user and/or password.");
            else $('#logForm').submit();
+           var i=0;
         },
 	
 	
