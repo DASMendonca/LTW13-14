@@ -406,7 +406,7 @@ class Tax implements savable{
 		
 		$this->TaxType=$id;
 		if($value>=0) $this->TaxPercentage=$value;
-		else $this->value=null;
+		else $this->TaxPercentage=null;
 		$this->description=$description;
 		
 
@@ -414,7 +414,7 @@ class Tax implements savable{
 	}
 	function saveToDB($db){
 		
-		if($this->value==null)return;//dont do nothing if it's not a valid tax
+		if($this->TaxPercentage==null)return;//dont do nothing if it's not a valid tax
 		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->TaxPercentage);
