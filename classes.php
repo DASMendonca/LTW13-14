@@ -1,22 +1,37 @@
 <?php 
-
-class ApiException extends Exception{
+class GeneralException extends Exception{
+	
+	
+	public $error;
+	
+	function __construct($err){
+		$this->error=$err;	
+	}
+}
+class ApiException {
 	
 	public $code;
 	public $reason;
+	public $field;
+	
 	
 };
 
 
 class NotFoundException extends Exception {};
-class DBInconsistencyException extends Exception {};
+class DBInconsistencyException extends Exception {
+	
+	
+};
 class BadParameterException extends ApiException {
 	
 	function __construct($fieldName){
-		$code="424";
-		$reason="Unknow field name: $fieldName Provided";
+		$this->code="424";
+		$this->reason="Unknow field name: $fieldName Provided";
 		
 	}
+
+	
 };
 class BadOpException extends ApiException {
 	
@@ -26,14 +41,28 @@ class BadOpException extends ApiException {
 	}
 	
 };
-class BadNumberArgsException extends ApiException {
 
-	function __construct($provided,$expected){
-		$code="422";
-		$reason="Wrong number of values provided: $provided. $expected were expected";
+
+class Err_MissingParameter extends ApiException {
+	
+	function __construct($field){
+		$this->code="701";
+		$this->reason="Missing Parameter";
+		$this->field=$field;
 		
 	}
-};
+}
+
+class Err_WrongNumberValues extends ApiException {
+	
+	function __construct($field){
+		
+		$this->code="702";
+		$this->reason="Wrong number of arguments";
+		$this->field=$field;
+		
+	}
+}
 
 
 
@@ -404,23 +433,23 @@ function getConditionStr($entry){
 	$fieldName=$entry[0];
 	
 	if($op=="equal"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException($entry[1], 1);
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." = ? ";	
 	}
 	else if($op=="max"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException($entry[1], 1);
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." <= ? ";
 	}
 	else if($op=="min"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException($entry[1], 1);
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." >= ? ";
 	}
 	else if($op=="range"){
-		if(count($entry[1])!=2)throw new BadNumberArgsException($entry[1], 2);
+		if(count($entry[1])!=2)throw new WrongNumberValues($fieldName);
 		return $fieldName." BETWEEN ? AND ? ";
 	}
 	else if($op=="contains"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException($entry[1], 1);
+		if(count($entry[1])!=1)throw new WrongNumberValues($fieldName);
 		return $fieldName." LIKE '%?%' ";
 	}
 	else throw new BadOpException($entry[2]);
