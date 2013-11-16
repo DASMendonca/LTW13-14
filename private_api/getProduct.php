@@ -10,7 +10,7 @@ $parameters=array(
 );
 
 try {
-	$products=Product::getInstancesByFields($db, $_POST);
+	$products=Product::getInstancesByFields($db, $_GET["params"]);
 	echo json_encode($products);
 } catch (ApiException $e) {
 	echo json_encode($e);
