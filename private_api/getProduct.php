@@ -2,7 +2,7 @@
 
 include '../classes.php';
 
-$db = new PDO('sqlite:./database.sqlite');
+$db = new PDO('sqlite:../database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
@@ -11,9 +11,11 @@ $parameters=array(
 );
 
 try {
+	if(!isset($_GET['params']))
+		throw new GeneralException(new Err_MissingParameter("params"));	
 	$products=Product::getInstancesByFields($db, $_GET["params"]);
 	echo json_encode($products);
-} catch (ApiException $e) {
+} catch (GeneralException $e) {
 	echo json_encode($e);
 }
 

@@ -14,14 +14,18 @@ function askIfLoginIsOk(){
 	var emailField= $("#emailInput");
 	var email=emailField.val();
 	var pw= $("#pwInput").val();
+	var params= new Array();
+	params[0]= new Array("Email", new Array(email), "equal");
+	params[1]= new Array("Password", new Array(pw), "equal");
 	
+	console.log(params);
 	$.ajax({
         url : "loginAjax.php",
         dataType : "json",
-        data : {"Email":email,"Password":pw},
+        data : {"params":params},
         success : function(data){
            if($.isEmptyObject(data))alert("Invalid user and/or password.");
-           else $('#loginForm').submit();
+           else $('#logForm').submit();
         },
 	
 	
