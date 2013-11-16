@@ -1,13 +1,11 @@
 
 $(document).ready(function() {
-// inicio uma requisição
+// inicio uma requisiÔøΩ‚Äπo
 	$("#SignInButton").click(
 			function(){
 				askIfLoginIsOk();	
 			}
-	
 	);
-    
 });
 
 
@@ -20,7 +18,7 @@ function askIfLoginIsOk(){
 	$.ajax({
         url : "loginAjax.php",
         dataType : "json",
-        data : {"email":email,"password":pw},
+        data : {"Email":email,"Password":pw},
         success : function(data){
            if($.isEmptyObject(data))alert("Invalid user and/or password.");
            else $('#loginForm').submit();
@@ -46,4 +44,13 @@ function askIfLoginIsOk(){
         }
     });//termina o ajax
 	
+}
+
+
+
+function loggedIn(){	
+	$(document).ready(function() {
+		// inicio uma requisiÔøΩ‚Äπo
+		$(".logged").css('visibility', 'visible');
+		});
 }

@@ -3,6 +3,9 @@
 
 class NotFoundException extends Exception {};
 class DBInconsistencyException extends Exception {};
+class BadParameterException extends Exception {};
+class BadOpException extends Exception {};
+class BadNumberArgsException extends Exception {};
 
 
 interface savable
@@ -22,43 +25,9 @@ class Customer implements savable{
 	public $permission;
 	
 	
-	static function fromDB_ID($db,$id){
+	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions){
 		
-		$stmt="Select * from customer where customerID=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
-		
-		$result=$query->execute()->fetchAll();
-		
-
-		if($result==null || count($result)!=1){
-			
-			$this->customerID=null;
-			$this->customerTaxID=null;
-			$this->customerName=null;
-			$this->address=null;
-			$this->email=null;
-			$this->password=null;
-			$this->permission=null;
-			return;
-		}
-
-		if($result==null)throw new NotFoundException();
-		else if ($result.count()!=1) throw new DBInconsistencyException();
-
-		
-		
-
-		$this->loadFromResult($result[0]);
-		
-
-		
-		
-	}
-	
-	function __construct($TaxID,$Name,$addID,$email,$pw,$permissions){
-		
-		$this->customerID=null;
+		$this->customerID=$ID;
 		if($TaxID>=0)$this->customerTaxID=$TaxID;//TODO: maybe use a validating function later
 		else $this->customerTaxID=null;
 
@@ -75,29 +44,6 @@ class Customer implements savable{
 		
 		
 	}
-	
-	static function fromDB_Email_Pw($db,$email,$password){
-		
-		$obj=new Customer(null,null,null,null,null,null);
-		
-		$stmt="Select * from Customer where Email=? AND password=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$email);
-		$query->bindParam(2,$password);
-		
-		$query->execute();
-		$result=$query->fetchAll();
-		
-		if($result==null)throw new NotFoundException();
-		else if (count($result)!=1) throw new DBInconsistencyException();
-		
-		$obj->loadFromResult($result[0]);
-		
-		return $obj;
-		
-		
-	}
-	
 	function saveToDB($db){
 		
 		if($this->customerTaxID==null || $this->customerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
@@ -122,17 +68,33 @@ class Customer implements savable{
 	
 	static public function getInstancesByFields($db,$fields){
 		
-	}
-	
-	function loadFromResult($result){
-		$this->customerID=$result[0];
-		$this->customerTaxID=$result[1];
-		$this->customerName=$result[2];
-		$this->email=$result[3];
-		$this->addressID=$result[4];
-		$this->password=$result[5];
-		$this->permission=$result[6];
+
+		$params=array();
 		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
+			strcmp($entry[0],"CustomerName")==0 || strcmp($entry[0],"Email")==0 || 
+			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password") || 
+			strcmp($entry[0],"Permission")==0){
+				array_push($params, $entry);
+			}
+			else throw new BadParameterException();
+		}
+		
+		
+		$query=constructSelect("Customer", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"]);
+			$instances[$i]=$instance;
+		}
+
+		return $instances;
 	}
 	
 }
@@ -148,43 +110,12 @@ class Address implements savable{
 	public $country;
 	
 	
-	function fromDB_ID($db,$id){
-		
-		$stmt= "Select * from Address where AddressID=?;";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
-		
-		$query->execute();
-		$result=$query->fetchAll();
-		
-		if($result==null || count($result)!=1){
-			$this->AddressID=null;
-			$this->detail=null;
-			$this->city=null;
-			$this->postalCode1=null;
-			$this->postalCode2=null;
-			$this->country=null;
-			return;
-			
-		}
-		
-		$result=$result[0];
-		
-		//load data
-		$this->AddressID=$result[0];
-		$this->detail=$result[1];
-		$this->city=$result[2];
-		$this->postalCode1=$result[3];
-		$this->postalCode2=$result[4];
-		$this->country=$result[5];
-		
-		
-	}
+	
 
 	
-	function __construct($det,$theCity,$zip1,$zip2,$theCountry){
+	function __construct($id,$det,$theCity,$zip1,$zip2,$theCountry){
 		
-		$this->AddressID=null;
+		$this->AddressID=$id;
 		$this->detail=$det;
 		$this->city=$theCity;
 		
@@ -218,7 +149,30 @@ class Address implements savable{
 		
 	}
 
-	static public function getInstancesByFields($db,$fields){}
+	static public function getInstancesByFields($db,$fields){
+		
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City") || strcmp($entry[0],"PostalCode1") || strcmp($entry[0],"PostalCode2") || strcmp($entry[0],"Country")==0)array_push($params, $entry);
+			else throw new BadParameterException();
+		}
+		
+		$query=constructSelect("Address", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Address($entry["AddressID"], $entry["AddressDetail"], $entry["City"], $entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+		
+	}
 }
 
 
@@ -230,45 +184,9 @@ class Product implements savable{
 	public $unitOfMeasure;
 	public $productTypeID;
 	
-	
-	function fromDB_ID($db,$code){
+	function __construct($code,$descrip,$price,$unit,$typeID){
 		
-		$stmt= "Select * from Product where produuctCode=?";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$code);
-		
-		
-		$result=$query->execute()->fetchAll();
-		
-		if($result==null || count($result)!=1){
-			
-			$this->productCode=null;
-			$this->productDescription=null;
-			$this->unitPrice=null;//in cents
-			$this->unitOfMeasure=null;
-			$this->productTypeID=null;
-			
-		}
-		
-		
-		$result=$result[0];
-		
-		
-		$this->productCode=$result[0];
-		$this->productDescription=$result[1];
-		$this->unitPrice=$result[2];
-		$this->unitOfMeasure=$result[3];
-		$this->productTypeID=$result[4];
-		
-		
-		
-		
-	}
-
-	
-	function __construct($descrip,$price,$unit,$typeID){
-		
-		$this->productCode=null;
+		$this->productCode=$code;
 		$this->productDescription=$descrip;
 		
 		if($price>=0)$this->unitPrice=$price;
@@ -300,7 +218,35 @@ class Product implements savable{
 		
 	}
 
-	static public function getInstancesByFields($db,$fields){}
+	static public function getInstancesByFields($db,$fields){
+		
+		
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"ProductCode")==0 || strcmp($entry[0],"ProductDescription")==0 || strcmp($entry[0],"UnitOfMeasure")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"ProductTypeID")==0)array_push($params, $entry);
+			else throw new BadParameterException();
+		}
+		
+		
+		
+		$query=constructSelect("Product", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
+			$instances[$i]=$instance;
+			
+		}
+		
+		return $instances;
+		
+	}
 }
 	
 class ProductType implements savable{
@@ -309,47 +255,16 @@ class ProductType implements savable{
 	public $typeDescription;
 	public $taxID;
 	
-	function fromDB_ID($db,$id){
-		
-		$stmt= "Select * from ProductType where ProductTypeID=?";
-		$query=$db->prepare($stmt);
-		$query->bindParam(1,$id);
 		
 		
-		$query->execute();
-		$result=$query->fetchAll();
+	
+	function __construct($typeID, $typeDescription,$theTaxID){
 		
-		if($result==null || count($result)!=1){
-				
-			$this->typeID=null;
-			$this->typeDescription=null;
-			$this->taxID=null;
-				
-		}
-		
-		
-		$result=$result[0];
-		
-		$this->typeID=$result[0];
-		$this->typeDescription=$result[1];
-		$this->taxID=$result[2];
-		
-		
-		
+		$this->typeID=$typeID;
+		$this->typeDescription=$typeDescription;
+		$this->taxID=$theTaxID;		
 	}
-	function __construct($name,$theTaxID){
-		
-		$this->typeID=null;
-		$this->typeDescription=$name;
-		$this->taxID=$theTaxID;
-		
-		
-		
-		
-		
-		
-		
-	}
+	
 	function saveToDB($db){
 		
 		if($this->typeDescription==null || $this->taxID==null)return;
@@ -363,7 +278,31 @@ class ProductType implements savable{
 		
 	}
 	
-	static public function getInstancesByFields($db,$fields){}
+	static public function getInstancesByFields($db,$fields){
+		
+		
+		$params=array();
+		
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"ProductTypeID")==0 || strcmp($entry[0],"ProductTypeDescription")==0 || strcmp($entry[0],"TaxID")==0)array_push($params, $entry);
+			else throw new BadParameterException();
+		}
+		
+		$query=constructSelect("ProductType", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new ProductType($entry["ProductTypeID"],$entry["ProductTypeDescription"],$entry["TaxID"]);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+	}
 }
 
 
@@ -375,17 +314,16 @@ class Tax implements savable{
 	public $description;
 	
 	
-	function __construct($value,$description){
+	function __construct($id,$value,$description){
 		
-		$this->taxID=null;
-		if($value>=0)$this->value=$value;
+		$this->taxID=$id;
+		if($value>=0) $this->value=$value;
 		else $this->value=null;
 		$this->description=$description;
 		
 
 		
 	}
-	
 	function saveToDB($db){
 		
 		if($this->value==null)return;//dont do nothing if it's not a valid tax
@@ -395,31 +333,65 @@ class Tax implements savable{
 		$query->bindParam(2,$this->description);
 		
 		return $query->execute();
-		
-	
-		
 	}
-	
-	
-
-
 	static public function getInstancesByFields($db,$fields){
 		
-		$id=$fields["taxID"];
-		$value=$fields["value"];
 		
-		$params=array(
-			array("taxID",$fields["taxID"]),
-			array("value",$fields["value"])
-		);
+		$params=array();
 		
-		$query=constructSelect("Tax", $param,$db);
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"Description")==0)array_push($params, $entry);
+			else throw new BadParameterException();		
+		}
+		
+		$query=constructSelect("Tax", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			$instance=new Tax($entry["TaxID"],$entry["TaxValue"],$entry["Description"]);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
 		
 		
 		
 	}
 }
 
+
+function getConditionStr($entry){
+	
+	$op=$entry[2];
+	$fieldName=$entry[0];
+	
+	if($op=="equal"){
+		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		return $fieldName." = ? ";	
+	}
+	else if($op=="max"){
+		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		return $fieldName." <= ? ";
+	}
+	else if($op=="min"){
+		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		return $fieldName." >= ? ";
+	}
+	else if($op=="range"){
+		if(count($entry[1])!=2)throw new BadNumberArgsException();
+		return $fieldName." BETWEEN ? AND ? ";
+	}
+	else throw new BadOpException();
+	
+	
+	
+	
+}
 
 function constructSelect($tableName,$parameters,$db){
 	
@@ -430,35 +402,34 @@ function constructSelect($tableName,$parameters,$db){
 		return $query;
 	}
 	
-	$goodParams=array();
-	$pos=0;
-	foreach ($parameters as $elem){
-		if($elem[1]!=NULL){
-			$goodParams[$pos]=$elem; //if not empty add
-			$pos++;
-		}
+
+	
+	$stmt.=" WHERE " ;
+	for($i=0;$i<count($parameters)-1;$i++){//for everyone but the last
+		$cond=getConditionStr($parameters[$i]);
+		$elem=$parameters[$i];
+		$stmt.=" $cond AND ";
 	}
-	
-	
-		$stmt.=" WHERE " ;
-		for($i=0;$i<count($goodParams)-1;$i++){//for everyone but the last
-			$elem=$goodParams[$i];
-			$stmt.=" $elem[0] = ? AND";
-		}
 		
-		$value=$goodParams[$i][0];
-		$stmt.=" $value = ?;";
-		$query=$db->prepare($stmt);
-		$place=1;
+	$stmt.=getConditionStr($parameters[$i]);
+	$query=$db->prepare($stmt);
+	$place=1;
 		
-		for($i=0;$i<count($goodParams);$i++){
-			;
-			$query->bindParam($place,$goodParams[$i][1]);
+	for($i=0;$i<count($parameters);$i++){
+		
+		$entry=$parameters[$i];
+		$query->bindParam($place,$entry[1][0]);
+		$place++;
+		
+		if($entry[2]=="range"){
+			$query->bindParam($place,$entry[1][1]);
 			$place++;
-		}
+		} 
+		
+	}
 
 		
-		$finished=$query->queryString;
+	$finished=$query->queryString;
 		
 	return $query;
 }

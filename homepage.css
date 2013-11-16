@@ -18,11 +18,11 @@ body{
 	width:70%;
 }
 
-form{
+form#logform{
 	display:inline!important;
 }
 
-form input
+form#logform input
 {
 	display:inline;
 	width: 8em;
@@ -36,5 +36,15 @@ padding:0;
 li
 {
 display:inline;
+margin-left: 1%;
+}
+
+#topmenu{
+	position:absolute;
+	width:100%;
+	top:0;
+	left:0;
+	background-color:#ccc;
+	opacity: 0.9;	
 }
 
