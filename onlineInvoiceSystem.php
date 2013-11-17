@@ -31,9 +31,8 @@
 							<input type="button" value="Sign In" id="SignInButton">
 						</form>
 					</li>
-					<li id="li_prod" class="top_lis">Products</li>
 						<?php
-						}
+						} echo '<li id="li_prod" class="top_lis">Products</li>';
 					?>
 					<?php if(isset($_SESSION['customer']) ){
 					?>
