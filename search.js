@@ -19,17 +19,23 @@ function searchByFields(){
 	console.log(possible_extr_nr);
 	var i =0;
 	for(i; i<divs.length; i++){
-		params.push(searchArrayConstruct(divs[i]));
+		var is_valid= searchArrayConstruct(divs[i]);
+		if(is_valid!=null)
+			
+		params.push(is_valid);
 	}
 	
+	if(params.length ==0){
+		alert("Please fill at least one of the search fields.");
+		return;
+	}
 	console.log(params);	
 	$.ajax({
         url : "./private_api/getProduct.php",
-        dataType : "json",
-        data : {"params":params},
+        dataType : "html",
+        data : {},
         success : function(data){
-           if($.isEmptyObject(data))alert("Product not found.");
-           else alert(data);
+          $("#search_results_div").html(data);
         },
         
         error: function(jqXHR, exception) {
@@ -66,12 +72,17 @@ function searchArrayConstruct(element){
 	//console.log(selected_query);
 	
 	var input_type = $(element).children("input");
+	if($(input_type[0]).val()=="")
+		return null;
+	if(input_type.length>1 && $(input_type[1]).val()=="")
+		return null;
 	//console.log(input_type);
 	
 	if(selected_query == null || selected_query.length == 0){
-		operation = "contains";
+		
 		var is_text = $(input_type[0]).attr("type");
 		if(is_text == "text"){
+			operation = "contains";
 			is_text = "%";
 			is_text= is_text.concat($(input_type[0]).val());
 			is_text= is_text.concat("%");
@@ -84,11 +95,11 @@ function searchArrayConstruct(element){
 		query_array.push(value);
 	}
 	else{
-		if(selected_query=="Between"){ operation = "range"}
-		else if(selected_query=="Is"){ operation ="equal"}  
-		else if(selected_query=="Max"){operation = "max"}  
-		else if(selected_query=="Min"){operation = "min"}  
-		else if(selected_query=="Contains"){operation ="contains"}
+		if(selected_query=="Between"){ operation = "range";}
+		else if(selected_query=="Is"){ operation ="equal";}  
+		else if(selected_query=="Max"){operation = "max";}  
+		else if(selected_query=="Min"){operation = "min";}  
+		else if(selected_query=="Contains"){operation ="contains";}
 	
 	
 	
@@ -136,7 +147,7 @@ function createExtraFields(i){
 
 function createNewInput(element, i){
 	var element2 = element.cloneNode(true);
-	element2.setAttribute("class", "inputextrafield")
+	element2.setAttribute("class", "inputextrafield");
 	
 	var new_id= "isextra";	
 	new_id= new_id.concat(i);

@@ -13,6 +13,7 @@
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
 <script type="text/javascript" src='login.js'></script>
+<script type="text/javascript" src='search.js'></script>
 </head>
 
 <div id = "home_page">
@@ -30,14 +31,14 @@
 							<input type="button" value="Sign In" id="SignInButton">
 						</form>
 					</li>
-					<li>Products</li>
+					<li id="li_prod" class="top_lis">Products</li>
 						<?php
 						}
 					?>
 					<?php if(isset($_SESSION['customer']) ){
 					?>
-					<li>Invoices</li>
-					<li>Clients</li>
+					<li class="top_lis">Invoices</li>
+					<li class="top_lis">Clients</li>
 					<li> <form action="logout.php" method="GET" id="logForm">
 							<input type="submit" name="logout" value="logout" id="sair">
 						</form>
