@@ -39,6 +39,7 @@
 					value="search" id="search_button">
 		</form>
 	</div>
+	<div id="mainDiv"></div>
 
 </body>
 </html>
