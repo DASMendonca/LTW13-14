@@ -36,7 +36,7 @@
 					?>
 					<?php if(isset($_SESSION['customer']) ){
 					?>
-					<li class="top_lis">Invoices</li>
+					<li class="top_lis" id="li_invoice">Invoices</li>
 					<li class="top_lis">Clients</li>
 					<li> <form action="logout.php" method="GET" id="logForm">
 							<input type="submit" name="logout" value="logout" id="sair">
