@@ -81,24 +81,29 @@ class Invoice implements savable{
 	
 	public $InvoiceNO;
 	public $InvoiceDate;
-	protected $CostumerID;
-	public $CostumerName;
+	protected $CustomerID;
+	public $CustomerName;
 	protected $Lines;
 	public $GrossTotal;
 	
-	function __construct($InvoiceNO,$InvoiceDate,$CostumerID,$CostumerName,$Lines){
+	function __construct($InvoiceNO,$InvoiceDate,$CustomerID,$CustomerName){
 		
 		$this->InvoiceNO=$InvoiceNO;
 		$this->InvoiceDate=$InvoiceDate;
-		$this->CostumerID=$CostumerID;
-		$this->CostumerName=$CostumerName;
-		$this->Lines=$Lines;
+		$this->CustomerID=$CustomerID;
+		$this->CustomerName=$CustomerName;
 		
+		
+		
+		
+	}
+	
+	function setLines($Lines){
+		$this->Lines=$Lines;
 		$this->GrossTotal=0;
 		for($i=0;count($this->Lines);$i++){
 			$this->GrossTotal+=$this->Lines[$i]->CreditAmount;
 		}
-		
 		
 	}
 	
@@ -106,9 +111,40 @@ class Invoice implements savable{
 	
 	
 	public function saveToDB($db){
-		
+		//TODO implement it
 	}
 	static public function getInstancesByFields($db,$fields){
+		
+		$params=array();
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"InvoiceNO")==0 || strcmp($entry[0],"InvoiceDate")==0 ||
+			strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"CustomerName")==0){
+				array_push($params, $entry);
+			}
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
+		}
+		
+		$query=constructSelect("Invoice", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+				
+			$instance=new Invoice($entry["InvoiceNO"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CustomerName"]);
+			
+			$fields=array(
+				array("InvoiceNo",array($instance->InvoiceNO),"equal")
+			);
+			$lines=Line::getInstancesByFields($db,$fields);
+			$instance->setLines($lines);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+		
 		
 	}
 }
