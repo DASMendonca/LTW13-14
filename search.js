@@ -33,7 +33,7 @@ function searchByFields(){
 	$.ajax({
         url : "./private_api/getProduct.php",
         dataType : "html",
-        data : {},
+        data : {"params": params},
         success : function(data){
           $("#search_results_div").html(data);
         },
