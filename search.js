@@ -32,6 +32,7 @@ function searchByFields(){
 	var what_api = $("#search_form").attr("name");
 	if(what_api=="Products") what_api= "./private_api/getProduct.php";
 	else if(what_api=="Invoice") what_api="./private_api/getInvoice.php";
+	else if(what_api=="Customer") what_api="./private_api/getCustomer.php";
 	
 	
 	console.log(params);	
