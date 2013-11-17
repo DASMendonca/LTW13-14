@@ -76,15 +76,22 @@ interface savable
 
 
 
+
 class Invoice implements savable{
 	
 	public $InvoiceNO;
 	public $InvoiceDate;
-	public $CostumerID;
-	public $Line;
+	protected $CostumerID;
+	public $CostumerName;
+	protected $Lines;
 	
-	function __construct(){
+	function __construct($InvoiceNO,$InvoiceDate,$CostumerID,$CostumerName,$Lines){
 		
+		$this->InvoiceNO=$InvoiceNO;
+		$this->InvoiceDate=$InvoiceDate;
+		$this->CostumerID=$CostumerID;
+		$this->CostumerName=$CostumerName;
+		$this->Lines=$Lines;
 		
 		
 	}
@@ -317,38 +324,38 @@ class Address implements savable{
 
 class Product implements savable{
 	
-	public $productCode;
-	public $productDescription;
-	public $unitPrice;//in cents
-	public $unitOfMeasure;
-	public $productTypeID;
+	public $ProductCode;
+	public $ProductDescription;
+	public $UnitPrice;//in cents
+	public $UnitOfMeasure;
+	public $ProductTypeID;
 	
 	function __construct($code,$descrip,$price,$unit,$typeID){
 		
-		$this->productCode=$code;
-		$this->productDescription=$descrip;
+		$this->ProductCode=$code;
+		$this->ProductDescription=$descrip;
 		
-		if($price>=0)$this->unitPrice=$price;
-		else $this->unitPrice=null;
+		if($price>=0)$this->UnitPrice=$price;
+		else $this->UnitPrice=null;
 		
-		$this->unitOfMeasure=$unit;
+		$this->UnitOfMeasure=$unit;
 		
-		if($typeID>=0)$this->productTypeID=$typeID;
-		else $this->productTypeID=null;
+		if($typeID>=0)$this->ProductTypeID=$typeID;
+		else $this->ProductTypeID=null;
 		
 		
 	}
 	
 	function saveToDB($db){
 		
-		if($this->productDescription==null || $this->unitPrice==null || $this->unitOfMeasure==null || $this->productTypeID==null){
+		if($this->ProductDescription==null || $this->UnitPrice==null || $this->UnitOfMeasure==null || $this->ProductTypeID==null){
 			
 			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
 			$query=$db->prepare($stmt);
-			$query->bindParam(1,$this->productDescription);
-			$query->bindParam(2,$this->unitPrice);
-			$query->bindParam(3,$this->unitOfMeasure);
-			$query->bindParam(4,$this->productTypeID);
+			$query->bindParam(1,$this->ProductDescription);
+			$query->bindParam(2,$this->UnitPrice);
+			$query->bindParam(3,$this->UnitOfMeasure);
+			$query->bindParam(4,$this->ProductTypeID);
 			
 			return $query->execute();
 					
@@ -559,6 +566,7 @@ function constructSelect($tableName,$parameters,$db){
 	$place=1;
 		
 	for($i=0;$i<count($parameters);$i++){
+		
 		
 		$entry=$parameters[$i];
 		$query->bindParam($place,$entry[1][0]);
