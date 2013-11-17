@@ -17,6 +17,12 @@ class ApiError {
 	
 };
 
+class SimpleError {
+	
+	public $code;
+	public $reason;
+}
+
 
 class NotFoundException extends Exception {};
 
@@ -65,11 +71,11 @@ class Err_UnknownOp extends ApiError{
 }
 
 
-class Err_Not_Found extends ApiError{
+class Err_Not_Found extends SimpleError{
 	
-	function __construct($fieldName){
-		
-		
+	function __construct($entityName){
+		$this->code="404";
+		$this->reason="No $entityName found";
 	}
 	
 }
@@ -89,16 +95,16 @@ interface savable
 
 class Invoice implements savable{
 	
-	public $InvoiceNO;
+	public $InvoiceNo;
 	public $InvoiceDate;
 	protected $CustomerID;
 	public $CompanyName;
 	protected $Lines;
 	public $GrossTotal;
 	
-	function __construct($InvoiceNO,$InvoiceDate,$CustomerID,$CompanyName){
+	function __construct($InvoiceNo,$InvoiceDate,$CustomerID,$CompanyName){
 		
-		$this->InvoiceNO=$InvoiceNO;
+		$this->InvoiceNo=$InvoiceNo;
 		$this->InvoiceDate=$InvoiceDate;
 		$this->CustomerID=$CustomerID;
 		$this->CompanyName=$CompanyName;
@@ -112,7 +118,7 @@ class Invoice implements savable{
 		$this->Lines=$Lines;
 		$this->GrossTotal=0;
 		for($i=0;$i<count($this->Lines);$i++){
-			$this->GrossTotal+=$this->Lines[$i]->CreditAmount;
+			$this->GrossTotal+=$this->Lines[$i]->CreditAmount*($this->Lines[$i]->Tax->TaxPercentage/100+1);
 		}
 		
 	}
@@ -129,7 +135,7 @@ class Invoice implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"InvoiceNO")==0 || strcmp($entry[0],"InvoiceDate")==0 ||
+			if(strcmp($entry[0],"InvoiceNo")==0 || strcmp($entry[0],"InvoiceDate")==0 ||
 			strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"CompanyName")==0){
 				array_push($params, $entry);
 			}
@@ -143,10 +149,10 @@ class Invoice implements savable{
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
 				
-			$instance=new Invoice($entry["InvoiceNO"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CompanyName"]);
+			$instance=new Invoice($entry["InvoiceNo"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CompanyName"]);
 			
 			$fields=array(
-				array("InvoiceNo",array($instance->InvoiceNO),"equal")
+				array("InvoiceNo",array($instance->InvoiceNo),"equal")
 			);
 			$lines=Line::getInstancesByFields($db,$fields);
 			$instance->setLines($lines);
