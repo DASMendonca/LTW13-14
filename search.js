@@ -16,20 +16,24 @@ function searchByFields(){
 	var params = new Array();
 	var divs = $("#search_form div");
 	var possible_extr_nr = $(".extrafield").length;
-	console.log(possible_extr_nr);
+	//console.log(possible_extr_nr);
 	var i =0;
 	for(i; i<divs.length; i++){
-		params.push(searchArrayConstruct(divs[i]));
+		var well_formed = searchArrayConstruct(divs[i]);
+		if(well_formed != null)
+		params.push(well_formed);
 	}
-	
-	console.log(params);	
+	console.log(params);
+	if(params.length==0){
+		alert("Please fill at least one of the search fields.");
+		return;
+	}	
 	$.ajax({
         url : "./private_api/getProduct.php",
-        dataType : "json",
+        dataType : "html",
         data : {"params":params},
         success : function(data){
-           if($.isEmptyObject(data))alert("Product not found.");
-           else alert(data);
+        	$("#mainDiv").html(data);
         },
         
         error: function(jqXHR, exception) {
@@ -67,11 +71,17 @@ function searchArrayConstruct(element){
 	
 	var input_type = $(element).children("input");
 	//console.log(input_type);
+	if($(input_type[0]).val()== ""){
+		return null;
+	}
+	else if(input_type.length >1 && $(input_type[1]).val() == ""){
+		return null;
+	}
 	
 	if(selected_query == null || selected_query.length == 0){
-		operation = "contains";
 		var is_text = $(input_type[0]).attr("type");
 		if(is_text == "text"){
+			operation = "contains";
 			is_text = "%";
 			is_text= is_text.concat($(input_type[0]).val());
 			is_text= is_text.concat("%");
@@ -79,16 +89,17 @@ function searchArrayConstruct(element){
 		}
 		else{
 			value.push($(input_type[0]).val());
+			operation="equal";
 		}
 		
 		query_array.push(value);
 	}
 	else{
-		if(selected_query=="Between"){ operation = "range"}
-		else if(selected_query=="Is"){ operation ="equal"}  
-		else if(selected_query=="Max"){operation = "max"}  
-		else if(selected_query=="Min"){operation = "min"}  
-		else if(selected_query=="Contains"){operation ="contains"}
+		if(selected_query=="Between"){ operation = "range";}
+		else if(selected_query=="Is"){ operation ="equal";}  
+		else if(selected_query=="Max"){operation = "max";}  
+		else if(selected_query=="Min"){operation = "min";}  
+		else if(selected_query=="Contains"){operation ="contains";}
 	
 	
 	
@@ -136,7 +147,7 @@ function createExtraFields(i){
 
 function createNewInput(element, i){
 	var element2 = element.cloneNode(true);
-	element2.setAttribute("class", "inputextrafield")
+	element2.setAttribute("class", "inputextrafield");
 	
 	var new_id= "isextra";	
 	new_id= new_id.concat(i);
