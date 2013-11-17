@@ -17,6 +17,12 @@ class ApiError {
 	
 };
 
+class SimpleError {
+	
+	public $code;
+	public $reason;
+}
+
 
 class NotFoundException extends Exception {};
 
@@ -65,11 +71,11 @@ class Err_UnknownOp extends ApiError{
 }
 
 
-class Err_Not_Found extends ApiError{
+class Err_Not_Found extends SimpleError{
 	
-	function __construct($fieldName){
-		
-		
+	function __construct($entityName){
+		$this->code="404";
+		$this->reason="No $entityName found";
 	}
 	
 }

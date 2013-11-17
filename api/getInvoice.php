@@ -11,15 +11,16 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $invoices=array();
 
 try {
-	if(!isset($_GET["InvoiceNo"])) throw new GeneralException(new Err_MissingParameter("field"));
+	if(!isset($_GET["InvoiceNo"])) throw new GeneralException(new Err_MissingParameter("InvoiceNo"));
 	
 	$params=array(
-			array("InvoiceNO",$_GET["InvoiceNo"],"equal")
+			array("InvoiceNO",array($_GET["InvoiceNo"]),"equal")
 
 	);
 
 	$invoices=Invoice::getInstancesByFields($db, $params);
-	echo json_encode($invoices);
+	if(count($invoices)==0)throw new GeneralException(new Err_Not_Found("invoices"));
+	echo json_encode($invoices[0]);
 
 } catch (GeneralException  $e) {
 	echo json_encode($e);
