@@ -19,29 +19,29 @@ try {
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 	
+	$params=$_GET["params"];
 	
 	
 	
-	$invoices=Invoice::getInstancesByFields($db, $_GET["params"]);
+	$customers=Product::getInstancesByFields($db, $params);
 } catch (GeneralException $e) {
 	echo '</fieldset>';
 	die();
 }
 
-if($invoices != NULL){
+if($customers != NULL){
 	?>
 	<table id="search_results_tb">
 		<tr>
-		<th>Invoice Number</th><th>Invoice Date</th><th>Costumer ID</th><th>Company Name</th><th>Gross Total</th>
+		<th>Product Code</th><th>Product Description</th><th>Measure Unit</th><th>Price p/ Unit</th>
 		</tr>
 <?php
-	foreach ($invoices as $invoice){
+	foreach ($customers as $customer){
 		echo utf8_encode('<tr>
-				<td>' .$invoice->InvoiceNo .'</td>
-				<td>' .$invoice->InvoiceDate .'</td>
-				<td>' .$invoice->getCustomerId() .'</td>
-				<td>' .$invoice->CompanyName.'</td>
-				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>
+				<td>' .$customer->CustomerID .'</td>
+				<td>' .$customer->CustomerName .'</td>
+				<td>' .$customer->CustomerTaxID .'</td>
+				<td>' .$customer->email.' </td>
 			<tr>');	
 	}
 	echo '</table>
