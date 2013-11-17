@@ -3,37 +3,43 @@
 
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="readme.css">
 <title>README</title>
 </head>
 
 <body>
-	<h1 id="GroupName">T5G2</h1>
-	<h2 id="GroupElements">Identificação dos elementos do grupo</h3>
-	<table border="1" id="Students">
+
+	<h1 id="ProjectName">Sistema de faturação online</h1>
+	<p>
+	<h2 id="">Linguagens e Tecnologias Web</h2>
+	<h2 id="GroupName">Grupo: T5G2</h2>
+	</p>
+
+	<h3 id="GroupElements">Identificação dos elementos do grupo</h3>
+	<table id="Students">
 		<tr>
-		<th>Nome Aluno</th>
-		<th>Nº Aluno</th>
+			<th>Nome Aluno</th>
+			<th>Nº Aluno</th>
 		</tr>
 		<tr>
-		<td>Daniel Arménio Silva Mendonca</td>
-		<td>200906506</td>
+			<td>Daniel Arménio Silva Mendonca</td>
+			<td>200906506</td>
 		</tr>
 		<tr>
-		<td>Miguel Angelo Jesus Vidal Ribeiro</td>
-		<td>201100657</td>
+			<td>Miguel Angelo Jesus Vidal Ribeiro</td>
+			<td>201100657</td>
 		</tr>
 		<tr>
-		<td>José Pedro Lobo Marinho Trocado Moreira</td>
-		<td>200901840</td>
+			<td>José Pedro Lobo Marinho Trocado Moreira</td>
+			<td>200901840</td>
 		</tr>
 		<tr>
-		<td>Vítor Hugo Torres Mineiro</td>
-		<td>200105060</td>
+			<td>Vítor Hugo Torres Mineiro</td>
+			<td>200105060</td>
 		</tr>
 	</table>
-	
+
 	<h3 id="Users_ID">Utilizadores registados na base de dados</h3>
-	
 	<table border="1" id="DB_Users">
 		<tr>
 			<th>Sign in</th>
@@ -63,9 +69,31 @@
 	</table>
 
 	<h3 id="FunctionsList">Listagem das funcionalidades implementadas</h3>
-	
-	<h3 id="Notes">Notas adicionais</h3>
-	
-	
+	<ul>
+		<li>Especificação e desenvolvimento de uma base de dados que
+			permita armazenar documentos e três níveis de permissões de
+			utilizadores (leitor, apenas com permissões de read; editor com
+			permissões de read e write; administrador com capacidade para
+			(des)promover utilizadores já registados a editores/leitores</li>
+		<li>Criação da API de consulta, contendo, pelo menos, os
+			seguintes métodos (ver especificação mais abaixo)</li>
+		<ul>
+			<li>/api/searchInvoicesByField.php</li>
+			<li>/api/searchCustomersByField.php</li>
+			<li>/api/searchProductsByField.php</li>
+			<li>/api/getInvoice.php</li>
+			<li>/api/getCustomer.php</li>
+			<li>/api/getProduct.php</li>
+		</ul>
+		<li>Pesquisa e listagem de documentos sumarizados (faturas,
+			clientes e produtos)</li>
+		<li>Visualização de documentos em detalhe (um documento, por
+			página web, com todos os detalhes relevantes)</li>
+		<li>Formatação de uma fatura para impressão em A4</li>
+	</ul>
+
+	<h3>Notas adicionais</h3>
+	<p id="Notes">Aqui deverão ser acrescentadas notas relaivas ao trabalhos</p>
+
 </body>
 </html>

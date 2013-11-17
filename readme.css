@@ -1,1 +1,81 @@
-@CHARSET "ISO-8859-1";
+html{
+background-color: #fff;
+}
+
+body{
+	width: 60%;
+	margin: auto;
+	color: #111;
+}
+
+#Students{
+	border-collapse:collapse;
+	margin-left: 15%;
+	margin-right: 15%;
+	border: 1px solid black;
+}
+#Students th{
+	vertical-align:center;
+	background-color: #999;
+	border: 1px solid black;
+}
+#Students tr{
+	background-color: #ddd;
+}
+#Students tr:nth-of-type(odd) {
+  background-color:#ccc;
+}
+#Students td{
+	text-align:center;
+	border: 1px solid black;
+	width: 70%;
+}
+
+.conteudoComentario {
+	text-align:center;
+}
+
+#DB_Users{
+	margin-left: 22.5%;
+	margin-right: 22.5%;
+}
+
+#DB_Users th{
+	background-color: #b99c6b;
+	border: 1px solid #666;
+	color: #22;
+}
+#DB_Users tr{
+	background-color: #c9c27f;
+	border: 1px solid #666;
+}
+#DB_Users tr:nth-of-type(odd) {
+  background-color:#74a18e;
+  border: 1px solid #222;
+}
+#DB_Users td, th{
+	text-align:center;
+	height:30px;
+	width: 500px;
+	vertical-align:center;
+	border: 1px solid #666;
+	color: #222;
+}
+
+ul {
+	text-align: justify;
+	margin-right: 10%;
+	margin-left: 10%;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+h3, h2, h1{
+	text-align: center;
+}
+
+#Notes {
+	text-align: justify;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
