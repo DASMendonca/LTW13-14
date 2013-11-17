@@ -1,7 +1,8 @@
 <?php
-include 'classes.php';
+include '../classes.php';
+header('Content-type: application/json');
 
-$db = new PDO('sqlite:./database.sqlite');
+$db = new PDO('sqlite:../database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
