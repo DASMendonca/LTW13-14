@@ -24,6 +24,7 @@ try {
 	
 } catch (GeneralException  $e) {
 	echo json_encode($e);
+	
 }
 
 ?>
