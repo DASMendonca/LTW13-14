@@ -1,8 +1,9 @@
-<!-- 		<script -->
-<!-- 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> -->
-<!-- </script> -->
-<!-- 		<script type="text/javascript" src='search.js'></script> -->
-		
+<?php 
+echo "hello";
+?>
+		<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" src='search.js'></script>
+
 		
 		<form id="search_form" class="bySearch" name="Products" method="GET">
 		<h1>Procurar Produto:</h1>
