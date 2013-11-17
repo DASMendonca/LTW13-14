@@ -65,6 +65,16 @@ class Err_UnknownOp extends ApiError{
 }
 
 
+class Err_Not_Found extends ApiError{
+	
+	function __construct($fieldName){
+		
+		
+	}
+	
+}
+
+
 
 
 
