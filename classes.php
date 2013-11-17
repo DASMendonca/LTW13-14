@@ -231,6 +231,7 @@ class Customer implements savable{
 	public $email;
 	public $password;
 	public $permission;
+	protected $Address;
 	
 	
 	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions){
@@ -248,7 +249,12 @@ class Customer implements savable{
 		$this->password=$pw;
 		$this->permission=$permissions;//TODO: maybe validate these permissions
 		
+		$addressParameters=array(
+			array("AddressID",array($this->addressID),"equal")
+		);
 		
+		$ads=Address::getInstancesByFields($db, $addressParameters);
+		$this->Address=$ads[0];
 		
 		
 	}
@@ -305,6 +311,11 @@ class Customer implements savable{
 		return $instances;
 	}
 	
+	
+	function getAddress(){
+		
+		return $this->Address;
+	}
 }
 
 
