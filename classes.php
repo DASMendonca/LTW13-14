@@ -81,7 +81,6 @@ class Invoice implements savable{
 	public $InvoiceNO;
 	public $InvoiceDate;
 	public $CostumerID;
-	public $AddressID;
 	public $Line;
 	
 	function __construct(){
@@ -105,9 +104,50 @@ class Line implements savable{
 	public $ProductCode;
 	public $Quantity;
 	public $UnitPrice;
+	public $CreditAmount;
+	public $Tax;
 	
-	public function saveToDB($db){}
-	static public function getInstancesByFields($db,$fields){}
+	
+	function __construct($LineNumber,$ProductCode,$Quantity,$UnitPrice,$Tax){
+		
+		$this->LineNumber=$LineNumber;
+		$this->ProductCode=$ProductCode;
+		$this->Quantity=$Quantity;
+		$this->UnitPrice=$UnitPrice;
+		$this->Tax=$Tax;
+		$this->CreditAmount=$this->UnitPrice*$this->Quantity;
+	}
+	public function saveToDB($db){
+		//TODO: implement it later
+	}
+	static public function getInstancesByFields($db,$fields){
+		
+		$params=array();
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"LineNumber")==0 || strcmp($entry[0],"ProductCode")==0 || 
+			strcmp($entry[0],"Quantity")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"Tax")==0){
+				array_push($params, $entry);
+			}
+			else throw new GeneralException(new Err_UnknownField($entry[0]));	
+		}
+		
+		$query=constructSelect("Invoice_Line", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			
+			$tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
+			$instance=new Line($entry["LineNumber"], $entry["ProductCode"], $entry["Quantity"], $entry["UnitPrice"],$tax);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+			
+	}
 	
 	
 }
@@ -408,7 +448,7 @@ class ProductType implements savable{
 class Tax implements savable{
 	
 	
-	public $TaxID;
+	protected $TaxID;
 	public $TaxPercentage;
 	public $TaxType;
 	
