@@ -29,9 +29,14 @@ function searchByFields(){
 		alert("Please fill at least one of the search fields.");
 		return;
 	}
+	var what_api = $("#search_form").attr("name");
+	if(what_api=="Products") what_api= "./private_api/getProduct.php";
+	else if(what_api=="Invoice") what_api="./private_api/getInvoice.php";
+	
+	
 	console.log(params);	
 	$.ajax({
-        url : "./private_api/getProduct.php",
+        url : what_api ,
         dataType : "html",
         data : {"params": params},
         success : function(data){
@@ -90,6 +95,7 @@ function searchArrayConstruct(element){
 		}
 		else{
 			value.push($(input_type[0]).val());
+			operation="equal";
 		}
 		
 		query_array.push(value);

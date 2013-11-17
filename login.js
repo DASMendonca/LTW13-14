@@ -19,8 +19,8 @@ $(document).ready(function() {
 
 function fetchPages(top_lis_id){
 	var page_request;
-	if(top_lis_id == "li_prod")
-		page_request= "searchProduct.php";
+	if(top_lis_id == "li_prod")	page_request= "searchProduct.php";
+	else if(top_lis_id == "li_invoice") page_request="searchInvoice.php";
 	else
 		return;
 	
