@@ -1,17 +1,9 @@
-<html>
-<head>
-<link rel="stylesheet" href="homepage.css">
-<meta charset="UTF-8">
-<title>Search product</title>
-<script
+		<script
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
-<script type="text/javascript" src="search.js"></script>
-</head>
-
-
-<body>
-	<div>
+		<script type="text/javascript" src='search.js'></script>
+		
+		
 		<form id="search_form" class="bySearch" name="Products" method="GET">
 		<h1>Procurar Produto:</h1>
 			<div id="ProductCode">
@@ -38,15 +30,11 @@
 				</select> 
 				<input name="UnitPrice" class="inputfield"
 					type="number" placeholder="price per unit"><br> 
-			</div>
-			
-			<div id="button">
-				<input type="button"
+					<input type="button"
 						value="search" id="search_button">
+						
 			</div>
-		</form>
-	</div>
-	<div id="mainDiv"></div>
+			</form>
+	<div id="search_results_div"></div>
 
-</body>
-</html>
+
