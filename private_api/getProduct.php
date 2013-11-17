@@ -17,8 +17,20 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 try {
 	if(!isset($_GET['params']))
-		throw new GeneralException(new Err_MissingParameter("params"));	
-	$products=Product::getInstancesByFields($db, $_GET["params"]);
+		throw new GeneralException(new Err_MissingParameter("params"));
+	
+	$params=$_GET["params"];
+	
+	//convert price to cents (as it is stored on the DB)
+	for($i=0;$i<count($params);$i++){
+		if(strcmp($params[$i][0],"UnitPrice")==0){
+			$params[$i][1][0]=$params[$i][1][0]*100;//convertion from euro to cents
+			if(count($params[$i][1])>1)$params[$i][1][1]=$params[$i][1][1]*100;//convertion to cents
+		}
+	}
+	
+	
+	$products=Product::getInstancesByFields($db, $params);
 } catch (GeneralException $e) {
 	echo '</fieldset>';
 	die();
