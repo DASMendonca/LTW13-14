@@ -95,6 +95,7 @@ function searchArrayConstruct(element){
 		}
 		else{
 			value.push($(input_type[0]).val());
+			operation="equal";
 		}
 		
 		query_array.push(value);

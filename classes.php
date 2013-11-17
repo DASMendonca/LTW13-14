@@ -122,7 +122,9 @@ class Invoice implements savable{
 		}
 		
 	}
-	
+	function getCustomerId(){
+		return $this->CustomerID;
+	}
 	
 	
 	
