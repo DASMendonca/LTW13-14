@@ -16,24 +16,26 @@ function searchByFields(){
 	var params = new Array();
 	var divs = $("#search_form div");
 	var possible_extr_nr = $(".extrafield").length;
-	//console.log(possible_extr_nr);
+	console.log(possible_extr_nr);
 	var i =0;
 	for(i; i<divs.length; i++){
-		var well_formed = searchArrayConstruct(divs[i]);
-		if(well_formed != null)
-		params.push(well_formed);
+		var is_valid= searchArrayConstruct(divs[i]);
+		if(is_valid!=null)
+			
+		params.push(is_valid);
 	}
-	console.log(params);
-	if(params.length==0){
+	
+	if(params.length ==0){
 		alert("Please fill at least one of the search fields.");
 		return;
-	}	
+	}
+	console.log(params);	
 	$.ajax({
         url : "./private_api/getProduct.php",
         dataType : "html",
-        data : {"params":params},
+        data : {},
         success : function(data){
-        	$("#mainDiv").html(data);
+          $("#search_results_div").html(data);
         },
         
         error: function(jqXHR, exception) {
@@ -70,15 +72,14 @@ function searchArrayConstruct(element){
 	//console.log(selected_query);
 	
 	var input_type = $(element).children("input");
+	if($(input_type[0]).val()=="")
+		return null;
+	if(input_type.length>1 && $(input_type[1]).val()=="")
+		return null;
 	//console.log(input_type);
-	if($(input_type[0]).val()== ""){
-		return null;
-	}
-	else if(input_type.length >1 && $(input_type[1]).val() == ""){
-		return null;
-	}
 	
 	if(selected_query == null || selected_query.length == 0){
+		
 		var is_text = $(input_type[0]).attr("type");
 		if(is_text == "text"){
 			operation = "contains";
@@ -89,7 +90,6 @@ function searchArrayConstruct(element){
 		}
 		else{
 			value.push($(input_type[0]).val());
-			operation="equal";
 		}
 		
 		query_array.push(value);

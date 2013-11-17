@@ -11,7 +11,47 @@ $(document).ready(function() {
 	    	$("#SignInButton").click();
 	    }
 	});
+	$('.top_lis').click(function(){
+			fetchPages($(this).attr("id"));
+	});
+	
 });
+
+function fetchPages(top_lis_id){
+	var page_request;
+	if(top_lis_id == "li_prod")
+		page_request= "searchProduct.php";
+	else
+		return;
+	
+	
+	$.ajax({
+        url : page_request,
+        dataType : "html",
+        data : {},
+        success : function(data){
+        	$("#mainDiv").html(data);
+        },
+        
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+    });
+}
 
 
 function askIfLoginIsOk(){
