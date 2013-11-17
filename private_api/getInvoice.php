@@ -39,7 +39,7 @@ if($invoices != NULL){
 		echo utf8_encode('<tr>
 				<td>' .$invoice->InvoiceNo .'</td>
 				<td>' .$invoice->InvoiceDate .'</td>
-				<td>' .$invoice->CustomerID .'</td>
+				<td>' .$invoice->getCustomerId() .'</td>
 				<td>' .$invoice->CompanyName.'</td>
 				<td>' .$invoice->GrossTotal.'</td>
 			<tr>');	
