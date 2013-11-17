@@ -2,7 +2,7 @@
 <script type="text/javascript" src='search.js'></script>
 
 <form id="search_form" class="bySearch" name="Invoice" method="GET">
-	<h1>Procurar Produto:</h1>
+	<h1>Invoice Search:</h1>
 	<div id="InvoiceNo">
 		Invoice number:<input type="number" name="InvoiceNo" class="inputfield" placeholder="Invoice Number">
 	</div>
