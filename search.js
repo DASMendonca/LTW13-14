@@ -64,27 +64,43 @@ function searchArrayConstruct(element){
 	
 	var selected_query = $(element).find(":selected").text();
 	//console.log(selected_query);
-	if(selected_query == null || selected_query.length == 0)
-		operation = "contains";
-	else{
-	if(selected_query=="Between"){ operation = "range"}
-	else if(selected_query=="Is"){ operation ="equal"}  
-	else if(selected_query=="Max"){operation = "max"}  
-	else if(selected_query=="Min"){operation = "min"}  
-	else if(selected_query=="Contains"){operation ="contains"}
-	}
 	
 	var input_type = $(element).children("input");
 	//console.log(input_type);
 	
-	if(operation != "range"){ 
-		value.push(parseInt($(input_type[0]).val()));
+	if(selected_query == null || selected_query.length == 0){
+		operation = "contains";
+		var is_text = $(input_type[0]).attr("type");
+		if(is_text == "text"){
+			is_text = "%";
+			is_text= is_text.concat($(input_type[0]).val());
+			is_text= is_text.concat("%");
+			value.push(is_text);
+		}
+		else{
+			value.push($(input_type[0]).val());
+		}
+		
 		query_array.push(value);
 	}
 	else{
-		value.push(parseInt($(input_type[0]).val()));
-		value.push(parseInt($(input_type[1]).val()));
-		query_array.push(value);
+		if(selected_query=="Between"){ operation = "range"}
+		else if(selected_query=="Is"){ operation ="equal"}  
+		else if(selected_query=="Max"){operation = "max"}  
+		else if(selected_query=="Min"){operation = "min"}  
+		else if(selected_query=="Contains"){operation ="contains"}
+	
+	
+	
+		if(operation != "range"){ 
+			value.push(parseInt($(input_type[0]).val()));
+			query_array.push(value);
+		}
+		else{
+			value.push(parseInt($(input_type[0]).val()));
+			value.push(parseInt($(input_type[1]).val()));
+			query_array.push(value);
+		}
 	}
 	
 	query_array.push(operation);
