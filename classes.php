@@ -101,7 +101,7 @@ class Invoice implements savable{
 	function setLines($Lines){
 		$this->Lines=$Lines;
 		$this->GrossTotal=0;
-		for($i=0;count($this->Lines);$i++){
+		for($i=0;$i<count($this->Lines);$i++){
 			$this->GrossTotal+=$this->Lines[$i]->CreditAmount;
 		}
 		
@@ -177,8 +177,8 @@ class Line implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"LineNumber")==0 || strcmp($entry[0],"ProductCode")==0 || 
-			strcmp($entry[0],"Quantity")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"Tax")==0){
+			if(strcmp($entry[0],"LineNo")==0 || strcmp($entry[0],"ProductCode")==0 || 
+			strcmp($entry[0],"Quantity")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"Tax")==0 || strcmp($entry[0],"InvoiceNo")==0){
 				array_push($params, $entry);
 			}
 			else throw new GeneralException(new Err_UnknownField($entry[0]));	
@@ -192,7 +192,7 @@ class Line implements savable{
 			$entry=$result[$i];
 			
 			$tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
-			$instance=new Line($entry["LineNumber"], $entry["ProductCode"], $entry["Quantity"], $entry["UnitPrice"],$tax);
+			$instance=new Line($entry["LineNo"], $entry["ProductCode"], $entry["Quantity"], $entry["UnitPrice"],$tax);
 			$instances[$i]=$instance;
 		}
 		
