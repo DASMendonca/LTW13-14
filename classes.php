@@ -84,6 +84,7 @@ class Invoice implements savable{
 	protected $CostumerID;
 	public $CostumerName;
 	protected $Lines;
+	public $GrossTotal;
 	
 	function __construct($InvoiceNO,$InvoiceDate,$CostumerID,$CostumerName,$Lines){
 		
@@ -93,8 +94,15 @@ class Invoice implements savable{
 		$this->CostumerName=$CostumerName;
 		$this->Lines=$Lines;
 		
+		$this->GrossTotal=0;
+		for($i=0;count($this->Lines);$i++){
+			$this->GrossTotal+=$this->Lines[$i]->CreditAmount;
+		}
+		
 		
 	}
+	
+	
 	
 	
 	public function saveToDB($db){
