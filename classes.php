@@ -65,6 +65,16 @@ class Err_UnknownOp extends ApiError{
 }
 
 
+class Err_Not_Found extends ApiError{
+	
+	function __construct($fieldName){
+		
+		
+	}
+	
+}
+
+
 
 
 
@@ -82,16 +92,16 @@ class Invoice implements savable{
 	public $InvoiceNO;
 	public $InvoiceDate;
 	protected $CustomerID;
-	public $CustomerName;
+	public $CompanyName;
 	protected $Lines;
 	public $GrossTotal;
 	
-	function __construct($InvoiceNO,$InvoiceDate,$CustomerID,$CustomerName){
+	function __construct($InvoiceNO,$InvoiceDate,$CustomerID,$CompanyName){
 		
 		$this->InvoiceNO=$InvoiceNO;
 		$this->InvoiceDate=$InvoiceDate;
 		$this->CustomerID=$CustomerID;
-		$this->CustomerName=$CustomerName;
+		$this->CompanyName=$CompanyName;
 		
 		
 		
@@ -101,7 +111,7 @@ class Invoice implements savable{
 	function setLines($Lines){
 		$this->Lines=$Lines;
 		$this->GrossTotal=0;
-		for($i=0;count($this->Lines);$i++){
+		for($i=0;$i<count($this->Lines);$i++){
 			$this->GrossTotal+=$this->Lines[$i]->CreditAmount;
 		}
 		
@@ -120,7 +130,7 @@ class Invoice implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"InvoiceNO")==0 || strcmp($entry[0],"InvoiceDate")==0 ||
-			strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"CustomerName")==0){
+			strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"CompanyName")==0){
 				array_push($params, $entry);
 			}
 			else throw new GeneralException(new Err_UnknownField($entry[0]));
@@ -133,7 +143,7 @@ class Invoice implements savable{
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
 				
-			$instance=new Invoice($entry["InvoiceNO"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CustomerName"]);
+			$instance=new Invoice($entry["InvoiceNO"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CompanyName"]);
 			
 			$fields=array(
 				array("InvoiceNo",array($instance->InvoiceNO),"equal")
@@ -177,8 +187,8 @@ class Line implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"LineNumber")==0 || strcmp($entry[0],"ProductCode")==0 || 
-			strcmp($entry[0],"Quantity")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"Tax")==0){
+			if(strcmp($entry[0],"LineNo")==0 || strcmp($entry[0],"ProductCode")==0 || 
+			strcmp($entry[0],"Quantity")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"Tax")==0 || strcmp($entry[0],"InvoiceNo")==0){
 				array_push($params, $entry);
 			}
 			else throw new GeneralException(new Err_UnknownField($entry[0]));	
@@ -192,7 +202,7 @@ class Line implements savable{
 			$entry=$result[$i];
 			
 			$tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
-			$instance=new Line($entry["LineNumber"], $entry["ProductCode"], $entry["Quantity"], $entry["UnitPrice"],$tax);
+			$instance=new Line($entry["LineNo"], $entry["ProductCode"], $entry["Quantity"], $entry["UnitPrice"],$tax);
 			$instances[$i]=$instance;
 		}
 		
@@ -208,7 +218,7 @@ class Customer implements savable{
 	
 	public $CustomerID;
 	public $CustomerTaxID;
-	public $CompanyName;
+	public $CustomerName;
 	public $addressID;
 	public $email;
 	public $password;
@@ -221,7 +231,7 @@ class Customer implements savable{
 		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
 		else $this->CustomerTaxID=null;
 
-		$this->CompanyName=$Name;
+		$this->CustomerName=$Name;
 		
 		if($addID>=0) $this->addressID=$addID;
 		else $this->addressID=null;
@@ -236,14 +246,14 @@ class Customer implements savable{
 	}
 	function saveToDB($db){
 		
-		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
+		if($this->CustomerTaxID==null || $this->CustomerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into customer (CustomerTaxID,CompanyName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
+		$stmt="Insert into customer (CustomerTaxID,CustomerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->CustomerTaxID);
-		$query->bindParam(2,$this->CompanyName);
+		$query->bindParam(2,$this->CustomerName);
 		$query->bindParam(3,$this->email);
 		$query->bindParam(4,$this->addressID);
 		$query->bindParam(5,$this->password);
