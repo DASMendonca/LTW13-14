@@ -23,7 +23,7 @@ try {
 	
 	
 	
-	$customers=Product::getInstancesByFields($db, $params);
+	$customers=Customer::getInstancesByFields($db, $params);
 } catch (GeneralException $e) {
 	echo '</fieldset>';
 	die();
