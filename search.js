@@ -21,8 +21,8 @@ function detailedAction(id){
 	var url = $("#search_form").attr("name");
 	var column="";
 	var parameter = new Array();
-	if(url=="Products") {url= "/DetailProduct.php?params="; column="ProductCode";}
-	else if(url=="Invoice"){ url="/DetailInvoice.php?params="; column="InvoiceNo";}
+	if(url=="Products") {url= "./DetailProduct.php?params="; column="ProductCode";}
+	else if(url=="Invoice"){ url="./DetailInvoice.php?params="; column="InvoiceNo";}
 	else if(url=="Customer"){ url="./DetailCustomer.php?params="; column="CustomerID";}
 	
 	var params = new Array();
