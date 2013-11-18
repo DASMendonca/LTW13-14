@@ -42,6 +42,8 @@ if($customers != NULL){
 				<td>' .$customer->CustomerName .'</td>
 				<td>' .$customer->CustomerTaxID .'</td>
 				<td>' .$customer->email.' </td>
+				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
+					id='.$customer->CustomerID .'/></td>
 			<tr>');	
 	}
 	echo '</table>
