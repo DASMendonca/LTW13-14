@@ -1,5 +1,5 @@
 <?php
 
-header("Location: ./searchProduct.php");
+header("Location: ./onlineInvoiceSystem.php");
 die();
 ?>

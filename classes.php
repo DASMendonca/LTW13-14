@@ -1,11 +1,87 @@
 <?php 
+class GeneralException extends Exception{
+	
+	
+	public $error;
+	
+	function __construct($err){
+		$this->error=$err;	
+	}
+}
+class ApiError {
+	
+	public $code;
+	public $reason;
+	public $field;
+	
+	
+};
+
+class SimpleError {
+	
+	public $code;
+	public $reason;
+}
 
 
 class NotFoundException extends Exception {};
-class DBInconsistencyException extends Exception {};
-class BadParameterException extends Exception {};
-class BadOpException extends Exception {};
-class BadNumberArgsException extends Exception {};
+
+
+
+class Err_MissingParameter extends ApiError {
+	
+	function __construct($field){
+		$this->code="701";
+		$this->reason="Missing Parameter";
+		$this->field=$field;
+		
+	}
+}
+
+class Err_WrongNumberValues extends ApiError {
+	
+	function __construct($field){
+		
+		$this->code="702";
+		$this->reason="Wrong number of arguments";
+		$this->field=$field;
+		
+	}
+}
+
+
+class Err_UnknownField extends ApiError{
+	
+	function __construct($fieldName){
+		$this->code="703";
+		$this->reason="Unknown field";
+		$this->field=$fieldName;
+		
+	}
+}
+
+class Err_UnknownOp extends ApiError{
+	
+	function __construct($fieldName){
+		$this->code="704";
+		$this->reason="Unknown operation";
+		$this->field=$fieldName;
+	}
+	
+}
+
+
+class Err_Not_Found extends SimpleError{
+	
+	function __construct($entityName){
+		$this->code="404";
+		$this->reason="No $entityName found";
+	}
+	
+}
+
+
+
 
 
 interface savable
@@ -14,24 +90,161 @@ interface savable
 	static public function getInstancesByFields($db,$fields);
 }
 
+
+
+
+class Invoice implements savable{
+	
+	public $InvoiceNo;
+	public $InvoiceDate;
+	protected $CustomerID;
+	public $CompanyName;
+	protected $Lines;
+	public $GrossTotal;
+	
+	function __construct($InvoiceNo,$InvoiceDate,$CustomerID,$CompanyName){
+		
+		$this->InvoiceNo=$InvoiceNo;
+		$this->InvoiceDate=$InvoiceDate;
+		$this->CustomerID=$CustomerID;
+		$this->CompanyName=$CompanyName;
+		
+		
+		
+		
+	}
+	
+	function setLines($Lines){
+		$this->Lines=$Lines;
+		$this->GrossTotal=0;
+		for($i=0;$i<count($this->Lines);$i++){
+			$this->GrossTotal+=$this->Lines[$i]->CreditAmount*($this->Lines[$i]->Tax->TaxPercentage/100+1);
+		}
+		
+	}
+	function getCustomerId(){
+		return $this->CustomerID;
+	}
+	
+	
+	
+	public function saveToDB($db){
+		//TODO implement it
+	}
+	static public function getInstancesByFields($db,$fields){
+		
+		$params=array();
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"InvoiceNo")==0 || strcmp($entry[0],"InvoiceDate")==0 ||
+			strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"CompanyName")==0){
+				array_push($params, $entry);
+			}
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
+		}
+		
+		$query=constructSelect("Invoice", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+				
+			$instance=new Invoice($entry["InvoiceNo"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CompanyName"]);
+			
+			$fields=array(
+				array("InvoiceNo",array($instance->InvoiceNo),"equal")
+			);
+			$lines=Line::getInstancesByFields($db,$fields);
+			$instance->setLines($lines);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+		
+		
+	}
+	
+	function getLines(){
+		return $this->Lines;
+	}
+}
+
+class Line implements savable{
+	
+	public $LineNumber;
+	public $ProductCode;
+	public $Quantity;
+	public $UnitPrice;
+	public $CreditAmount;
+	public $Tax;
+	
+	
+	function __construct($LineNumber,$ProductCode,$Quantity,$UnitPrice,$Tax){
+		
+		$this->LineNumber=$LineNumber;
+		$this->ProductCode=$ProductCode;
+		$this->Quantity=$Quantity;
+		$this->UnitPrice=$UnitPrice;
+		$this->Tax=$Tax;
+		$this->CreditAmount=$this->UnitPrice*$this->Quantity;
+	}
+	public function saveToDB($db){
+		//TODO: implement it later
+	}
+	static public function getInstancesByFields($db,$fields){
+		
+		$params=array();
+		
+		for($i=0;$i<count($fields);$i++){
+			$entry=$fields[$i];
+			if(strcmp($entry[0],"LineNo")==0 || strcmp($entry[0],"ProductCode")==0 || 
+			strcmp($entry[0],"Quantity")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"Tax")==0 || strcmp($entry[0],"InvoiceNo")==0){
+				array_push($params, $entry);
+			}
+			else throw new GeneralException(new Err_UnknownField($entry[0]));	
+		}
+		
+		$query=constructSelect("Invoice_Line", $params, $db);
+		$query->execute();
+		$result=$query->fetchAll();
+		$instances=array();
+		for($i=0;$i<count($result);$i++){
+			$entry=$result[$i];
+			
+			$tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
+			$instance=new Line($entry["LineNo"], $entry["ProductCode"], $entry["Quantity"], $entry["UnitPrice"],$tax);
+			$instances[$i]=$instance;
+		}
+		
+		return $instances;
+			
+	}
+	
+	
+}
+
+
 class Customer implements savable{
 	
-	public $customerID;
-	public $customerTaxID;
-	public $customerName;
+	public $CustomerID;
+	public $CustomerTaxID;
+	public $CustomerName;
 	public $addressID;
 	public $email;
 	public $password;
 	public $permission;
+	protected $Address;
 	
 	
-	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions){
+	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions,$db){
 		
-		$this->customerID=$ID;
-		if($TaxID>=0)$this->customerTaxID=$TaxID;//TODO: maybe use a validating function later
-		else $this->customerTaxID=null;
+		$this->CustomerID=$ID;
+		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
+		else $this->CustomerTaxID=null;
 
-		$this->customerName=$Name;
+		$this->CustomerName=$Name;
 		
 		if($addID>=0) $this->addressID=$addID;
 		else $this->addressID=null;
@@ -40,20 +253,27 @@ class Customer implements savable{
 		$this->password=$pw;
 		$this->permission=$permissions;//TODO: maybe validate these permissions
 		
+		$addressParameters=array(
+			array("AddressID",array($this->addressID),"equal")
+		);
 		
+		
+		
+		$ads=Address::getInstancesByFields($db, $addressParameters);
+		$this->Address=$ads[0];
 		
 		
 	}
 	function saveToDB($db){
 		
-		if($this->customerTaxID==null || $this->customerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
+		if($this->CustomerTaxID==null || $this->CustomerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into customer (customerTaxID,customerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
+		$stmt="Insert into customer (CustomerTaxID,CustomerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
-		$query->bindParam(1,$this->customerTaxID);
-		$query->bindParam(2,$this->customerName);
+		$query->bindParam(1,$this->CustomerTaxID);
+		$query->bindParam(2,$this->CustomerName);
 		$query->bindParam(3,$this->email);
 		$query->bindParam(4,$this->addressID);
 		$query->bindParam(5,$this->password);
@@ -76,11 +296,11 @@ class Customer implements savable{
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
 			strcmp($entry[0],"CustomerName")==0 || strcmp($entry[0],"Email")==0 || 
-			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password") || 
+			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password")==0 || 
 			strcmp($entry[0],"Permission")==0){
 				array_push($params, $entry);
 			}
-			else throw new BadParameterException();
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		
@@ -90,13 +310,18 @@ class Customer implements savable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"]);
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
 			$instances[$i]=$instance;
 		}
 
 		return $instances;
 	}
 	
+	
+	function getAddress(){
+		
+		return $this->Address;
+	}
 }
 
 
@@ -156,8 +381,8 @@ class Address implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City") || strcmp($entry[0],"PostalCode1") || strcmp($entry[0],"PostalCode2") || strcmp($entry[0],"Country")==0)array_push($params, $entry);
-			else throw new BadParameterException();
+			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0 || strcmp($entry[0],"PostalCode1")==0 || strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"Country")==0)array_push($params, $entry);
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		$query=constructSelect("Address", $params, $db);
@@ -178,38 +403,38 @@ class Address implements savable{
 
 class Product implements savable{
 	
-	public $productCode;
-	public $productDescription;
-	public $unitPrice;//in cents
-	public $unitOfMeasure;
-	public $productTypeID;
+	public $ProductCode;
+	public $ProductDescription;
+	public $UnitPrice;//in cents
+	public $UnitOfMeasure;
+	public $ProductTypeID;
 	
 	function __construct($code,$descrip,$price,$unit,$typeID){
 		
-		$this->productCode=$code;
-		$this->productDescription=$descrip;
+		$this->ProductCode=$code;
+		$this->ProductDescription=$descrip;
 		
-		if($price>=0)$this->unitPrice=$price;
-		else $this->unitPrice=null;
+		if($price>=0)$this->UnitPrice=$price;
+		else $this->UnitPrice=null;
 		
-		$this->unitOfMeasure=$unit;
+		$this->UnitOfMeasure=$unit;
 		
-		if($typeID>=0)$this->productTypeID=$typeID;
-		else $this->productTypeID=null;
+		if($typeID>=0)$this->ProductTypeID=$typeID;
+		else $this->ProductTypeID=null;
 		
 		
 	}
 	
 	function saveToDB($db){
 		
-		if($this->productDescription==null || $this->unitPrice==null || $this->unitOfMeasure==null || $this->productTypeID==null){
+		if($this->ProductDescription==null || $this->UnitPrice==null || $this->UnitOfMeasure==null || $this->ProductTypeID==null){
 			
 			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
 			$query=$db->prepare($stmt);
-			$query->bindParam(1,$this->productDescription);
-			$query->bindParam(2,$this->unitPrice);
-			$query->bindParam(3,$this->unitOfMeasure);
-			$query->bindParam(4,$this->productTypeID);
+			$query->bindParam(1,$this->ProductDescription);
+			$query->bindParam(2,$this->UnitPrice);
+			$query->bindParam(3,$this->UnitOfMeasure);
+			$query->bindParam(4,$this->ProductTypeID);
 			
 			return $query->execute();
 					
@@ -227,7 +452,7 @@ class Product implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"ProductCode")==0 || strcmp($entry[0],"ProductDescription")==0 || strcmp($entry[0],"UnitOfMeasure")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"ProductTypeID")==0)array_push($params, $entry);
-			else throw new BadParameterException();
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		
@@ -287,7 +512,7 @@ class ProductType implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"ProductTypeID")==0 || strcmp($entry[0],"ProductTypeDescription")==0 || strcmp($entry[0],"TaxID")==0)array_push($params, $entry);
-			else throw new BadParameterException();
+			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
 		$query=constructSelect("ProductType", $params, $db);
@@ -309,28 +534,28 @@ class ProductType implements savable{
 class Tax implements savable{
 	
 	
-	public $taxID;
-	public $value;
-	public $description;
+	protected $TaxID;
+	public $TaxPercentage;
+	public $TaxType;
 	
 	
 	function __construct($id,$value,$description){
 		
-		$this->taxID=$id;
-		if($value>=0) $this->value=$value;
-		else $this->value=null;
-		$this->description=$description;
+		$this->TaxID=$id;
+		if($value>=0) $this->TaxPercentage=$value;
+		else $this->TaxPercentage=null;
+		$this->TaxType=$description;
 		
 
 		
 	}
 	function saveToDB($db){
 		
-		if($this->value==null)return;//dont do nothing if it's not a valid tax
+		if($this->TaxPercentage==null)return;//dont do nothing if it's not a valid tax
 		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";
 		$query=$db->prepare($stmt);
-		$query->bindParam(1,$this->value);
-		$query->bindParam(2,$this->description);
+		$query->bindParam(1,$this->TaxPercentage);
+		$query->bindParam(2,$this->TaxType);
 		
 		return $query->execute();
 	}
@@ -343,7 +568,7 @@ class Tax implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"Description")==0)array_push($params, $entry);
-			else throw new BadParameterException();		
+			else throw new GeneralException(new Err_UnknownField($entry[0]));		
 		}
 		
 		$query=constructSelect("Tax", $params, $db);
@@ -371,22 +596,26 @@ function getConditionStr($entry){
 	$fieldName=$entry[0];
 	
 	if($op=="equal"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." = ? ";	
 	}
 	else if($op=="max"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." <= ? ";
 	}
 	else if($op=="min"){
-		if(count($entry[1])!=1)throw new BadNumberArgsException();
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." >= ? ";
 	}
 	else if($op=="range"){
-		if(count($entry[1])!=2)throw new BadNumberArgsException();
+		if(count($entry[1])!=2)throw new GeneralException(new Err_WrongNumberValues($fieldName));
 		return $fieldName." BETWEEN ? AND ? ";
 	}
-	else throw new BadOpException();
+	else if($op=="contains"){
+		if(count($entry[1])!=1)throw new GeneralException(new Err_WrongNumberValues($fieldName));
+		return $fieldName." LIKE ? ";
+	}
+	else throw new GeneralException(new Err_UnknownOp($entry[2]));
 	
 	
 	
@@ -416,6 +645,7 @@ function constructSelect($tableName,$parameters,$db){
 	$place=1;
 		
 	for($i=0;$i<count($parameters);$i++){
+		
 		
 		$entry=$parameters[$i];
 		$query->bindParam($place,$entry[1][0]);

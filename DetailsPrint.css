@@ -1,0 +1,84 @@
+@page {
+	margin-bottom: 2cm;	
+}
+
+body{
+	width: 21cm;
+	height: 29.7cm;
+	margin: 0cm;
+	padding-bottom: 2cm;
+	padding-left: 3cm;
+	padding-right: 2.5cm;
+	padding-top: 2cm;
+}
+
+table.Logo th {
+	font-size: x-large;
+}
+
+.sheetID {
+	font-size: x-large;
+	font-weight: bold;
+}
+
+.rowID {
+	font-weight: bold;
+}
+
+table.Logo {
+	margin-left: 12.7cm;
+	margin-top: 2cm;
+	margin-bottom:2cm;
+	text-align: center;
+	font-size: large;
+	width: auto;
+	border: 0;
+}
+
+table.invoice {
+	text-align: left;
+}
+table.products {
+	text-align: left;
+	border: 1px solid black;
+	width: 100%;
+	
+	border-collapse: collapse;
+}
+table.products th{
+	border: 1px solid black;
+	height: 1cm;
+}
+table.products td {
+	border-bottom: 0;
+	border-top: 0;
+	border-left: 1px solid black;
+	border-rigth: 1px solid black;
+	height: 0.75cm;
+}
+
+.Articles {
+	font-size: large;
+	font-weight: bold;
+}
+
+td {
+	padding: 0.2cm;
+}
+
+p {
+	display: inline;
+	line-height: 0.7cm;	
+}
+
+table {
+	page-break-inside: auto;
+}
+
+thead {display: table-header-group;}
+
+div.divHeader {
+	top: 0;
+	margin: 0cm;
+	padding: 0cm;
+}
