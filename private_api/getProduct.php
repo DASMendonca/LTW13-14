@@ -5,6 +5,8 @@ include '../classes.php';
 header('Content-type: text/html; charset=UTF-8');
 ?>
 
+<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src='search.js'></script>
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
@@ -50,7 +52,7 @@ if($products != NULL){
 				<td>' .$product->UnitOfMeasure .'</td>
 				<td>' .($product->UnitPrice / 100).' &euro; </td>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
-					id=' .$product->ProductCode .' /></td>
+					class="s_cart_img" id=' .$product->ProductCode .' /></td>
 				<td><img src="./pictures/shopping_cart.png" width="16" height="16" border="0" alt="add To Cart"/></td>
 			<tr>');	
 	}

@@ -10,7 +10,33 @@ $(document).ready(function() {
 	    	$("#search_button").click();
 	    }
 	});
+	$(".s_cart_img").click(
+			function(){
+				detailedAction(jQuery(this).attr("id"));
+			});
 });
+
+
+function detailedAction(id){
+	var url = $("#search_form").attr("name");
+	var column="";
+	var parameter = new Array();
+	if(url=="Products") {url= "/DetailProduct.php?params="; column="ProductCode";}
+	else if(url=="Invoice"){ url="/DetailInvoice.php?params="; column="InvoiceNo";}
+	else if(url=="Customer"){ url="./DetailProduct.php?params="; column="CustomerID";}
+	
+	var params = new Array();
+	params.push(column);
+	parameter.push(id);
+	params.push(parameter);
+	var op= "equal";
+	params.push(op);
+	url= url + JSON.stringify(params);
+	window.location.href = url;
+	
+	
+	
+}
 
 function searchByFields(){
 	var params = new Array();
