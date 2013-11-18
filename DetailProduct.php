@@ -3,8 +3,8 @@
 
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="DetailCostumer.css">
-<title>DetailCostumer</title>
+<link rel="stylesheet" href="DetailsPrint.css" media="print">
+<title>DetailProduct</title>
 </head>
 
 <body>
@@ -18,22 +18,21 @@
 </table>
 <br>
 
-<p class="sheetID">Dados de Cliente</p><br><br>
-<p class="rowID">Código de Cliente: </p>
+<p class="sheetID">Dados de Produto</p><br><br>
+<p class="rowID">Código de Produto: </p>
 <p>0001 </p><br>
-<p class="rowID">Nome: </p>
-<p> Filomena</p><br>
-<p class="rowID">Morada: </p>
-<p>Ali </p><br>
-<p class="rowID">Código-Postal: </p>
-<p>4000 </p>
-<p> - </p>
-<p>123</p><br>
-<p class="rowID">NIF: </p>
-<p>123456321</p><br>
-<p class="rowID">e-mail: </p>
-<p>ois3@ois.com</p>
-<br>
+<p class="rowID">Descrição do Produto: </p>
+<p>Cimento Normal Saco 35kg</p><br>
+<p class="rowID">UN: </p>
+<p>un </p><br>
+<p class="rowID">Preço Unitário: </p>
+<p>3.17 </p><br>
+<p class="rowID">Taxa: </p>
+<p>23%</p><br>
+<p class="rowID">Preço de Venda: </p>
+<p>3.19*1.23</p><br>
+<p class="rowID">Tipo de Produto: </p>
+<p>Material de Construção</p><br>
 <br>
 </body>
 </html>
