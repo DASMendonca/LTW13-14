@@ -20,7 +20,7 @@
 
 
 
-<php
+<?php
 
 include './classes.php';
 $db = new PDO('sqlite:./database.sqlite');
@@ -40,19 +40,21 @@ try {
 	$products=Product::getInstancesByFields($db, $params);
 	$product=$products[0];
 	
-	$typeID=$product->$ProductTypeID;
+	$typeID=$product->ProductTypeID;
 	
 	$typeQueryParams=array(
 		array("ProductTypeID",array($typeID),"equal")
 	);
 	
-	$type=ProductType::getInstancesByFields($db,$typeQueryParams);
+	$types=ProductType::getInstancesByFields($db,$typeQueryParams);
+	$type=$types[0];
 	
 	$TaxQueryParams=array(
 		array("TaxID",array($type->taxID),"equal")
 	);
 	
-	$tax=Tax::getInstancesByFields($db,$typeQueryParams);
+	$taxes=Tax::getInstancesByFields($db,$TaxQueryParams);
+	$tax=$taxes[0];
 	
 	
 	$ProductCode=$product->ProductCode;
@@ -79,23 +81,25 @@ try {
 }
 
 
-?>
 
-<p class="sheetID">Product Data</p><br><br>
-<p class="rowID">Product Code: </p>
-<p>0001 </p><br>
-<p class="rowID">Product Description: </p>
-<p>Cimento Normal Saco 35kg</p><br>
-<p class="rowID">UN: </p>
-<p>un </p><br>
-<p class="rowID">Unitary Price: </p>
-<p>3.17 </p><br>
-<p class="rowID">Tax: </p>
-<p>23%</p><br>
-<p class="rowID">Selling Price: </p>
-<p>3.19*1.23</p><br>
-<p class="rowID">Product Type: </p>
-<p>Material de Construção</p><br>
+
+echo '<p class="sheetID">Product Data</p><br><br>';
+echo '<p class="rowID">Product Code: </p>';
+echo '<p>'.$ProductCode.'</p><br>';
+echo '<p class="rowID">Product Description: </p>';
+echo '<p>'.$ProductDescription.'</p><br>';
+echo '<p class="rowID">UN: </p>';
+echo '<p>'.$UnitOfMeasure.'</p><br>';
+echo '<p class="rowID">Unitary Price: </p>';
+echo '<p>'.$UnitPrice.'</p><br>';
+echo '<p class="rowID">Tax: </p>';
+echo '<p>'.$Tax.' &#37; </p><br>';
+echo '<p class="rowID">Selling Price: </p>';
+echo '<p>'.$FinalPrice.'</p><br>';
+echo '<p class="rowID">Product Type: </p>';
+echo '<p>'.$type->typeDescription.'</p>';
+?>
+<br>
 <br>
 </body>
 </html>

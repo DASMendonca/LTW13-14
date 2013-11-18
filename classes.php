@@ -165,6 +165,10 @@ class Invoice implements savable{
 		
 		
 	}
+	
+	function getLines(){
+		return $this->Lines;
+	}
 }
 
 class Line implements savable{
