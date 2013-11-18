@@ -10,7 +10,7 @@
 <body>
 	<table class="Logo">
 		<tr>
-			<th>Sistema de Faturação Online</th>
+			<th>Online Invoice System</th>
 		</tr>
 		<tr>
 			<td>Linguagens e Tecnologias Web</td>
@@ -36,73 +36,101 @@ try {
 	$invoices=invoice::getInstancesByFields($db, $params);
 	$invoice=$invoices[0];
 	
-	$invoiceNo=$invoice->InvoiceNo;
+	$invoiceCode=$invoice->InvoiceNo;
 	$invoiceDate=$invoice->InvoiceDate;
 	$invoiceCompanyName=$invoice->CompanyName;
 	$invoiceGrossTotal=$invoice->GrossTotal;
 	$invoiceCustomerID=$invoice->getCustomerId();
+	
+	$customerQueryParams=array(
+		array("CustomerID",array($invoice->getCustomerId()),"equal")
+	);
+	
+	$customers=Customer::getInstancesByFields($db, $customerQueryParams);
+	$custormer=$customers[0];
+	
+	$invoiceNif=$custormer->CustomerTaxID;
 	$invoiceLines =$invoice->getLines();
 	
 } catch (GeneralException $e) {
 
-	$invoiceCode=-1;
-	$invoiceName="No Name";
-	$invoiceAddress="No Address";
-	$invoicePostalCode1="0000";
-	$invoicePostalCode2="000";
-	$invoiceCity="No City";
-	$invoiceNif="000000000";
-	$invoiceEmail="noemail@nodomain.com";
+	$invoiceCode="0";
+	$invoiceDate="1970-1-1";
+	$invoiceCompanyName="No Company";
+	$invoiceGrossTotal="0";
+	$invoiceCustomerID="0";
+	$invoiceNif="0";
+	$invoiceLines=array();
+
 }
 
 	
-	<p class="sheetID">Dados de Cliente</p>
-	<br>
-	<br>
-	<p class="rowID">Código de Cliente:</p>
-	<p>0001</p>
-	<br>
-	<p class="rowID">Nome:</p>
-	<p>Filomena</p>
-	<br>
-	<p class="rowID">NIF:</p>
-	<p>123456321</p>
-	<br>
-	<br>
+	echo '<p class="sheetID">Customer Data</p>';
+	echo '<br><br>';
+	echo '<p class="rowID">Customer Code:</p>';
+	echo '<p>'.$invoiceCustomerID.'</p>';
+	echo '<br>';
+	echo '<p class="rowID">Name:</p>';
+	echo '<p>'.$invoiceCompanyName.'</p>';
+	echo '<br>';
+	echo '<p class="rowID">NIF:</p>';
+	echo '<p>'.$invoiceNif.'</p>';
+	echo '<br>';
+	echo '<br>';
 
-	<p class="sheetID">Factura</p>
-	<br>
-	<table class="invoice">
-		<tr>
-			<td class="rowID">Fatura n.º:</td>
-			<td>0001</td>
-			<td class="rowID">Data:</td>
-			<td>2013-12-12</td>
-		</tr>
-	</table>
-	<br>
+	echo '<p class="sheetID">Invoice</p>';
+	echo '<br>';
+	echo '<table class="invoice">';
+	echo '<tr>';
+	echo '<td class="rowID">Invoice Nr:</td>';
+	echo '<td>'.$invoiceCode.'</td>';
+	echo '<td class="rowID">Date:</td>';
+	echo '<td>'.$invoiceDate.'</td>';
+	echo '</tr>';
+	echo '</table>';
+	echo '<br>';
 
-	<p class="Articles">Artigos</p>
+	echo '<p class="Articles">Products</p>
 	<br>
 	<table class="products">
-		<tr>
-			<th>Cód. Produto</th>
-			<th>Descrição do Produto</th>
+	<tr>
+	<th>Product Code:</th>
+			<th>Product Description:</th>
 			<th>UN</th>
-			<th>Quantidade</th>
-			<th>Preço Unit.</th>
-			<th>IVA</th>
-			<th>Preço Total</th>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
+			<th>Quantity</th>
+			<th>Unit Price</th>
+			<th>Tax</th>
+			<th>Total Price</th>
+		</tr>';
+
+	
+	
+	for($i=0;count($invoiceLines);$i++){
+		$line=$invoiceLines[$i];
+		
+		$productQueryParams=array(
+		array("ProductCode",array($line->ProductCode),"equal")
+		);
+		
+		
+		echo'<tr>';
+		echo '<td>'.$line->ProductCode.'</td>';
+		echo '<td>'.Produto1.'</td>';
+		echo '<td>'.un.'</td>';
+		echo '<td>'.'</td>';
+		echo '<td>'.'</td>';
+		echo'<td>'.'</td>';
+		echo '<td>'.'</td>
+		</tr>';
+		
+
+
+
+	}
+	
+	
+	?>
+			
 				<tr>
 			<td>00001</td>
 			<td>Produto 1</td>
