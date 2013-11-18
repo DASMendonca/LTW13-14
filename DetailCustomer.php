@@ -10,7 +10,7 @@
 <body>
 <table class="Logo">
 <tr>
-<th>Sistema de Faturação Online</th>
+<th>Online Invoice System</th>
 </tr>
 <tr>
 <td>Linguagens e Tecnologias Web</td>
@@ -30,14 +30,14 @@ try {
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 
-	$params=$_GET["params"];
+	$params=array(json_decode($_GET["params"]));
 
 
 
 	$customers=Customer::getInstancesByFields($db, $params);
 	$customer=$customers[0];
 	
-	$CustomerCode=$custormer->CustomerID;
+	$CustomerCode=$customer->CustomerID;
 	$CustomerName=$customer->CustomerName;
 	$CustomerAddress=$customer->getAddress()->detail;
 	$CustomerPostalCode1=$customer->getAddress()->postalCode1;
