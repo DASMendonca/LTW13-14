@@ -72,6 +72,7 @@ input[id="search_button"]
 
 #search_results_div
 {
+	text-align: center;
 	margin-top: 30px;
 	margin-left: 5px;
 	background-color:black;

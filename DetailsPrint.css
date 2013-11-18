@@ -1,0 +1,50 @@
+@page {
+	size:portrait;
+	margin:0;
+}
+
+body{
+	width: 21cm;
+	height: 29.7cm;
+	padding-left: 2.5cm;
+	padding-right:2cm;
+	padding-top:3cm;
+	padding-bottom: 3cm;
+}
+
+table.Logo th {
+	font-size: x-large;
+}
+
+.sheetID {
+	font-size: x-large;
+	font-weight: bold;
+}
+
+.rowID {
+	font-weight: bold;
+}
+
+table.Logo {
+	margin-left: 12.7cm;
+	margin-top: 2cm;
+	margin-bottom:2cm;
+	text-align: center;
+	font-size: large;
+	width: auto;
+	border: 0;
+}
+
+td {
+	padding: 0.2cm;
+}
+p {
+	display: inline;
+	line-height: 0.7cm;	
+}
+
+
+
+
+
+

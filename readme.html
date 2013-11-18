@@ -1,39 +1,42 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="readme.css">
 <title>README</title>
 </head>
 
 <body>
-	<h1 id="GroupName">T5G2</h1>
-	<h2 id="GroupElements">Identificação dos elementos do grupo</h3>
-	<table border="1" id="Students">
+
+	<h2 id="UC">Linguagens e Tecnologias Web</h2><br>
+	<h1 id="ProjectName">Sistema de Faturação Online</h1><br>
+	<h3 id="GroupName">Grupo: T5G2</h3>
+	<h3 id="GroupElements">Identificação dos elementos do grupo</h3>
+	<table id="Students">
 		<tr>
-		<th>Nome Aluno</th>
-		<th>Nº Aluno</th>
+			<th>Nome Aluno</th>
+			<th>Nº Aluno</th>
 		</tr>
 		<tr>
-		<td>Daniel Arménio Silva Mendonca</td>
-		<td>200906506</td>
+			<td>Daniel Arménio Silva Mendonca</td>
+			<td>200906506</td>
 		</tr>
 		<tr>
-		<td>Miguel Angelo Jesus Vidal Ribeiro</td>
-		<td>201100657</td>
+			<td>Miguel Angelo Jesus Vidal Ribeiro</td>
+			<td>201100657</td>
 		</tr>
 		<tr>
-		<td>José Pedro Lobo Marinho Trocado Moreira</td>
-		<td>200901840</td>
+			<td>José Pedro Lobo Marinho Trocado Moreira</td>
+			<td>200901840</td>
 		</tr>
 		<tr>
-		<td>Vítor Hugo Torres Mineiro</td>
-		<td>200105060</td>
+			<td>Vítor Hugo Torres Mineiro</td>
+			<td>200105060</td>
 		</tr>
 	</table>
-	
+
 	<h3 id="Users_ID">Utilizadores registados na base de dados</h3>
-	
 	<table border="1" id="DB_Users">
 		<tr>
 			<th>Sign in</th>
@@ -63,9 +66,36 @@
 	</table>
 
 	<h3 id="FunctionsList">Listagem das funcionalidades implementadas</h3>
-	
-	<h3 id="Notes">Notas adicionais</h3>
-	
-	
+	<ul>
+		<li>Base de dados onde estão armazenados os produtos, clientes e
+			faturas utilizados nesta fase do trabalho. A base de dados poderá ser
+			acedida por utilizadores com 3 níveis de permissão (leitura,
+			leitura/escrita e leitura/ escrita/ gestão de utilizadores). Nesta
+			primeira entrega apenas foram implementados as funções de
+			leitura.</li>
+		<li>API de consulta, contendo, os
+			seguintes métodos:
+			<ul>
+				<li>/api/searchInvoicesByField.php</li>
+				<li>/api/searchCustomersByField.php</li>
+				<li>/api/searchProductsByField.php</li>
+				<li>/api/getInvoice.php</li>
+				<li>/api/getCustomer.php</li>
+				<li>/api/getProduct.php</li>
+			</ul>
+		</li>
+		<li>Pesquisa e listagem de documentos sumarizados (faturas,
+			clientes e produtos)</li>
+		<li>Visualização de documentos em detalhe (um documento, por
+			página web, com todos os detalhes relevantes)</li>
+		<li>Formatação de uma fatura para impressão em A4</li>
+	</ul>
+
+	<h3>Notas adicionais</h3>
+	<p id="Notes">Concluída a primeira fase do trabalho e implementados os
+		vários métodos de consulta consideramos que esta etapa foi
+		desenvolvida de forma muito positiva, e esperamos desta forma atingir
+		com sucesso, os objetivos propostos para o trabalho prático.</p><br>
+	<img id="validation" src="http://www.w3c.it/events/2013/css3html5/img/html5-logo.png" alt="html page valid">
 </body>
 </html>

@@ -42,9 +42,11 @@ if($invoices != NULL){
 				<td>' .$invoice->getCustomerId() .'</td>
 				<td>' .$invoice->CompanyName.'</td>
 				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>
+				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
+					id='.$invoice->InvoiceNo . '/></td>
 			<tr>');	
 	}
 	echo '</table>
-		</fieldset>';	
+		</fieldset>';
 }
 ?>
