@@ -113,7 +113,7 @@ function searchArrayConstruct(element){
 	if(selected_query == null || selected_query.length == 0){
 		
 		var is_text = $(input_type[0]).attr("type");
-		if(is_text == "text"){
+		if(is_text == "text" || is_text=="email"){
 			operation = "contains";
 			is_text = "%";
 			is_text= is_text.concat($(input_type[0]).val());
