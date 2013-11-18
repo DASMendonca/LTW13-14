@@ -17,6 +17,45 @@
 		</tr>
 	</table>
 
+	<?php 
+include './classes.php';
+$db = new PDO('sqlite:./database.sqlite');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+
+
+try {
+	if(!isset($_GET['params']))
+		throw new GeneralException(new Err_MissingParameter("params"));
+
+	$params=array(json_decode($_GET["params"]));
+
+
+
+	$invoices=invoice::getInstancesByFields($db, $params);
+	$invoice=$invoices[0];
+	
+	$invoiceNo=$invoice->InvoiceNo;
+	$invoiceDate=$invoice->InvoiceDate;
+	$invoiceCompanyName=$invoice->CompanyName;
+	$invoiceGrossTotal=$invoice->GrossTotal;
+	$invoiceCustomerID=$invoice->getCustomerId();
+	$invoiceLines =$invoice->getLines();
+	
+} catch (GeneralException $e) {
+
+	$invoiceCode=-1;
+	$invoiceName="No Name";
+	$invoiceAddress="No Address";
+	$invoicePostalCode1="0000";
+	$invoicePostalCode2="000";
+	$invoiceCity="No City";
+	$invoiceNif="000000000";
+	$invoiceEmail="noemail@nodomain.com";
+}
+
+	
 	<p class="sheetID">Dados de Cliente</p>
 	<br>
 	<br>
