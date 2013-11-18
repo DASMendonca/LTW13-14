@@ -1,15 +1,15 @@
 @page {
-	size:portrait;
-	margin:0;
+	width: 21cm;
+	height: 29.7cm;
+	margin: 0cm;	
 }
 
 body{
-	width: 21cm;
-	height: 29.7cm;
-	padding-left: 2.5cm;
-	padding-right:2cm;
-	padding-top:3cm;
-	padding-bottom: 3cm;
+	margin: 0cm;
+	padding-bottom: 2cm;
+	padding-left: 3cm;
+	padding-right: 2.5cm;
+	padding-top: 2cm;
 }
 
 table.Logo th {
@@ -42,44 +42,20 @@ table.products {
 	text-align: left;
 	border: 1px solid black;
 	width: 100%;
-	height: 17cm;
+	
 	border-collapse: collapse;
 }
 table.products th{
 	border: 1px solid black;
 	height: 1cm;
 }
-tr.productRow {
-	border-bottom: 0;
-	border-top: 0;
-	height: 0.75cm;
-}
-td.ProdCode {
+table.products td {
 	border-bottom: 0;
 	border-top: 0;
 	border-left: 1px solid black;
 	border-rigth: 1px solid black;
-	text-align: left;
+	height: 0.75cm;
 }
-td.ProdDes {
-	text-align: left;
-}
-td.UN {
-	text-align: center;
-}
-td.QTT {
-	text-align: rigth;
-}
-td.UnitPri {
-	text-align: rigth;
-}
-td.IVA {
-	text-align: rigth;
-}
-td.TotPri {
-	text-align: rigth;
-}
-
 
 .Articles {
 	font-size: large;
@@ -95,7 +71,11 @@ p {
 	line-height: 0.7cm;	
 }
 
-
+table {
+	table-layout:
+	page-break-inside: auto;
+}
+thead {display: table-header-group;}
 
 
 
