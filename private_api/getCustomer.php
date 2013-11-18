@@ -34,7 +34,7 @@ if($customers != NULL){
 	?>
 	<table id="search_results_tb">
 		<tr>
-		<th>Product Code</th><th>Product Description</th><th>Measure Unit</th><th>Price p/ Unit</th>
+		<th>Customer ID</th><th>Customer Name</th><th>Costumer Tax ID</th><th>Email address</th>
 		</tr>
 <?php
 	foreach ($customers as $customer){
