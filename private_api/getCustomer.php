@@ -42,10 +42,11 @@ if($customers != NULL){
 				<td>' .$customer->CustomerID .'</td>
 				<td>' .$customer->CustomerName .'</td>
 				<td>' .$customer->CustomerTaxID .'</td>
-				<td>' .$customer->email.' </td>
+				<td>' .$customer->email.' </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
-					class="s_cart_img" id='.$customer->CustomerID .'/></td>
-			<tr>');	
+					class="s_cart_img" id="<?php echo $customer->CustomerID;?>"/></td>
+			<tr>
+<?php	
 	}
 	echo '</table>
 		</fieldset>';	
