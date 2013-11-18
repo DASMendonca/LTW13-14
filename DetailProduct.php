@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="DetailsPrint.css" media="print">
+<link rel="stylesheet" href="Details.css" media="screen">
 <title>DetailProduct</title>
 </head>
 

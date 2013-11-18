@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="DetailsPrint.css" media="print">
+<link rel="stylesheet" href="Details.css" media="screen">
 <title>DetailInvoice</title>
 </head>
 
@@ -105,22 +106,25 @@ try {
 
 	
 	
-	for($i=0;count($invoiceLines);$i++){
+	for($i=0;$i<count($invoiceLines);$i++){
 		$line=$invoiceLines[$i];
 		
 		$productQueryParams=array(
 		array("ProductCode",array($line->ProductCode),"equal")
 		);
 		
+		$products=Product::getInstancesByFields($db, $productQueryParams);
+		$product=$products[0];
+		
 		
 		echo'<tr>';
 		echo '<td>'.$line->ProductCode.'</td>';
-		echo '<td>'.Produto1.'</td>';
-		echo '<td>'.un.'</td>';
-		echo '<td>'.'</td>';
-		echo '<td>'.'</td>';
-		echo'<td>'.'</td>';
-		echo '<td>'.'</td>
+		echo '<td>'.$product->ProductCode.'</td>';
+		echo '<td>'.$product->UnitOfMeasure.'</td>';
+		echo '<td>'.$line->Quantity.'</td>';
+		echo '<td>'.($line->UnitPrice/100).' &euro; </td>';
+		echo'<td>'.$line->Tax->TaxPercentage.'</td>';
+		echo '<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
 		</tr>';
 		
 
@@ -131,168 +135,6 @@ try {
 	
 	?>
 			
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-		<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-				<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-		<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-		<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
-		<tr>
-			<td>00001</td>
-			<td>Produto 1</td>
-			<td>un</td>
-			<td>1.00</td>
-			<td>100.00</td>
-			<td>23</td>
-			<td>123.00</td>
-		</tr>
 	</table>
 
 
