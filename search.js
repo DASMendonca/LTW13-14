@@ -23,7 +23,7 @@ function detailedAction(id){
 	var parameter = new Array();
 	if(url=="Products") {url= "/DetailProduct.php?params="; column="ProductCode";}
 	else if(url=="Invoice"){ url="/DetailInvoice.php?params="; column="InvoiceNo";}
-	else if(url=="Customer"){ url="./DetailProduct.php?params="; column="CustomerID";}
+	else if(url=="Customer"){ url="./DetailCustomer.php?params="; column="CustomerID";}
 	
 	var params = new Array();
 	params.push(column);
