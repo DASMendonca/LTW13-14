@@ -32,7 +32,10 @@ function detailedAction(id){
 	var op= "equal";
 	params.push(op);
 	url= url + JSON.stringify(params);
-	window.location.href = url;
+	
+	var win=window.open(url, '_blank');
+	win.focus();
+	//window.location.href = url;
 	
 	
 	
