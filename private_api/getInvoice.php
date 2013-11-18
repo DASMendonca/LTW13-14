@@ -42,10 +42,11 @@ if($invoices != NULL){
 				<td>' .$invoice->InvoiceDate .'</td>
 				<td>' .$invoice->getCustomerId() .'</td>
 				<td>' .$invoice->CompanyName.'</td>
-				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>
+				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
-					class="s_cart_img" id='.$invoice->InvoiceNo . '/></td>
-			<tr>');	
+					class="s_cart_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
+			<tr>
+			<?php	
 	}
 	echo '</table>
 		</fieldset>';

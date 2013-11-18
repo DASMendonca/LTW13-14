@@ -50,11 +50,12 @@ if($products != NULL){
 				<td>' .$product->ProductCode .'</td>
 				<td>' .$product->ProductDescription .'</td>
 				<td>' .$product->UnitOfMeasure .'</td>
-				<td>' .($product->UnitPrice / 100).' &euro; </td>
+				<td>' .($product->UnitPrice / 100).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
-					class="s_cart_img" id=' .$product->ProductCode .' /></td>
+					class="s_cart_img" id="<?php echo $product->ProductCode;?>" /></td>
 				<td><img src="./pictures/shopping_cart.png" width="16" height="16" border="0" alt="add To Cart"/></td>
-			<tr>');	
+			<tr>
+			<?php	
 	}
 	echo '</table>
 		</fieldset>';	
