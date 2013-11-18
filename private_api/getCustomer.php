@@ -4,7 +4,8 @@ include '../classes.php';
 
 header('Content-type: text/html; charset=UTF-8');
 ?>
-
+<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src='search.js'></script>
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
