@@ -1,5 +1,5 @@
 <?php
 
-header("Location: ./api/getInvoice.php?InvoiceNo=1");
+header("Location: ./onlineInvoiceSystem.php");
 die();
 ?>

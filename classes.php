@@ -234,7 +234,7 @@ class Customer implements savable{
 	protected $Address;
 	
 	
-	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions){
+	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions,$db){
 		
 		$this->CustomerID=$ID;
 		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
@@ -252,6 +252,8 @@ class Customer implements savable{
 		$addressParameters=array(
 			array("AddressID",array($this->addressID),"equal")
 		);
+		
+		
 		
 		$ads=Address::getInstancesByFields($db, $addressParameters);
 		$this->Address=$ads[0];
@@ -304,7 +306,7 @@ class Customer implements savable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"]);
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
 			$instances[$i]=$instance;
 		}
 
