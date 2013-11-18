@@ -1,15 +1,12 @@
-@page {
-	margin-bottom: 2cm;	
-}
-
 body{
-	width: 21cm;
-	height: 29.7cm;
+	width: 70%;
 	margin: 0cm;
-	padding-bottom: 2cm;
-	padding-left: 3cm;
-	padding-right: 2.5cm;
-	padding-top: 2cm;
+	padding-bottom: 2%;
+	padding-left: 15%%;
+	padding-right: 15%;
+	padding-top: 2cm%;
+	background-image:url('fundo12.png');
+	color: white;
 }
 
 table.Logo th {
@@ -40,20 +37,20 @@ table.invoice {
 }
 table.products {
 	text-align: left;
-	border: 1px solid black;
+	border: 1px solid white;
 	width: 100%;
 	
 	border-collapse: collapse;
 }
 table.products th{
-	border: 1px solid black;
+	border: 1px solid white;
 	height: 1cm;
 }
 table.products td {
 	border-bottom: 0;
 	border-top: 0;
-	border-left: 1px solid black;
-	border-rigth: 1px solid black;
+	border-left: 1px solid white;
+	border-rigth: 1px solid white;
 	height: 0.75cm;
 }
 
