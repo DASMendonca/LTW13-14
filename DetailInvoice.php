@@ -119,7 +119,7 @@ try {
 		
 		echo'<tr>';
 		echo '<td>'.$line->ProductCode.'</td>';
-		echo '<td>'.$product->ProductCode.'</td>';
+		echo '<td>'.$product->ProductDescription.'</td>';
 		echo '<td>'.$product->UnitOfMeasure.'</td>';
 		echo '<td>'.$line->Quantity.'</td>';
 		echo '<td>'.($line->UnitPrice/100).' &euro; </td>';
