@@ -1,4 +1,5 @@
 <?php 
+	include 'classes.php';
 	session_start(); 
 ?>
 
@@ -38,6 +39,11 @@
 					?>
 					<li class="top_lis" id="li_invoice">Invoices</li>
 					<li class="top_lis" id="li_customer">Clients</li>
+					<?php 
+						if (($_SESSION['customer']->permission)==3) {
+							echo '<li>Administrative section</li>';
+						}
+					?>
 					<li> <form action="logout.php" method="GET" id="logForm">
 							<input type="submit" name="logout" value="logout" id="sair">
 						</form>
