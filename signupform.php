@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Sign up</title>
-	</head>
+<?php 
+$i=0;
+$i++;
+?>
+		
 
-	<body>
-		<form action="signup.php" method="GET">
+		<form action="signup.php" method="post">
 			Name:<br>
-			<input type="text" value="name" name="name"><br>
+			<input type="text" placeholder="name" name="CustomerName"><br>
 			Tax number:<br>
-			<input type="text" value="customer tax id" name="cTaxID"><br>
+			<input type="text" placeholder="customer tax id" name="CustomerTaxID"><br>
 			E-mail address:<br>
-			<input type="email" value="email" name="email"><br>
+			<input type="email" placeholder="email" name="Email"><br>
 			Password:<br>
-			<input type="password" value="password" name="password"><br>
+			<input type="password" placeholder="password" name="Password"><br>
 			Country:<br>
-			<input type="text" value="country" name="country"><br>
+			<input type="text" placeholder="Country" name="Country"><br>
 			Address:<br>
-			<input type="text" value="address" name="addr"><br>
+			<input type="text" placeholder="Address" name="AddressDetail"><br>
 			City:<br>
-			<input type="text" value="city" name="city"><br>
+			<input type="text" placeholder="City" name="City"><br>
 			Postal-Code:<br>
-			<input type="text" value="Postal Code" name="postalC1"> - <input type="text" value="Postal Code 2" name="postalC2"><br>
-			<input type="submit" value="Sign In">
-			<input type="button" value="Sign Up"/>
+			<input type="number" placeholder="Postal-Code" name="PostalCode1">-<input type="number" placeholder="PostalCode2" name="PostalCode2"><br>
+			<input type="submit" placeholder="Sign Up">
 		</form>
-	</body>
 
-</html>

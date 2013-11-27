@@ -259,8 +259,8 @@ class Customer implements savable{
 		
 		
 		
-		$ads=Address::getInstancesByFields($db, $addressParameters);
-		$this->Address=$ads[0];
+		//$ads=Address::getInstancesByFields($db, $addressParameters);
+		//$this->Address=$ads[0];
 		
 		
 	}
@@ -270,7 +270,7 @@ class Customer implements savable{
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into customer (CustomerTaxID,CustomerName,Email,AddressID,Password,Permissions) Values(?,?,?,?,?,?);";
+		$stmt="Insert into Customer (CustomerTaxID,CustomerName,Email,AddressID,Password,Permission) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->CustomerTaxID);
 		$query->bindParam(2,$this->CustomerName);
@@ -381,7 +381,8 @@ class Address implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0 || strcmp($entry[0],"PostalCode1")==0 || strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"Country")==0)array_push($params, $entry);
+			if(strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"City")==0 || strcmp($entry[0],"PostalCode1")==0 || strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"Country")==0)
+				array_push($params, $entry);				
 			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		

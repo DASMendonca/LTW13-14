@@ -10,7 +10,7 @@ $(document).ready(function() {
 	    	$("#search_button").click();
 	    }
 	});
-	$(".s_cart_img").click(
+	$(".detail_img").click(
 			function(){
 				detailedAction(jQuery(this).attr("id"));
 			});
