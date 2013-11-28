@@ -7,6 +7,9 @@
 	<div id="CustomerID">
 		Customer ID:<input type="number" name="CustomerID" class="inputfield" placeholder="Customer Identification">
 	</div>
+	<div id="CustomerTaxID">
+		Customer Tax ID:<input type="number" name="CustomerTaxID" class="inputfield" placeholder="Customer Tax ID">
+	</div>
 	<div id="CustomerName">
 		Customer Name:<input type="text" name="CustomerName" class="inputfield" placeholder="Customer Name">
 	</div>

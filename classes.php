@@ -235,7 +235,7 @@ class Customer implements savable{
 	public $email;
 	public $password;
 	public $permission;
-	protected $Address;
+	//protected $Address;
 	
 	
 	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions,$db){

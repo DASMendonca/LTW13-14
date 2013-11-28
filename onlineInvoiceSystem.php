@@ -32,16 +32,19 @@
 							<input type="button" value="Sign In" id="SignInButton">
 						</form>
 					</li>
+					<li class="top_lis" id="li_signup">Signup</li>
 						<?php
 						} echo '<li id="li_prod" class="top_lis">Products</li>';
 					?>
 					<?php if(isset($_SESSION['customer']) ){
 					?>
-					<li class="top_lis" id="li_invoice">Invoices</li>
-					<li class="top_lis" id="li_customer">Clients</li>
+					<li class="top_lis" id="li_myInvoices" name="myInvoices">My Invoices</li>
+					<li class="top_lis" id="li_myProfile" name="myProfile">My Profile</li>
 					<?php 
-						if (($_SESSION['customer']->permission)==3) {
-							echo '<li>Administrative section</li>';
+						if (($_SESSION['customer']->permission)>1) {
+							echo '	<li class="top_lis" id="li_invoice">Search Invoices</li>
+									<li class="top_lis" id="li_customer">Search Clients</li>
+									<li class="top_lis" id="li_administration">Administrative section</li>';
 						}
 					?>
 					<li> <form action="logout.php" method="GET" id="logForm">
