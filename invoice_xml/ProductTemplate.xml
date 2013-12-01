@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Product>
+	<ProductType></ProductType>
+	<ProductCode></ProductCode>
+	<ProductDescription></ProductDescription>
+	<ProductNumberCode></ProductNumberCode> <!-- Same as ProductCode -->
+</Product>

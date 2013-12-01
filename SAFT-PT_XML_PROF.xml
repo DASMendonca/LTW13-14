@@ -45,7 +45,7 @@ xsi:schemaLocation="urn:OECD:StandardAuditFile-Tax:PT_1.03_01 http://serprest.pt
       <SelfBillingIndicator>0</SelfBillingIndicator>
     </Customer>
     <Product>
-      <ProductType>S</ProductType>
+      <ProductType>P</ProductType>
       <ProductCode>160</ProductCode>
       <ProductGroup>1</ProductGroup>
       <ProductDescription>Madeira de Pinho</ProductDescription>

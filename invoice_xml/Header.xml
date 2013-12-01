@@ -7,13 +7,11 @@
 	<TaxAccountingBasis>F</TaxAccountingBasis>
 	<CompanyName>ACompany</CompanyName>
 	<CompanyAddress>
-		<AddressStructurePT>
-			<AddressDetail>Rua Dr. Roberto Frias,127</AddressDetail>
-			<City>Porto</City>
-			<PostalCode>4200-465</PostalCode>
-			<Region>Porto</Region>
-			<Country>PT</Country>
-		</AddressStructurePT>
+		<AddressDetail>Rua Dr. Roberto Frias,127</AddressDetail>
+		<City>Porto</City>
+		<PostalCode>4200-465</PostalCode>
+		<Region>Porto</Region>
+		<Country>PT</Country>
 	</CompanyAddress>
 	<FiscalYear></FiscalYear><!-- Start Date's Year -->
 	<StartDate></StartDate>
