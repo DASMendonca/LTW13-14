@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<GeneralLedger>
+	<AccountID>0</AccountID>
+	<AcountDescription>NoAccount</AcountDescription>
+	<OpeningDebitBalance>0</OpeningDebitBalance>
+	<OpeningCreditBalance>0</OpeningCreditBalance>
+	<ClosingDebitBalance>0</ClosingDebitBalance>
+	<ClosingCreditBalance>0</ClosingCreditBalance>
+	<GroupingCategory>GR</GroupingCategory>
+	
+	
+	
+</GeneralLedger>
+
+
