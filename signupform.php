@@ -1,7 +1,4 @@
-<?php 
-$i=0;
-$i++;
-?>
+
 		
 
 		<form class="to_db_form" action="signup.php" method="post">

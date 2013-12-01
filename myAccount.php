@@ -37,7 +37,7 @@ echo '
 				<label class="to_ident" for="PostalCode1"></label>
 				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$myAddr[0]->postalCode1.'">-
 				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$myAddr[0]->postalCode2.'"><br>
-				<input type="submit" value="Save">				
+				<input type="button" value="Save">				
 			</fieldset>
 		</form>
 </div>';	

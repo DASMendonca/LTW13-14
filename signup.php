@@ -43,10 +43,4 @@ if(count($customer_exists)==0){
 
 
 header("Location: onlineInvoiceSystem.php");
-
-
-
-
-
-
 ?>

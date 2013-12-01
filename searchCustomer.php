@@ -5,16 +5,16 @@
 <form id="search_form" class="bySearch" name="Customer" method="GET">
 	<h1>Costumer Search:</h1>
 	<div id="CustomerID">
-		Customer ID:<input type="number" name="CustomerID" class="inputfield" placeholder="Customer Identification">
+		<label>Customer ID:</label><input type="number" name="CustomerID" class="inputfield" placeholder="Customer Identification">
 	</div>
 	<div id="CustomerTaxID">
-		Customer Tax ID:<input type="number" name="CustomerTaxID" class="inputfield" placeholder="Customer Tax ID">
+		<label>Customer Tax ID:</label><input type="number" name="CustomerTaxID" class="inputfield" placeholder="Customer Tax ID">
 	</div>
 	<div id="CustomerName">
-		Customer Name:<input type="text" name="CustomerName" class="inputfield" placeholder="Customer Name">
+		<label>Customer Name:</label><input type="text" name="CustomerName" class="inputfield" placeholder="Customer Name">
 	</div>
 	<div id="Email">
-		Email:<input type="email" name="Email" class="inputfield" placeholder="email@example.com">
+		<label>Email:</label><input type="email" name="Email" class="inputfield" placeholder="email@example.com">
 	</div>
 	<input type="button" value="search" id="search_button">
 </form>

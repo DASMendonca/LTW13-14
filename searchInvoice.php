@@ -4,13 +4,13 @@
 <form id="search_form" class="bySearch" name="Invoice" method="GET">
 	<h1>Invoice Search:</h1>
 	<div id="InvoiceNo">
-		Invoice number:<input type="number" name="InvoiceNo" class="inputfield" placeholder="Invoice Number">
+		<label>Invoice number:</label><input type="number" name="InvoiceNo" class="inputfield" placeholder="Invoice Number">
 	</div>
 	<div id="CustomerID">
-		Customer ID:<input type="number" name="CustomerID" class="inputfield" placeholder="Customer Identification">
+		<label>Customer ID:</label><input type="number" name="CustomerID" class="inputfield" placeholder="Customer Identification">
 	</div>
 	<div id="CompanyName">
-		Company Name:<input type="text" name="CompanyName" class="inputfield" placeholder="Company Name">
+		<label>Company Name:</label><input type="text" name="CompanyName" class="inputfield" placeholder="Company Name">
 	</div>
 	<div id="InvoiceDate">
 		<input type="date" name="InvoiceDate" class="inputfield" placeholder="YYYY-MM-DD">
