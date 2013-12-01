@@ -1,7 +1,7 @@
 <?php 
 include 'classes.php';
 
-$CustomerName = $_REQUEST['CustomerName'];
+$CompanyName = $_REQUEST['CompanyName'];
 $CustomerTaxID = $_REQUEST['CustomerTaxID'];
 $Email = $_REQUEST['Email'];
 $Password = $_REQUEST['Password'];
@@ -35,7 +35,7 @@ if(count($customer_exists)==0){
 		$addr_exists= Address::getInstancesByFields($db, $params);
 		$myAddrID=$addr_exists->AddressID;
 	}
-	$myCustomer = new Customer(null, $CustomerTaxID, $CustomerName, $myAddrID, $Email, $Password, 1, $db);
+	$myCustomer = new Customer(null, $CustomerTaxID, $CompanyName, $myAddrID, $Email, $Password, 1, $db);
 	
 	$myCustomer->saveToDB($db);
 }

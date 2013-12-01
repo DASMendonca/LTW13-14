@@ -14,7 +14,7 @@ echo '
 			<fieldset>
 				<legend><h2>Edit Information</h2></legend>
 				<label class="to_ident" for="">Name</label>
-				<input type="text" name="CustomerName" id="CustomerName" placeholder="'.$_SESSION['customer']->CustomerName.'"><br>
+				<input type="text" name="CompanyName" id="CompanyName" placeholder="'.$_SESSION['customer']->CompanyName.'"><br>
 				
 				<label class="to_ident" for="email">E-mail</label>
 				<input type="text" name="email" id="email" placeholder="'.$_SESSION['customer']->email.'"><br>

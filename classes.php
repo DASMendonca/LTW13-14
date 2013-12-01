@@ -230,7 +230,7 @@ class Customer implements savable{
 	
 	public $CustomerID;
 	public $CustomerTaxID;
-	public $CustomerName;
+	public $CompanyName;
 	public $addressID;
 	public $email;
 	public $password;
@@ -244,7 +244,7 @@ class Customer implements savable{
 		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
 		else $this->CustomerTaxID=null;
 
-		$this->CustomerName=$Name;
+		$this->CompanyName=$Name;
 		
 		if($addID>=0) $this->addressID=$addID;
 		else $this->addressID=null;
@@ -259,21 +259,21 @@ class Customer implements savable{
 		
 		
 		
-		//$ads=Address::getInstancesByFields($db, $addressParameters);
-		//$this->Address=$ads[0];
+		$ads=Address::getInstancesByFields($db, $addressParameters);
+		$this->Address=$ads[0];
 		
 		
 	}
 	function saveToDB($db){
 		
-		if($this->CustomerTaxID==null || $this->CustomerName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
+		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into Customer (CustomerTaxID,CustomerName,Email,AddressID,Password,Permission) Values(?,?,?,?,?,?);";
+		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressID,Password,Permission) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->CustomerTaxID);
-		$query->bindParam(2,$this->CustomerName);
+		$query->bindParam(2,$this->CompanyName);
 		$query->bindParam(3,$this->email);
 		$query->bindParam(4,$this->addressID);
 		$query->bindParam(5,$this->password);
@@ -295,7 +295,7 @@ class Customer implements savable{
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
-			strcmp($entry[0],"CustomerName")==0 || strcmp($entry[0],"Email")==0 || 
+			strcmp($entry[0],"CompanyName")==0 || strcmp($entry[0],"Email")==0 || 
 			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password")==0 || 
 			strcmp($entry[0],"Permission")==0){
 				array_push($params, $entry);
@@ -310,7 +310,7 @@ class Customer implements savable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CustomerName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
 			$instances[$i]=$instance;
 		}
 

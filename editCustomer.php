@@ -16,10 +16,10 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $costumers=array();
 
 try {
-	if(!isset($_GET["CustomerID"])) throw new GeneralException(new Err_MissingParameter("CustomerID"));
+	if(!isset($_REQUEST["CustomerID"])) throw new GeneralException(new Err_MissingParameter("CustomerID"));
 
 	$params=array(
-			array("CustomerID",array($_GET["CustomerID"]),"equal")
+			array("CustomerID",array($_REQUEST["CustomerID"]),"equal")
 
 	);
 
@@ -29,11 +29,11 @@ try {
 	 echo '
 <div id="customer_edition" name="'.$customer->CustomerID.'">
 		<br><br>
-		<form action="updateMyuser.php" method="post" id="update_form">
+		<form action="updateMyuser.php" method="post" class="update_form">
 			<fieldset>
 				<legend><h2>Edit Information</h2></legend>
-				<label class="to_ident" for="">Name</label>
-				<input type="text" name="CustomerName" id="CustomerName" placeholder="'.$customer->CustomerName.'"><br>
+				<label class="to_ident" for="CompanyName">Name</label>
+				<input type="text" name="CompanyName" id="CompanyName" placeholder="'.$customer->CompanyName.'"><br>
 	 
 				<label class="to_ident" for="email">E-mail</label>
 				<input type="text" name="email" id="email" placeholder="'.$customer->email.'"><br>

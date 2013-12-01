@@ -39,7 +39,7 @@ try {
 	$customer=$customers[0];
 	
 	$CustomerCode=$customer->CustomerID;
-	$CustomerName=$customer->CustomerName;
+	$CompanyName=$customer->CompanyName;
 	$CustomerAddress=$customer->getAddress()->detail;
 	$CustomerPostalCode1=$customer->getAddress()->postalCode1;
 	$CustomerPostalCode2=$customer->getAddress()->postalCode2;
@@ -50,7 +50,7 @@ try {
 } catch (GeneralException $e) {
 
 	$CustomerCode=-1;
-	$CustomerName="No Name";
+	$CompanyName="No Name";
 	$CustomerAddress="No Address";
 	$CustomerPostalCode1="0000";
 	$CustomerPostalCode2="000";
@@ -73,9 +73,9 @@ echo '<p class="sheetID">Customer Data</p><br><br>';
 echo '<p class="rowID">Customer Code: </p>';
 echo '<p>'.$CustomerCode.'</p><br>';
 echo '<p class="rowID">Name: </p>';
-echo '<p>'.$CustomerName.'</p><br>';
+echo '<p>'.$CompanyName.'</p><br>';
 echo '<p class="rowID">Address: </p>';
-echo '<p>'.$CustomerName.'</p><br>';
+echo '<p>'.$CompanyName.'</p><br>';
 echo '<p class="rowID">Zip Code: </p>';
 echo '<p>'.$CustomerPostalCode1. '</p>';
 echo '<p> - </p>';

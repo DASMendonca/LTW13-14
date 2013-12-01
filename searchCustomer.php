@@ -10,8 +10,8 @@
 	<div id="CustomerTaxID">
 		<label>Customer Tax ID:</label><input type="number" name="CustomerTaxID" class="inputfield" placeholder="Customer Tax ID">
 	</div>
-	<div id="CustomerName">
-		<label>Customer Name:</label><input type="text" name="CustomerName" class="inputfield" placeholder="Customer Name">
+	<div id="CompanyName">
+		<label>Customer Name:</label><input type="text" name="CompanyName" class="inputfield" placeholder="Customer Name">
 	</div>
 	<div id="Email">
 		<label>Email:</label><input type="email" name="Email" class="inputfield" placeholder="email@example.com">
