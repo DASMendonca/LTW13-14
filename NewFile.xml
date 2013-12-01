@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Header>
+	<AuditFileVersion>1.03_01</AuditFileVersion>
+	<CompanyID>240022570</CompanyID><!-- Qualquer nif da -->
+	<TaxRegistrationNumber>240022570</TaxRegistrationNumber>
+	<TaxAccountingBasis>F</TaxAccountingBasis>
+	<CompanyName>ACompany</CompanyName>
+	<CompanyAddress>
+		<AddressStructurePT>
+			<AddressDetail>Rua Dr. Roberto Frias,127</AddressDetail>
+			<City>Porto</City>
+			<PostalCode>4200-465</PostalCode>
+			<Region>Porto</Region>
+			<Country>PT</Country>
+		</AddressStructurePT>
+	</CompanyAddress>
+	<FiscalYear></FiscalYear><!-- Start Date's Year -->
+	<StartDate></StartDate>
+	<EndDate></EndDate>
+	<CurrencyCode>EUR</CurrencyCode>
+	<DateCreated></DateCreated>
+	<TaxEntity>Global</TaxEntity>
+	<ProductCompanyTaxID>240022570</ProductCompanyTaxID> <!-- Software company is the same thar is emiting invoices right? -->
+	<SoftwareCertificationNumber>0</SoftwareCertificationNumber>
+	<ProductID>ACompany/AwsomeInvoice</ProductID>
+	<ProductVersion>0.9</ProductVersion>
+
+
+</Header>
