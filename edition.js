@@ -1,11 +1,11 @@
 $(document).ready(function() {
 	$(".update_form input#save_edit" ).click(function() {
-		doThat();
+		updateEntry();
 	});
 });
 
 
-function doThat(){
+function updateEntry(){
 	var form_divs= $(".update_form div");
 	var parameters= new Array();
 	var parameter = new Array();
