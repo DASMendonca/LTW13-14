@@ -660,9 +660,59 @@ function constructSelect($tableName,$parameters,$db){
 	}
 
 		
-	$finished=$query->queryString;
 		
 	return $query;
+}
+
+function constructInsert($tableName,$parameters,$db){
+	
+	if($parameters==NULL|| count($parameters)==0) throw new GeneralException(new Err_MissingParameter("parameters"));
+	
+	$stmt="INSERT INTO $tableName";
+	
+	$fields=" (";
+	$values=" Values(";
+	
+	for($i=0;$i<count($parameters)-1;$i++){
+		$fields.=$parameters[$i][0].",";
+		$values.="?,";
+	}
+	$fields.=$parameters[$i][0].")";
+	$values.="?)";
+	$stmt.=$fields.$values;
+	$query=$db->prepare($stmt);
+	
+	
+	for($i=0;$i<count($parameters);$i++) $query->bindParam($i+1,$paramenters[$i][1]);
+	
+	return $query;
+	
+	
+	
+}
+
+
+function constructUpdate($tableName,$parameters,$db){
+	
+	if($parameters==NULL|| count($parameters)==0) throw new GeneralException(new Err_MissingParameter("parameters"));
+	
+	$stmt="UPDATE $tableName SET ";
+	
+	//starting at 1 because first element will be the id that is the matching parameter
+	
+	for($i=1;$i<count($parameters)-1;$i++) $stmt.=$parameters[$i][0]." = ? ,";
+	
+	$stmt.=$parameters[$i][0]." = ? ";
+	
+	$stmt.=" WHERE ".$parameters[0][0]." = ".$parameters[0][1];
+	
+	$query=$db->prepare($stmt);
+	
+	for($i=1;$i<count($parameters);$i++) $query->bindParam($i,$parameters[$i][1]);
+	
+	return $query;
+	
+	
 }
 
 ?>

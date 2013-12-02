@@ -5,15 +5,17 @@ $db = new PDO('sqlite:./database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-$fields=array(
-	array("CustomerID",array(4),"equal")
+
+$parameters=array(
+	array("CustomerID",2),
+	array("Email","ois4@ois.com"),
+	array("CompanyName","Isadorinha")
 		
 		
 );
-try {
-	$Invoices= Invoice::getInstancesByFields($db, $fields);
-} catch (Exception $e) {
-	echo $e;
-}
+
+$query=constructUpdate("Customer", $parameters, $db);
+//$query=constructInsert("Customer", $parameters, $db);
+$query->execute();
 
 ?>
