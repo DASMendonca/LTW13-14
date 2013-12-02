@@ -5,6 +5,7 @@ session_start();
 <script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src='edition.js'></script>
 
+
 <?php
 
 if(isset($_SESSION['customer'])){
@@ -14,42 +15,42 @@ if(isset($_SESSION['customer'])){
 echo '
 <div class="update_div" name="Customer">
 		<br><br>
-		<form action="updateMyuser.php" method="post" class="update_form" name ="CustomerID" id="'.$_SESSION['customer']->CustomerID.'">
+		<form action="updateMyuser.php" method="post" class="update_form" name="CustomerID" id="'.$_SESSION['customer']->CustomerID.'">
 			<fieldset>
 				<legend><h2>Edit Information</h2></legend>
 				<div id="CompanyName">
 				<label class="to_ident" for="">Name</label>
-				<input type="text" name="CompanyName" id="CompanyName" value="'.$_SESSION['customer']->CompanyName.'"><br>
+				<input type="text" name="CompanyName" id="CompanyName" placeholder="'.$_SESSION['customer']->CompanyName.'" value="'.$_SESSION['customer']->CompanyName.'"><br>
 				</div>
 
 				<div id="Email">
 				<label class="to_ident" for="email">E-mail</label>
-				<input type="text" name="email" id="email" value="'.$_SESSION['customer']->email.'"><br>
+				<input type="text" name="email" id="email" placeholder="'.$_SESSION['customer']->email.'" value="'.$_SESSION['customer']->email.'"><br>
 				</div>
 						
 				<div id="CustomerTaxID">
 				<label class="to_ident" for="CustomerTaxID">Tax ID</label>
-				<input type="number" name="CustomerTaxID" id="CustomerTaxID" value="'.$_SESSION['customer']->CustomerTaxID.'"><br>
+				<input type="number" name="CustomerTaxID" id="CustomerTaxID" placeholder="'.$_SESSION['customer']->CustomerTaxID.'" value="'.$_SESSION['customer']->CustomerTaxID.'"><br>
 				</div>		
 
 				<div id="Password">
 				<label class="to_ident" for="password">Password</label>
-				<input type="text" name="password" id="password" value="'.$_SESSION['customer']->password.'"><br>
+				<input type="text" name="password" id="password" placeholder="'.$_SESSION['customer']->password.'" value="'.$_SESSION['customer']->password.'"><br>
 				</div>
 						
 				<div id="Country">
 				<label class="to_ident" for="Country">Country</label>
-				<input type="text" name="Country" id="Country" value="'.$myAddr[0]->country.'"><br>
+				<input type="text" name="Country" id="Country" placeholder="'.$myAddr[0]->country.'" value="'.$myAddr[0]->country.'"><br>
 				</div>
 				
 				<div id="City>
 				<label class="to_ident" for="City"></label>
-				<input type="text" name="City" id="City" value="'.$myAddr[0]->city.'"><br>
+				<input type="text" name="City" id="City" placeholder="'.$myAddr[0]->city.'" value="'.$myAddr[0]->city.'"><br>
 				</div>
 						
 				<div id="AddressDetail">
 				<label class="to_ident" for="AddressDetail"></label>
-				<input type="text" name="AddressDetail" id="AddressDetail" value="'.$myAddr[0]->detail.'"><br>
+				<input type="text" name="AddressDetail" id="AddressDetail" placeholder="'.$myAddr[0]->detail.'" value="'.$myAddr[0]->detail.'"><br>
 				</div>
 					
 				<div id="PostalCode1">

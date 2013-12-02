@@ -15,6 +15,7 @@
 </script>
 <script type="text/javascript" src='login.js'></script>
 <script type="text/javascript" src='search.js'></script>
+<script type="text/javascript" src='edition.js'></script>
 </head>
 
 <div id = "home_page">
