@@ -88,7 +88,7 @@ interface savable
 {
 	public function insertIntoDB($db);
 	static public function getInstancesByFields($db,$fields);
-	static public function updateInDB($db,$parameters);
+	//static public function updateInDB($db,$parameters);
 }
 
 
@@ -170,6 +170,7 @@ class Invoice implements savable{
 	function getLines(){
 		return $this->Lines;
 	}
+	
 }
 
 class Line implements savable{
@@ -281,7 +282,7 @@ class Customer implements savable{
 		$query=$db->prepare($stmt);
 		$result=$query->execute();
 		
-		//if($result) return new Customer($, $TaxID, $Name, $email, $pw, $permissions, $db)
+		if($result) return new Customer($parameters["CustomerID"], $parameters["CustomerTaxID"], $parameters["Name"], $email, $pw, $permissions, $db);
 		
 		
 		
