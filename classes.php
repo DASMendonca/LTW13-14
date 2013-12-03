@@ -281,7 +281,7 @@ class Customer implements savable{
 		$query=$db->prepare($stmt);
 		$result=$query->execute();
 		
-		if($result) return new Customer($, $TaxID, $Name, $email, $pw, $permissions, $db)
+		//if($result) return new Customer($, $TaxID, $Name, $email, $pw, $permissions, $db)
 		
 		
 		
