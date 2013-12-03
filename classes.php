@@ -278,11 +278,10 @@ class Customer implements savable{
 	}
 	static public function updateInDB($db,$parameters){
 		
-		$stmt=constructUpdate("Customer", $parameters, $db);
-		$query=$db->prepare($stmt);
+		$query=constructUpdate("Customer", $parameters, $db);
 		$result=$query->execute();
 		
-		if($result) return new Customer($parameters["CustomerID"], $parameters["CustomerTaxID"], $parameters["Name"], $parameters["email"], $parameters["Password"], $parameters["Permission"]);
+		if($result) return Customer::getInstancesByFields($db, array(array("CustomerID",array($parameters[0][1]),"equal")))[0];
 		
 		
 		

@@ -64,21 +64,17 @@ function isToUpdate(div_elem){
 	var query_array= new Array();
 	
 	var input_field= $(div_elem).children("input");
-	var input_type= $(input_field[0]).attr('type');
+	//var input_type= $(input_field[0]).attr('type');
 	var new_val = $(input_field[0]).val();
 	var pre_val= $(input_field[0]).attr('placeholder');
 	
-	
-	if(input_type.localeCompare("text")==0 || input_type.localeCompare("email")==0){
-	if(new_val == null || new_val.localeCompare(pre_val)==0)
-		return null;
-	}
-	else{
-		if(new_val== pre_val)
-			return null;
-	}
 	query_array.push(db_column_name);
-	query_array.push(new_val);
+	
+	if(new_val=="")
+	query_array.push(pre_val);
+	
+	else
+		query_array.push(new_val);
 	
 	return query_array;
 }

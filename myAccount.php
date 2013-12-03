@@ -41,8 +41,8 @@ echo '
 				<input type="text" name="Country" id="Country" placeholder="'.$_SESSION['customer']->getAddress()->country.'" value="'.$_SESSION['customer']->getAddress()->country.'"><br>
 				</div>
 				
-				<div id="City>
-				<label class="to_ident" for="City"></label>
+				<div id="City">
+				<label class="to_ident" for="City">City</label>
 				<input type="text" name="City" id="City" placeholder="'.$_SESSION['customer']->getAddress()->city.'" value="'.$_SESSION['customer']->getAddress()->city.'"><br>
 				</div>
 						
