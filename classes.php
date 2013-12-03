@@ -231,23 +231,20 @@ class Customer implements savable{
 	public $CustomerID;
 	public $CustomerTaxID;
 	public $CompanyName;
-	public $addressID;
+	protected $address;
 	public $email;
 	public $password;
 	public $permission;
 	//protected $Address;
 	
 	
-	function __construct($ID,$TaxID,$Name,$addID,$email,$pw,$permissions,$db){
+	function __construct($ID,$TaxID,$Name,$email,$pw,$permissions,$db){
 		
 		$this->CustomerID=$ID;
 		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
 		else $this->CustomerTaxID=null;
 
 		$this->CompanyName=$Name;
-		
-		if($addID>=0) $this->addressID=$addID;
-		else $this->addressID=null;
 		
 		$this->email=$email;
 		$this->password=$pw;
@@ -296,7 +293,9 @@ class Customer implements savable{
 			$entry=$fields[$i];
 			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
 			strcmp($entry[0],"CompanyName")==0 || strcmp($entry[0],"Email")==0 || 
-			strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"Password")==0 || 
+			strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"PostalCode1")==0 || 
+			strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"City")==0 ||
+			strcmp($entry[0],"Country")==0 || strcmp($entry[0],"Password")==0 ||
 			strcmp($entry[0],"Permission")==0){
 				array_push($params, $entry);
 			}
@@ -310,7 +309,8 @@ class Customer implements savable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["AddressID"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
+			$instance->address=new Address($entry["AddressDetail"], $entry["City"],$entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
 			$instances[$i]=$instance;
 		}
 
@@ -327,7 +327,6 @@ class Customer implements savable{
 
 class Address implements savable{
 	
-	public $AddressID;
 	public $detail;
 	public $city;
 	public $postalCode1;
@@ -338,9 +337,8 @@ class Address implements savable{
 	
 
 	
-	function __construct($id,$det,$theCity,$zip1,$zip2,$theCountry){
+	function __construct($det,$theCity,$zip1,$zip2,$theCountry){
 		
-		$this->AddressID=$id;
 		$this->detail=$det;
 		$this->city=$theCity;
 		
@@ -376,7 +374,7 @@ class Address implements savable{
 
 	static public function getInstancesByFields($db,$fields){
 		
-		$params=array();
+	/*	$params=array();
 		
 		
 		for($i=0;$i<count($fields);$i++){
@@ -396,7 +394,7 @@ class Address implements savable{
 			$instances[$i]=$instance;
 		}
 		
-		return $instances;
+		return $instances;*/
 		
 	}
 }
