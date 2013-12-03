@@ -240,7 +240,7 @@ class Customer implements savable{
 	//protected $Address;
 	
 	
-	function __construct($ID,$TaxID,$Name,$email,$pw,$permissions,$db){
+	function __construct($ID,$TaxID,$Name,$email,$pw,$permissions){
 		
 		$this->CustomerID=$ID;
 		if($TaxID>=0)$this->CustomerTaxID=$TaxID;//TODO: maybe use a validating function later
@@ -282,7 +282,7 @@ class Customer implements savable{
 		$query=$db->prepare($stmt);
 		$result=$query->execute();
 		
-		if($result) return new Customer($parameters["CustomerID"], $parameters["CustomerTaxID"], $parameters["Name"], $email, $pw, $permissions, $db);
+		if($result) return new Customer($parameters["CustomerID"], $parameters["CustomerTaxID"], $parameters["Name"], $parameters["email"], $parameters["Password"], $parameters["Permission"]);
 		
 		
 		
@@ -314,7 +314,7 @@ class Customer implements savable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], $entry["Password"], $entry["Permission"],$db);
+			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], $entry["Password"], $entry["Permission"]);
 			$instance->address=new Address($entry["AddressDetail"], $entry["City"],$entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
 			$instances[$i]=$instance;
 		}
@@ -325,7 +325,7 @@ class Customer implements savable{
 	
 	function getAddress(){
 		
-		return $this->Address;
+		return $this->address;
 	}
 }
 
