@@ -9,9 +9,7 @@ session_start();
 <?php
 
 if(isset($_SESSION['customer'])){
-	$db= new PDO('sqlite:./database.sqlite');
-	$params=array(array("AddressID", array($_SESSION['customer']->addressID), "equal"));
-	$myAddr= Address::getInstancesByFields($db, $params);
+	
 echo '
 <div class="update_div" name="Customer">
 		<br><br>
@@ -40,25 +38,25 @@ echo '
 						
 				<div id="Country">
 				<label class="to_ident" for="Country">Country</label>
-				<input type="text" name="Country" id="Country" placeholder="'.$myAddr[0]->country.'" value="'.$myAddr[0]->country.'"><br>
+				<input type="text" name="Country" id="Country" placeholder="'.$_SESSION['customer']->getAddress()->country.'" value="'.$_SESSION['customer']->getAddress()->country.'"><br>
 				</div>
 				
 				<div id="City>
 				<label class="to_ident" for="City"></label>
-				<input type="text" name="City" id="City" placeholder="'.$myAddr[0]->city.'" value="'.$myAddr[0]->city.'"><br>
+				<input type="text" name="City" id="City" placeholder="'.$_SESSION['customer']->getAddress()->city.'" value="'.$_SESSION['customer']->getAddress()->city.'"><br>
 				</div>
 						
 				<div id="AddressDetail">
 				<label class="to_ident" for="AddressDetail"></label>
-				<input type="text" name="AddressDetail" id="AddressDetail" placeholder="'.$myAddr[0]->detail.'" value="'.$myAddr[0]->detail.'"><br>
+				<input type="text" name="AddressDetail" id="AddressDetail" placeholder="'.$_SESSION['customer']->getAddress()->detail.'" value="'.$_SESSION['customer']->getAddress()->detail.'"><br>
 				</div>
 					
 				<div id="PostalCode1">
 				<label class="to_ident" for="PostalCode1"></label>
-				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$myAddr[0]->postalCode1.'" value="'.$myAddr[0]->postalCode1.'">-
+				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$_SESSION['customer']->getAddress()->postalCode1.'" value="'.$_SESSION['customer']->getAddress()->postalCode1.'">-
 				</div>
 				<div id ="PostalCode2">
-				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$myAddr[0]->postalCode2.'" value="'.$myAddr[0]->postalCode2.'"><br>
+				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$_SESSION['customer']->getAddress()->postalCode2.'" value="'.$_SESSION['customer']->getAddress()->postalCode2.'"><br>
 				</div>
 				<input type="button" id="save_edit" value="Save">				
 			</fieldset>

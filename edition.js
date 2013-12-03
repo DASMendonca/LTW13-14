@@ -24,7 +24,7 @@ function updateEntry(){
 		return;
 	}
 	var what_api = $(".update_div").attr("name");
-	if(what_api=="Customer") what_api= "./api/updateCustomer.php";
+	if(what_api=="Customer") what_api= "./private_api/changeCustomer.php";
 	else return;
 	
 	console.log(parameters);
