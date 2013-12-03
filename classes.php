@@ -86,8 +86,9 @@ class Err_Not_Found extends SimpleError{
 
 interface savable
 {
-	public function saveToDB($db);
+	public function insertIntoDB($db);
 	static public function getInstancesByFields($db,$fields);
+	static public function updateInDB($db,$parameters);
 }
 
 
@@ -128,7 +129,7 @@ class Invoice implements savable{
 	
 	
 	
-	public function saveToDB($db){
+	public function insertIntoDB($db){
 		//TODO implement it
 	}
 	static public function getInstancesByFields($db,$fields){
@@ -190,7 +191,7 @@ class Line implements savable{
 		$this->Tax=$Tax;
 		$this->CreditAmount=$this->UnitPrice*$this->Quantity;
 	}
-	public function saveToDB($db){
+	public function insertIntoDB($db){
 		//TODO: implement it later
 	}
 	static public function getInstancesByFields($db,$fields){
@@ -250,18 +251,11 @@ class Customer implements savable{
 		$this->password=$pw;
 		$this->permission=$permissions;//TODO: maybe validate these permissions
 		
-		$addressParameters=array(
-			array("AddressID",array($this->addressID),"equal")
-		);
 		
-		
-		
-		$ads=Address::getInstancesByFields($db, $addressParameters);
-		$this->Address=$ads[0];
 		
 		
 	}
-	function saveToDB($db){
+	function insertIntoDB($db){
 		
 		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
 		
@@ -281,7 +275,17 @@ class Customer implements savable{
 		
 		
 	}
-	
+	static public function updateInDB($db,$parameters){
+		
+		$stmt=constructUpdate("Customer", $parameters, $db);
+		$query=$db->prepare($stmt);
+		$result=$query->execute();
+		
+		if($result) return new Customer($, $TaxID, $Name, $email, $pw, $permissions, $db)
+		
+		
+		
+	}
 	
 	static public function getInstancesByFields($db,$fields){
 		
@@ -354,7 +358,7 @@ class Address implements savable{
 	}
 	
 	
-	function saveToDB($db){
+	function insertIntoDB($db){
 		
 		if($this->city==null || $this->detail==null || $this->city==null || $this->postalCode1==null || $this->postalCode2==null || $this->country==null) return;
 		
@@ -424,7 +428,7 @@ class Product implements savable{
 		
 	}
 	
-	function saveToDB($db){
+	function insertIntoDB($db){
 		
 		if($this->ProductDescription==null || $this->UnitPrice==null || $this->UnitOfMeasure==null || $this->ProductTypeID==null){
 			
@@ -489,7 +493,7 @@ class ProductType implements savable{
 		$this->taxID=$theTaxID;		
 	}
 	
-	function saveToDB($db){
+	function insertIntoDB($db){
 		
 		if($this->typeDescription==null || $this->taxID==null)return;
 		
@@ -548,7 +552,7 @@ class Tax implements savable{
 
 		
 	}
-	function saveToDB($db){
+	function insertIntoDB($db){
 		
 		if($this->TaxPercentage==null)return;//dont do nothing if it's not a valid tax
 		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";

@@ -8,17 +8,14 @@ header('Content-type: application/json');
 try {
 	
 	
-	if(!isset($POST["parameters"])) throw new GeneralException(new Err_MissingParameter("parameters"));
+	if(!isset($POST["parameters"]) || count($POST["parameters"])==0 ) throw new GeneralException(new Err_MissingParameter("parameters"));
 	
 	$parameters=$POST["parameters"];
 	
 	
-	for($i=0;count($parameters);$i++){
-		
-		$columnName=$parameters[$i][0];
-		if($columnName!=)
-		
-	}
+	
+	$id=$parameters[1][0];
+	if($id="") 
 	
 	
 	
