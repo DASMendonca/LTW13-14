@@ -266,7 +266,7 @@ class Customer implements savable,changable{
 	public $CustomerID;
 	public $CustomerTaxID;
 	public $CompanyName;
-	protected $address;
+	public $BillingAddress;
 	public $email;
 	public $password;
 	public $permission;
@@ -290,16 +290,20 @@ class Customer implements savable,changable{
 	}
 	function insertIntoDB($db){
 		
-		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->addressID==null || $this->email==null || $this->password==null) return;
+		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->BillingAddress->AddressDetail==null || $this->BillingAddress->PostalCode1==null || $this->BillingAddress->PostalCode2==null || $this->BillingAddress->City==null  || $this->BillingAddress->Country==null || $this->email==null || $this->password==null ) return;
 		
 		if($this->permission==null)$this->permission=0;
 		
-		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressID,Password,Permission) Values(?,?,?,?,?,?);";
+		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressDetail,PostalCode1,PostalCode2,City,Country,Password,Permission) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->CustomerTaxID);
 		$query->bindParam(2,$this->CompanyName);
 		$query->bindParam(3,$this->email);
-		$query->bindParam(4,$this->addressID);
+		$query->bindParam(4,$this->BillingAddress->AddressDetail);
+		$query->bindParam(4,$this->BillingAddress->PostalCode1);
+		$query->bindParam(4,$this->BillingAddress->PostalCode2);
+		$query->bindParam(4,$this->BillingAddress->City);
+		$query->bindParam(4,$this->BillingAddress->Country);
 		$query->bindParam(5,$this->password);
 		$query->bindParam(6,$this->permission);
 		
@@ -359,7 +363,7 @@ class Customer implements savable,changable{
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
 			$instance=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], $entry["Password"], $entry["Permission"]);
-			$instance->address=new Address($entry["AddressDetail"], $entry["City"],$entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
+			$instance->BillingAddress=new Address($entry["AddressDetail"], $entry["City"],$entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
 			$instances[$i]=$instance;
 		}
 
@@ -380,7 +384,7 @@ class Customer implements savable,changable{
 	 * passed parameter same as updateInDB
 	 * 
 	 */
-	static public function instatiate($parameters){
+	static public function instatiate($db,$parameters){
 		
 		
 		
@@ -401,7 +405,9 @@ class Customer implements savable,changable{
 		}
 		$customer=new Customer(NULL, $TaxID, $Name, $email, $pw, $permissions);
 		
-		$customer->address=new Address($addressDetail, $city, $postalCode1, $postalCode2, $country);
+		$customer->BillingAddress=new Address($addressDetail, $city, $postalCode1, $postalCode2, $country);
+		
+		$customer->insertIntoDB($db);
 		
 		
 		return $customer;
@@ -409,7 +415,7 @@ class Customer implements savable,changable{
 	
 	function getAddress(){
 		
-		return $this->address;
+		return $this->BillingAddress;
 	}
 
 
@@ -588,7 +594,7 @@ class Product implements savable,changable{
 		
 	}
 
-	static public function instatiate($parameters){
+	static public function instatiate($db,$parameters){
 	
 		for($i;$i<count($parameters);$i++){
 			$parameterName=$parameters[$i][0];
@@ -602,14 +608,11 @@ class Product implements savable,changable{
 		
 		$product=new Product($code, $descrip, $price, $unit, $typeID);
 	
-	
+		$product->insertIntoDB($db);
+		
 		return $product;
 	}
-	
-	function getAddress(){
-	
-		return $this->address;
-	}
+
 	
 	
 	

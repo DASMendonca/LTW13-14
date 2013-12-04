@@ -27,7 +27,7 @@ try {
 		echo json_encode($product);
 	}
 	else{
-		$product=Product::instatiate($parameters);
+		$product=Product::instatiate($db,$parameters);
 		echo json_encode($product);
 	}
 	
