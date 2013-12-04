@@ -42,7 +42,7 @@
 					<li class="top_lis" id="li_myInvoices" name="myInvoices">My Invoices</li>
 					<li class="top_lis" id="li_myProfile" name="myProfile">My Profile</li>
 					<?php 
-						if (($_SESSION['customer']->permission)>1) {
+						if (($_SESSION['customer']->Permission)>1) {
 							echo '	<li class="top_lis" id="li_invoice">Search Invoices</li>
 									<li class="top_lis" id="li_customer">Search Clients</li>
 									<li class="top_lis" id="li_administration">Administrative section</li>';

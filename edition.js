@@ -95,9 +95,23 @@ function isToUpdate(div_elem){
 
 function updatePlaceholders(data, div_element){
 	var db_column_name= $(div_element).attr('id');
+	var address_field;
 	var input_field= $(div_element).children("input")[0];
+	
 	console.log(db_column_name);
 	console.log($(input_field).attr("placeholder"));
-	$(input_field).attr('placeholder', data[db_column_name]);
+	
+	if(db_column_name == "City" || 
+			db_column_name == "Country" || 
+			db_column_name == "AddressDetail"||	
+			db_column_name == "PostalCode1" || 
+			db_column_name == "PostalCode2")
+	{
+		address_field = "BillingAddress";
+		$(input_field).attr('placeholder', data[address_field][db_column_name]);
+		}
+	else{
+		$(input_field).attr('placeholder', data[db_column_name]);
+	}
 	console.log($(input_field).attr("placeholder"));
 }
