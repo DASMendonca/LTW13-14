@@ -267,9 +267,9 @@ class Customer implements savable,changable{
 	public $CustomerTaxID;
 	public $CompanyName;
 	public $BillingAddress;
-	public $email;
-	public $password;
-	public $permission;
+	public $Email;
+	public $Password;
+	public $Permission;
 	
 	
 	function __construct($ID,$TaxID,$Name,$email,$pw,$permissions){
@@ -280,9 +280,9 @@ class Customer implements savable,changable{
 
 		$this->CompanyName=$Name;
 		
-		$this->email=$email;
-		$this->password=$pw;
-		$this->permission=$permissions;//TODO: maybe validate these permissions
+		$this->Email=$email;
+		$this->Password=$pw;
+		$this->Permission=$permissions;//TODO: maybe validate these permissions
 		
 		
 		
@@ -290,22 +290,22 @@ class Customer implements savable,changable{
 	}
 	function insertIntoDB($db){
 		
-		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->BillingAddress->AddressDetail==null || $this->BillingAddress->PostalCode1==null || $this->BillingAddress->PostalCode2==null || $this->BillingAddress->City==null  || $this->BillingAddress->Country==null || $this->email==null || $this->password==null ) return;
+		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->BillingAddress->AddressDetail==null || $this->BillingAddress->PostalCode1==null || $this->BillingAddress->PostalCode2==null || $this->BillingAddress->City==null  || $this->BillingAddress->Country==null || $this->Email==null || $this->Password==null ) return;
 		
-		if($this->permission==null)$this->permission=0;
+		if($this->Permission==null)$this->Permission=0;
 		
 		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressDetail,PostalCode1,PostalCode2,City,Country,Password,Permission) Values(?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->CustomerTaxID);
 		$query->bindParam(2,$this->CompanyName);
-		$query->bindParam(3,$this->email);
+		$query->bindParam(3,$this->Email);
 		$query->bindParam(4,$this->BillingAddress->AddressDetail);
 		$query->bindParam(4,$this->BillingAddress->PostalCode1);
 		$query->bindParam(4,$this->BillingAddress->PostalCode2);
 		$query->bindParam(4,$this->BillingAddress->City);
 		$query->bindParam(4,$this->BillingAddress->Country);
-		$query->bindParam(5,$this->password);
-		$query->bindParam(6,$this->permission);
+		$query->bindParam(5,$this->Password);
+		$query->bindParam(6,$this->Permission);
 		
 		
 		return $query->execute();

@@ -12,24 +12,13 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 try {
 	
 	
+	if(!isset($_POST["customer"]))throw new GeneralException(new Err_MissingParameter("parameter"));
 	
+	$customer=json_decode($_POST["customer"],true);
 	
-	if(!isset($_POST["parameters"]) || count($_POST["parameters"])==0 ) throw new GeneralException(new Err_MissingParameter("parameters"));
+	if(issetr)
 	
-	$parameters=$_POST["parameters"];
-	
-	
-	
-	$id=$parameters[1][0];
-	if($id!="") {//update
-		$customer =Customer::updateInDB($db, $parameters);
-		
-		echo json_encode($customer);
-	}
-	else{
-		$customer=Customer::instatiate($parameters);
-		echo json_encode($customer);
-	}
+
 	
 	
 	
