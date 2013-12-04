@@ -382,12 +382,29 @@ class Customer implements savable,changable{
 	 */
 	static public function instatiate($parameters){
 		
+		
+		
+		
 		for($i;$i<count($parameters);$i++){
 			$parameterName=$parameters[$i][0];
 			if(!Customer::isColumn($parameterName))throw new GeneralException(new Err_UnknownField($parameterName));
+			else if (strcmp($parameterName, "CustomerTaxID")==0)$TaxID=$parameters[$i][0];
+			else if (strcmp($parameterName, "CompanyName")==0)$Name=$parameters[$i][0];
+			else if (strcmp($parameterName, "Email")==0)$email=$parameters[$i][0];
+			else if (strcmp($parameterName, "Password")==0)$pw=$parameters[$i][0];
+			else if (strcmp($parameterName, "Permission")==0)$permissions=$parameters[$i][0];
+			else if (strcmp($parameterName, "AddressDetail")==0)$addressDetail=$parameters[$i][0];
+			else if (strcmp($parameterName, "PostalCode1")==0)$postalCode1=$parameters[$i][0];
+			else if (strcmp($parameterName, "PostalCode2")==0)$postalCode2=$parameters[$i][0];
+			else if (strcmp($parameterName, "City")==0)$city=$parameters[$i][0];
+			else if (strcmp($parameterName, "Country")==0)$country=$parameters[$i][0];
 		}
+		$customer=new Customer(NULL, $TaxID, $Name, $email, $pw, $permissions);
+		
+		$customer->address=new Address($addressDetail, $city, $postalCode1, $postalCode2, $country);
 		
 		
+		return $customer;
 	}
 	
 	function getAddress(){

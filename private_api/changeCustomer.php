@@ -23,7 +23,8 @@ try {
 		echo json_encode($customer);
 	}
 	else{
-		
+		$customer=Customer::instatiate($parameters);
+		echo json_encode($customer);
 	}
 	
 	
