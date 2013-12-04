@@ -36,10 +36,8 @@ function detailedAction(id){
 	var win=window.open(url, '_blank');
 	win.focus();
 	//window.location.href = url;
-	
-	
-	
 }
+
 
 function searchByFields(){
 	var params = new Array();

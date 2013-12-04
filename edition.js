@@ -2,6 +2,11 @@ $(document).ready(function() {
 	$(".update_form input#save_edit" ).click(function() {
 		updateEntry();
 	});
+	
+	$(".edit_img").click(
+			function(){
+				editAction(jQuery(this).attr("id"));
+			});
 });
 
 
@@ -115,3 +120,92 @@ function updatePlaceholders(data, div_element){
 	}
 	console.log($(input_field).attr("placeholder"));
 }
+
+
+
+function editAction(id){
+	var url= $("#search_form").attr("name");
+	var column="";
+	var parameter = new Array();
+	var url2= url;
+	if(url=="Products") {url= "./api/getProduct.php"; column="ProductCode";}
+	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
+	else if(url=="Customer"){ url="./api/getCustomer.php"; column="CustomerID";}
+	
+	var params= new Array();
+	params.push(column);
+	var op= "equal";
+	parameter.push(id);
+	params.push(op);
+	 
+	$.ajax({
+		type: "GET",
+        url : url ,
+        dataType : "json",
+        data : {"CustomerID": id},
+        success : function(data){
+          //TODO $("#search_results_div").html(data);
+        	editionForm(data, url2);
+        	
+        },
+        
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+    });
+	
+}
+
+function editionForm(json_obj, url){
+	var column="";
+	
+	if(url=="Products") {url= "./api/getProduct.php"; column="ProductCode";}
+	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
+	else if(url=="Customer"){ url="./editCustomer.php"; column="CustomerID";}
+	
+	$.ajax({
+		type: "POST",
+        url : url ,
+        dataType : "json",
+        data : {"params": json_obj},
+        success : function(data){
+          //TODO $("#search_results_div").html(data);
+        	$("#mainDiv").html(data);
+        },
+        
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+    });
+	
+}
+
+

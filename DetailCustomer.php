@@ -40,12 +40,12 @@ try {
 	
 	$CustomerCode=$customer->CustomerID;
 	$CompanyName=$customer->CompanyName;
-	$CustomerAddress=$customer->getAddress()->detail;
-	$CustomerPostalCode1=$customer->getAddress()->postalCode1;
-	$CustomerPostalCode2=$customer->getAddress()->postalCode2;
-	$CustomerCity=$customer->getAddress()->city;
+	$CustomerAddress=$customer->getAddress()->AddressDetail;
+	$CustomerPostalCode1=$customer->getAddress()->PostalCode1;
+	$CustomerPostalCode2=$customer->getAddress()->PostalCode2;
+	$CustomerCity=$customer->getAddress()->City;
 	$CustomerNif=$customer->CustomerTaxID;
-	$CustomerEmail=$customer->email;
+	$CustomerEmail=$customer->Email;
 	
 } catch (GeneralException $e) {
 
