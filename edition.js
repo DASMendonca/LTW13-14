@@ -96,6 +96,8 @@ function isToUpdate(div_elem){
 function updatePlaceholders(data, div_element){
 	var db_column_name= $(div_element).attr('id');
 	var input_field= $(div_element).children("input")[0];
-	
+	console.log(db_column_name);
+	console.log($(input_field).attr("placeholder"));
 	$(input_field).attr('placeholder', data[db_column_name]);
+	console.log($(input_field).attr("placeholder"));
 }
