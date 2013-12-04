@@ -1,6 +1,7 @@
 <?php
 
 include '../classes.php';
+session_start();
 header('Content-type: application/json');
 
 $db = new PDO('sqlite:../database.sqlite');

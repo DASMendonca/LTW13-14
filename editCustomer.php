@@ -1,7 +1,8 @@
 <?php
-include '../classes.php';
-header('Content-type: application/json');
+include './classes.php';
 session_start();
+header('Content-type: application/json');
+
 
 
 
