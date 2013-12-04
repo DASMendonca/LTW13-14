@@ -22,20 +22,16 @@ try {
 	
 	$id=$parameters[1][0];
 	if($id!="") {//update
-		$customer =Customer::updateInDB($db, $parameters);
+		$product =Product::updateInDB($db, $parameters);
 		
-		echo json_encode($customer);
+		echo json_encode($product);
 	}
 	else{
-		$customer=Customer::instatiate($parameters);
-		echo json_encode($customer);
+		$product=Product::instatiate($parameters);
+		echo json_encode($product);
 	}
 	
-	
-	
-	if(isset($_POST["reloadSession"]) && $_POST["reloadSession"]==TRUE){//if the customer we are editing is the one stored in session than update it
-		$_SESSION["customer"]=$customer;//change sessionCustomer
-	}
+
 	
 	
 	

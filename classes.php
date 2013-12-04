@@ -345,7 +345,7 @@ class Customer implements savable,changable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(Product::isColumn($entry[0])){
+			if(Customer::isColumn($entry[0])){
 				array_push($params, $entry);
 			}
 			else throw new GeneralException(new Err_UnknownField($entry[0]));
@@ -588,6 +588,32 @@ class Product implements savable,changable{
 		
 	}
 
+	static public function instatiate($parameters){
+	
+		for($i;$i<count($parameters);$i++){
+			$parameterName=$parameters[$i][0];
+			if(!Customer::isColumn($parameterName))throw new GeneralException(new Err_UnknownField($parameterName));
+			else if (strcmp($parameterName, "ProductCode")==0)$code=$parameters[$i][0];
+			else if (strcmp($parameterName, "ProductDescription")==0)$descript=$parameters[$i][0];
+			else if (strcmp($parameterName, "UnitOfMeasure")==0)$unit=$parameters[$i][0];
+			else if (strcmp($parameterName, "UnitPrice")==0)$price=$parameters[$i][0];
+			else if (strcmp($parameterName, "ProductTypeID")==0)$typeID=$parameters[$i][0];
+		}
+		
+		$product=new Product($code, $descrip, $price, $unit, $typeID);
+	
+	
+		return $product;
+	}
+	
+	function getAddress(){
+	
+		return $this->address;
+	}
+	
+	
+	
+	
 }
 	
 class ProductType implements savable{
