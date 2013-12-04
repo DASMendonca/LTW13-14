@@ -425,11 +425,11 @@ class Customer implements savable,changable{
 //TODO: change isColumn and updateDB as interface methods
 class Address implements savable{
 	
-	public $detail;
-	public $city;
-	public $postalCode1;
-	public $postalCode2;
-	public $country;
+	public $AddressDetail;
+	public $City;
+	public $PostalCode1;
+	public $PostalCode2;
+	public $Country;
 	
 	
 	
@@ -437,16 +437,16 @@ class Address implements savable{
 	
 	function __construct($det,$theCity,$zip1,$zip2,$theCountry){
 		
-		$this->detail=$det;
-		$this->city=$theCity;
+		$this->AddressDetail=$det;
+		$this->City=$theCity;
 		
-		if($zip1>0)$this->postalCode1=$zip1;
-		else $this->postalCode1=null;
+		if($zip1>0)$this->PostalCode1=$zip1;
+		else $this->PostalCode1=null;
 		
-		if($zip2>0)$this->postalCode2=$zip2;
-		else $this->postalCode2=null;
+		if($zip2>0)$this->PostalCode2=$zip2;
+		else $this->PostalCode2=null;
 		
-		$this->country=$theCountry;
+		$this->Country=$theCountry;
 		
 		
 	}
@@ -454,15 +454,15 @@ class Address implements savable{
 	
 	function insertIntoDB($db){
 		
-		if($this->city==null || $this->detail==null || $this->city==null || $this->postalCode1==null || $this->postalCode2==null || $this->country==null) return;
+		if($this->City==null || $this->AddressDetail==null || $this->City==null || $this->PostalCode1==null || $this->PostalCode2==null || $this->Country==null) return;
 		
 		$stmt="Insert into Address (AddressDetail,City,PostalCode1,PostalCode2,Country) Values(?,?,?,?,?);";
 		$query=$db->prepare($stmt);
-		$query->bindParam(1,$this->detail);
-		$query->bindParam(2,$this->city);
-		$query->bindParam(3,$this->postalCode1);
-		$query->bindParam(4,$this->postalCode2);
-		$query->bindParam(5,$this->country);
+		$query->bindParam(1,$this->AddressDetail);
+		$query->bindParam(2,$this->City);
+		$query->bindParam(3,$this->PostalCode1);
+		$query->bindParam(4,$this->PostalCode2);
+		$query->bindParam(5,$this->Country);
 		
 		
 		return $query->execute();
