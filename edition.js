@@ -23,19 +23,32 @@ function updateEntry(){
 		alert("No changes detected.");
 		return;
 	}
+	var reloadSession = false;
 	var what_api = $(".update_div").attr("name");
-	if(what_api=="Customer") what_api= "./private_api/changeCustomer.php";
+	if(what_api=="Customer") {
+		what_api= "./private_api/changeCustomer.php";
+		reloadSession = true;
+		}
 	else return;
 	
 	console.log(parameters);
+	
+	
 	
 	$.ajax({
 		type: "POST",
         url : what_api ,
         dataType : "json",
-        data : {"parameters": parameters},
+        data : {"parameters": parameters, "reloadSession": reloadSession},
         success : function(data){
           alert("Customer information updated.");
+          for(i=0; i< form_divs.length; i++){
+      		var to_update= isToUpdate(form_divs[i]);
+      		if(to_update != null)
+      			updatePlaceholders(data, form_divs[i]);
+      	}
+          
+          //TODO update placeholders
         },
         
         error: function(jqXHR, exception) {
@@ -77,4 +90,12 @@ function isToUpdate(div_elem){
 		query_array.push(new_val);
 	
 	return query_array;
+}
+
+
+function updatePlaceholders(data, div_element){
+	var db_column_name= $(div_element).attr('id');
+	var input_field= $(div_element).children("input")[0];
+	
+	$(input_field).attr('placeholder', data[db_column_name]);
 }
