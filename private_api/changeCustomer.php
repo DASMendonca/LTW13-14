@@ -18,9 +18,12 @@ try {
 	
 	
 	$id=$parameters[1][0];
-	if($id!="") {
+	if($id!="") {//update
 		$customer =Customer::updateInDB($db, $parameters);
 		echo json_encode($customer);
+	}
+	else{
+		
 	}
 	
 	

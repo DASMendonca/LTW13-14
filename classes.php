@@ -92,9 +92,15 @@ interface savable
 }
 
 
+interface changable{
+	static public function updateInDB($db,$parameters);
+	
+	
+}
 
 
-class Invoice implements savable{
+
+class Invoice implements savable,changable{
 	
 	public $InvoiceNo;
 	public $InvoiceDate;
@@ -127,7 +133,24 @@ class Invoice implements savable{
 		return $this->CustomerID;
 	}
 	
+	static public function updateInDB($db,$parameters){
 	
+		for($i=0;$i<count($parameters);$i++){
+			$columnName=$parameters[$i][0];
+			if(!Invoice::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
+		}
+	
+	
+	
+	
+		$query=constructUpdate("Invoice", $parameters, $db);
+		$result=$query->execute();
+	
+		if($result) return Invoice::getInstancesByFields($db, array(array($parameters[0][0],array($parameters[0][1]),"equal")))[0];
+	
+	
+	
+	}
 	
 	public function insertIntoDB($db){
 		//TODO implement it
@@ -138,8 +161,7 @@ class Invoice implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"InvoiceNo")==0 || strcmp($entry[0],"InvoiceDate")==0 ||
-			strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"AddressID")==0 || strcmp($entry[0],"CompanyName")==0){
+			if(Invoice::isColumn($entry[0])){
 				array_push($params, $entry);
 			}
 			else throw new GeneralException(new Err_UnknownField($entry[0]));
@@ -169,6 +191,17 @@ class Invoice implements savable{
 	
 	function getLines(){
 		return $this->Lines;
+	}
+	
+	static public function isColumn($candidate){
+	
+		$columns=array("InvoiceNo","InvoiceDate","CustomerID","AddressID","CompanyName");
+		for($i=0;$i<count($columns);$i++){
+			if(strcmp($candidate, $columns[$i])==0)return TRUE;
+		}
+	
+		return FALSE;
+	
 	}
 	
 }
@@ -228,7 +261,7 @@ class Line implements savable{
 }
 
 
-class Customer implements savable{
+class Customer implements savable,changable{
 	
 	public $CustomerID;
 	public $CustomerTaxID;
@@ -237,7 +270,6 @@ class Customer implements savable{
 	public $email;
 	public $password;
 	public $permission;
-	//protected $Address;
 	
 	
 	function __construct($ID,$TaxID,$Name,$email,$pw,$permissions){
@@ -276,12 +308,30 @@ class Customer implements savable{
 		
 		
 	}
+	
+	/*
+	 * 
+	 * This method recieves an array. Each of the array entries are supposed to be an arry with to positions:
+	 * 0-> the column name , 1-> column value
+	 * The first of this pairs is not a value to be changed, it's the matching parameter instead (the one that will go in the where clause of the update) tipically it should be the ID
+	 * 
+	 * 
+	 */
+	
 	static public function updateInDB($db,$parameters){
+		
+		for($i=0;$i<count($parameters);$i++){
+			$columnName=$parameters[$i][0];
+			if(!Customer::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
+		}
+		
+		
+		
 		
 		$query=constructUpdate("Customer", $parameters, $db);
 		$result=$query->execute();
 		
-		if($result) return Customer::getInstancesByFields($db, array(array("CustomerID",array($parameters[0][1]),"equal")))[0];
+		if($result) return Customer::getInstancesByFields($db, array(array($parameters[0][0],array($parameters[0][1]),"equal")))[0];
 		
 		
 		
@@ -295,12 +345,7 @@ class Customer implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"CustomerID")==0 || strcmp($entry[0],"CustomerTaxID")==0 || 
-			strcmp($entry[0],"CompanyName")==0 || strcmp($entry[0],"Email")==0 || 
-			strcmp($entry[0],"AddressDetail")==0 || strcmp($entry[0],"PostalCode1")==0 || 
-			strcmp($entry[0],"PostalCode2")==0 || strcmp($entry[0],"City")==0 ||
-			strcmp($entry[0],"Country")==0 || strcmp($entry[0],"Password")==0 ||
-			strcmp($entry[0],"Permission")==0){
+			if(Product::isColumn($entry[0])){
 				array_push($params, $entry);
 			}
 			else throw new GeneralException(new Err_UnknownField($entry[0]));
@@ -321,14 +366,40 @@ class Customer implements savable{
 		return $instances;
 	}
 	
+	static public function isColumn($candidate){
+	
+		$columns=array("CustomerID","CustomerTaxID","CompanyName","Email","Password","Permission","AddressDetail","PostalCode1","PostalCode2","City","Country");
+		for($i=0;$i<count($columns);$i++){
+			if(strcmp($candidate, $columns[$i])==0)return TRUE;
+		}
+	
+		return FALSE;
+	
+	}
+	/*
+	 * passed parameter same as updateInDB
+	 * 
+	 */
+	static public function instatiate($parameters){
+		
+		for($i;$i<count($parameters);$i++){
+			$parameterName=$parameters[$i][0];
+			if(!Customer::isColumn($parameterName))throw new GeneralException(new Err_UnknownField($parameterName));
+		}
+		
+		
+	}
 	
 	function getAddress(){
 		
 		return $this->address;
 	}
+
+
+
 }
 
-
+//TODO: change isColumn and updateDB as interface methods
 class Address implements savable{
 	
 	public $detail;
@@ -404,7 +475,7 @@ class Address implements savable{
 }
 
 
-class Product implements savable{
+class Product implements savable,changable{
 	
 	public $ProductCode;
 	public $ProductDescription;
@@ -454,7 +525,7 @@ class Product implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"ProductCode")==0 || strcmp($entry[0],"ProductDescription")==0 || strcmp($entry[0],"UnitOfMeasure")==0 || strcmp($entry[0],"UnitPrice")==0 || strcmp($entry[0],"ProductTypeID")==0)array_push($params, $entry);
+			if(Product::isColumn($entry[0]))array_push($params, $entry);
 			else throw new GeneralException(new Err_UnknownField($entry[0]));
 		}
 		
@@ -475,6 +546,31 @@ class Product implements savable{
 		return $instances;
 		
 	}
+
+	static public function updateInDB($db,$parameters){
+		
+		for($i=0;$i<count($parameters);$i++){
+			$columnName=$parameters[$i][0];
+			if(!Product::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
+		}
+		
+		$query=constructUpdate("Product", $parameters, $db);
+		$result=$query->execute();
+		
+		if($result) return Product::getInstancesByFields($db, array(array($parameters[0][0],array($parameters[0][1]),"equal")))[0];
+	}
+	
+	static public function isColumn($candidate){
+		
+		$columns=array("ProductCode","ProductDescription","UnitOfMeasure","UnitPrice","ProductTypeID");
+		for($i=0;$i<count($columns);$i++){
+			if(strcmp($candidate, $columns[$i])==0)return TRUE;
+		}
+		
+		return FALSE;
+		
+	}
+
 }
 	
 class ProductType implements savable{
