@@ -3,6 +3,7 @@ $(document).ready(function() {
 	$("body").on('click', '#search_button', 
 			function(){
 				searchByFields();	
+				
 			}
 	);
 	$('#search_form input').keydown(function(e) {
