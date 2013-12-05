@@ -39,12 +39,12 @@ if($customers != NULL){
 		</tr>
 <?php
 	foreach ($customers as $customer){
-		if(isset($_SESSION['customer']) && ($_SESSION['customer']->permission)>1){				
+		if(isset($_SESSION['customer']) && ($_SESSION['customer']->Permission)>1){				
 				echo utf8_encode('<tr>
 				<td>' .$customer->CustomerID .'</td>
 				<td>' .$customer->CompanyName .'</td>
 				<td>' .$customer->CustomerTaxID .'</td>
-				<td>' .$customer->email.' </td>'); ?>
+				<td>' .$customer->Email.' </td>'); ?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $customer->CustomerID;?>"/></td>
 <?php
