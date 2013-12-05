@@ -298,7 +298,10 @@ class Customer implements savable,changable{
 		
 		$this->Email=$email;
 		$this->Password=$pw;
-		$this->Permission=$permissions;//TODO: maybe validate these permissions
+		if($permissions==null)
+			$this->Permission=1;
+		else 
+			$this->Permission=$permissions;//TODO: maybe validate these permissions
 		
 		
 		

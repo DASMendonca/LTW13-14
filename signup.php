@@ -21,26 +21,13 @@ $params=array(array("CustomerTaxID", array($CustomerTaxID), "equal"), array("Ema
 $customer_exists= Customer::getInstancesByFields($db, $params);
 
 if(count($customer_exists)==0){
-	
-	$params = array(array("Country", array($Country), "equal"), array("City", array($City), "equal"),
-			array("PostalCode1", array($PostalCode1), "equal"), array("PostalCode2", array($PostalCode2), "equal"));
-	
-	$addr_exists= Address::getInstancesByFields($db, $params);
-	if(count($addr_exists)>0){
-		$myAddrID= $addr_exists[0]->AddressID;
-	}
-	else{
-		$new_address = new Address(null, $AddressDetail, $City, $PostalCode1, $PostalCode2, $Country);
-		$new_address->saveToDB($db);
-		$addr_exists= Address::getInstancesByFields($db, $params);
-		$myAddrID=$addr_exists->AddressID;
-	}
-	$myCustomer = new Customer(null, $CustomerTaxID, $CompanyName, $myAddrID, $Email, $Password, 1, $db);
-	
-	$myCustomer->saveToDB($db);
+		$new_address = new Address($AddressDetail, $City, $PostalCode1, $PostalCode2, $Country);
+		$myCustomer = new Customer(null, $CustomerTaxID, $CompanyName, $Email, $Password, null);
+		$myCustomer->BillingAddress=$new_address;
+		$myCustomer->insertIntoDB($db);
 }
 
 
-
-header("Location: onlineInvoiceSystem.php");
+else
+header("Location: onlineInvoiceSystem.php?msg=CustomerAlreadyInDB");
 ?>

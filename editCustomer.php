@@ -2,15 +2,17 @@
 include './classes.php';
 session_start();
 header('Content-type: text/html');
+?>
 
-
-
+<?php 
 
 if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2) 
 	header("Location: onlineInvoiceSystem.php");
 	
 
-	$db = new PDO('sqlite:../database.sqlite');
+	$db = new PDO('sqlite:./database.sqlite');
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 	
 	$params=array(
@@ -19,7 +21,8 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 	);
 	
 
-	$customer = Customer::getInstancesByFields($db, $params);
+	$customers = Customer::getInstancesByFields($db, $params);
+	$customer= $customers[0];
 
 	 
 	 echo '
@@ -45,15 +48,15 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 
 				<div id="Password">
 				<label class="to_ident" for="password">Password</label>
-				<input type="text" name="password" id="password" placeholder="'.$customer->password.'" value="'.$customer->password.'"><br>
+				<input type="text" name="password" id="password" placeholder="'.$customer->Password.'" value="'.$customer->Password.'"><br>
 				</div>
 						
 				<div id="Country">
 				<label class="to_ident" for="Country">Country</label>
-				<input type="text" name="Country" id="Country" placeholder="'.$customer->getAddress()->Country.'" value="'.$customer_addr[0]->getAddress()->Country.'"><br>
+				<input type="text" name="Country" id="Country" placeholder="'.$customer->getAddress()->Country.'" value="'.$customer->getAddress()->Country.'"><br>
 				</div>
 				
-				<div id="City>
+				<div id="City">
 				<label class="to_ident" for="City"></label>
 				<input type="text" name="City" id="City" placeholder="'.$customer->getAddress()->City.'" value="'.$customer->getAddress()->City.'"><br>
 				</div>

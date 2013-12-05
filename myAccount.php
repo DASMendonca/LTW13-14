@@ -2,8 +2,6 @@
 include 'classes.php';
 session_start();
 ?>
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src='edition.js'></script>
 
 
 <?php
@@ -11,7 +9,7 @@ session_start();
 if(isset($_SESSION['customer'])){
 	
 echo '
-<div class="update_div" name="Customer">
+<div class="update_div" name="Customer" id="true">
 		<br><br>
 		<form action="updateMyuser.php" method="post" class="update_form" name="CustomerID" id="'.$_SESSION['customer']->CustomerID.'">
 			<fieldset>
