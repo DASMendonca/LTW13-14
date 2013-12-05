@@ -11,7 +11,7 @@ $(document).ready(function() {
 	    	$("#search_button").click();
 	    }
 	});
-	$(".detail_img").click(
+	$("body").on("click", ".detail_img",
 			function(){
 				detailedAction(jQuery(this).attr("id"));
 			});
