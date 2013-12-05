@@ -7,6 +7,7 @@ header('Content-type: text/html; charset=UTF-8');
 ?>
 <script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src='search.js'></script>
+<script type="text/javascript" src='edition.js'></script>
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
@@ -47,6 +48,8 @@ if($customers != NULL){
 				<td>' .$customer->Email.' </td>'); ?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $customer->CustomerID;?>"/></td>
+				<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Customer"
+					class="edit_img" id="<?php echo $customer->CustomerID;?>"/></td>
 <?php
 		} 					
 		echo '<tr>';	
