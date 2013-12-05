@@ -11,6 +11,7 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 try {
 	
+	if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	
 	
 	
