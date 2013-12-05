@@ -99,6 +99,17 @@ class Err_PermissionDenied extends SimpleError{
 	}
 }
 
+class Err_MalformedField extends SimpleError{
+	
+	public function __construct($fieldName){
+		
+		$this->code="997";
+		$this->reason="Malformed Parameter";
+		$this->field=$fieldName;
+			
+	}
+	
+}
 
 interface savable
 {
