@@ -9,22 +9,20 @@ $db = new PDO('sqlite:../database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
+
+
+
 try {
 	
 	
 	if(!isset($_POST["customer"]))throw new GeneralException(new Err_MissingParameter("parameter"));
 	
-	$customer=json_decode($_POST["customer"],true);
+	$authenticationResult=authenticate($_REQUEST["customer"], $_POST["customer"], $_REQUEST["salted_request"]);
 	
-	if(issetr)
+	if($authenticationResult==FALSE)throw new GeneralException(new Err_Autentication());
+	
 	
 
-	
-	
-	
-	if(isset($_POST["reloadSession"]) && $_POST["reloadSession"]==TRUE){//if the customer we are editing is the one stored in session than update it
-		$_SESSION["customer"]=$customer;//change sessionCustomer
-	}
 	
 	
 	
@@ -33,6 +31,17 @@ try {
 }
 
 
+
+
+function authenticate($customer,$requesObject,$recievedResult){
+	
+	$requestObjectJson=json_encode($requesObject);
+	$pw=$customer->Password;
+	$result=sha1($requestObjectJson.$pw);
+	if(strcmp($result, $recievedResult)==0)return TRUE;
+	return FALSE;
+	
+}
 
 
 ?>
