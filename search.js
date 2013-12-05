@@ -1,6 +1,6 @@
 $(document).ready(function() {
 // inicio uma requisi�‹o
-	$("#search_button").click(
+	$("body").on('click', '#search_button', 
 			function(){
 				searchByFields();	
 			}

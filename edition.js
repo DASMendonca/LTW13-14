@@ -130,7 +130,7 @@ function editAction(id){
 	var url2= url;
 	if(url=="Products") {url= "./api/getProduct.php"; column="ProductCode";}
 	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
-	else if(url=="Customer"){ url="./api/getCustomer.php"; column="CustomerID";}
+	else if(url=="Customer"){ url="./editCustomer.php"; column="CustomerID";}
 	
 	var params= new Array();
 	params.push(column);
@@ -141,11 +141,12 @@ function editAction(id){
 	$.ajax({
 		type: "GET",
         url : url ,
-        dataType : "json",
+        dataType : "html",
         data : {"CustomerID": id},
         success : function(data){
-          //TODO $("#search_results_div").html(data);
-        	editionForm(data, url2);
+        	//TODO $("#search_results_div").html(data);
+        	//editionForm(data, url2);
+        	$("#mainDiv").html(data);
         	
         },
         
@@ -180,7 +181,7 @@ function editionForm(json_obj, url){
 	$.ajax({
 		type: "POST",
         url : url ,
-        dataType : "json",
+        dataType : "html",
         data : {"params": json_obj},
         success : function(data){
           //TODO $("#search_results_div").html(data);

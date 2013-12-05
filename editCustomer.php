@@ -1,19 +1,25 @@
 <?php
 include './classes.php';
 session_start();
-header('Content-type: application/json');
+header('Content-type: text/html');
 
 
 
 
-if(!isset($_SESSION['customer']) || $_SESSION['customer']->permission<2) 
+if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2) 
 	header("Location: onlineInvoiceSystem.php");
-
-
-try {
 	
 
-	$customer=array(json_decode($_REQUEST["params"]));
+	$db = new PDO('sqlite:../database.sqlite');
+
+	
+	$params=array(
+			array("CustomerID",array($_GET["CustomerID"]),"equal")
+	
+	);
+	
+
+	$customer = Customer::getInstancesByFields($db, $params);
 
 	 
 	 echo '
@@ -68,9 +74,5 @@ try {
 			</fieldset>
 		</form>
 </div>';
-	
-	} catch (GeneralException  $e) {
-		echo json_encode($e);
-	}
 	
 ?>
