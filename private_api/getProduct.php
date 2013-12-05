@@ -12,12 +12,15 @@ header('Content-type: text/html; charset=UTF-8');
 	
 <?php
 
+session_start();
+
 $db = new PDO('sqlite:../database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
 try {
+	if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 	
