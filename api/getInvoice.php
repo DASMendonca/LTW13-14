@@ -1,6 +1,8 @@
 <?php
 
 include '../classes.php';
+
+session_start();
 header('Content-type: application/json');
 
 $db = new PDO('sqlite:../database.sqlite');
@@ -12,18 +14,14 @@ $invoices=array();
 
 try {
 	if(!isset($_GET["InvoiceNo"])) throw new GeneralException(new Err_MissingParameter("InvoiceNo"));
-	
+	if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	$params=array(
-			array("InvoiceNO",array($_GET["InvoiceNo"]),"equal")
+			array("InvoiceNo",array($_GET["InvoiceNo"]),"equal")
 
 	);
 	
 	
-	//TODO continue from here
-	$logedInUser=$_SESSION["customer"];
-	$queriedID=$_GET["CustomerID"];
-	
-	if(($logedInUser->Permission==0 || $logedInUser->Permission==1) && $logedInUser->CustomerID!=$queriedID) throw  new GeneralException(new Err_PermissionDenied());
+
 	
 	
 	
@@ -31,6 +29,17 @@ try {
 
 	$invoices=Invoice::getInstancesByFields($db, $params);
 	if(count($invoices)==0)throw new GeneralException(new Err_Not_Found("invoices"));
+	
+	
+	
+	$logedInUser=$_SESSION["customer"];
+	$InvoiceOwner=$invoices[0]->getCustomerId();
+	
+	if(($logedInUser->Permission==0 || $logedInUser->Permission==1) && $logedInUser->CustomerID!=$InvoiceOwner) throw  new GeneralException(new Err_PermissionDenied());
+	
+	
+	
+	
 	echo json_encode($invoices[0]);
 
 } catch (GeneralException  $e) {

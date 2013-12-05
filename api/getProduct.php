@@ -2,6 +2,7 @@
 
 include '../classes.php';
 header('Content-type: application/json');
+session_start();
 
 $db = new PDO('sqlite:../database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -11,6 +12,9 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $products=array();
 
 try {
+	
+	if(!isset($_SESSION["customer"]))throw new GeneralException(new Err_Autentication());
+	
 	if(!isset($_GET["ProductCode"])) throw new GeneralException(new Err_MissingParameter("ProductCode"));
 	
 	$params=array(
