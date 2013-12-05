@@ -5,9 +5,6 @@ session_start();
 
 header('Content-type: text/html; charset=UTF-8');
 ?>
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src='search.js'></script>
-<script type="text/javascript" src='edition.js'></script>
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
@@ -19,6 +16,8 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
 try {
+	if(!isset($_SESSION['customer']))
+	throw new GeneralException(new Err_Autentication());
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 	

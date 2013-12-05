@@ -1,12 +1,17 @@
 $(document).ready(function() {
-	$(".update_form input#save_edit" ).click(function() {
-		updateEntry();
-	});
-	
-	$(".edit_img").click(
+	$("body").on('click', '#save_edit', 
 			function(){
-				editAction(jQuery(this).attr("id"));
-			});
+				updateEntry();	
+				
+			}
+	);
+	
+	$("body").on('click', '.edit_img', 
+			function(){
+				editAction(jQuery(this).attr("id"));	
+				
+			}
+	);
 });
 
 
@@ -28,15 +33,16 @@ function updateEntry(){
 		alert("No changes detected.");
 		return;
 	}
-	var reloadSession = false;
 	var what_api = $(".update_div").attr("name");
+	var reload_is_true= $(".update_div").attr("id");
+	var reload_session =false;
 	if(what_api=="Customer") {
 		what_api= "./private_api/changeCustomer.php";
-		reloadSession = true;
+		if(reload_is_true=="true") reload_session = true;
 		}
 	else return;
 	
-	console.log(parameters);
+	////console.log(parameters);
 	
 	
 	
@@ -44,7 +50,7 @@ function updateEntry(){
 		type: "POST",
         url : what_api ,
         dataType : "json",
-        data : {"parameters": parameters, "reloadSession": reloadSession},
+        data : {"parameters": parameters, "reloadSession": reload_session},
         success : function(data){
           alert("Customer information updated.");
           for(i=0; i< form_divs.length; i++){
@@ -103,8 +109,8 @@ function updatePlaceholders(data, div_element){
 	var address_field;
 	var input_field= $(div_element).children("input")[0];
 	
-	console.log(db_column_name);
-	console.log($(input_field).attr("placeholder"));
+	//console.log(db_column_name);
+	//console.log($(input_field).attr("placeholder"));
 	
 	if(db_column_name == "City" || 
 			db_column_name == "Country" || 
@@ -118,7 +124,7 @@ function updatePlaceholders(data, div_element){
 	else{
 		$(input_field).attr('placeholder', data[db_column_name]);
 	}
-	console.log($(input_field).attr("placeholder"));
+	//console.log($(input_field).attr("placeholder"));
 }
 
 
