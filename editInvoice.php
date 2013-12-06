@@ -46,28 +46,26 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 		<form action="updateMyInvoice.php" method="post" class="update_form" name="InvoiceNo" id="'.$invoice->InvoiceNo.'">
 			<fieldset>
 				<legend><h2>Edit Information</h2></legend>
-				<div>
-				<label name="CompanyName" value="'.$invoice->CompanyName.'"></label>
-				</div><br>
-
-				<div>
-				<label class="to_ident" value="'.$invoice->InvoiceDate.'">
+				<div class="permanent">
+				<label>Company Name</label>
+				<label class="to_ident" value="'.$customer->CompanyName.'"></label>
 				</div><br>
 						
-				<div id="CustomerTaxID">
-				<label class="to_ident" for="CustomerTaxID">Tax ID</label>
-				<input type="number" name="CustomerTaxID" id="CustomerTaxID" placeholder="'.$customer->CustomerTaxID.'" value="'.$customer->CustomerTaxID.'"><br>
-				</div>		
+				<div class="permanent">
+				<label  class="to_ident">Tax ID</label>
+				<label  class="to_ident" value="'.$customer->CustomerTaxID.'"></label>
+				</div><br>	
 
-				<div id="Password">
-				<label class="to_ident" for="password">Password</label>
-				<input type="text" name="password" id="password" placeholder="'.$customer->Password.'" value="'.$customer->Password.'"><br>
-				</div>
+				<div class="permanent">
+				<label class="to_ident">Invoice Date</label>
+				<label class="to_ident" value="'.$invoice->InvoiceDate.'"></label>
+				</div><br>
 						
 				<div id="Country">
 				<label class="to_ident" for="Country">Country</label>
 				<input type="text" name="Country" id="Country" placeholder="'.$customer->getAddress()->Country.'" value="'.$customer->getAddress()->Country.'"><br>
 				</div>
+						
 				
 				<div id="City">
 				<label class="to_ident" for="City"></label>
