@@ -42,6 +42,8 @@ function updateEntry(){
 		}
 	else if(what_api == "Product")
 		what_api= "./private_api/changeProduct.php";
+	else if(what_api== "Invoice") 
+		what_api= "./private_api/changeInvoice.php"
 	else return;
 	
 	////console.log(parameters);
