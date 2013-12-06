@@ -4,8 +4,7 @@ include '../classes.php';
 
 header('Content-type: text/html; charset=UTF-8');
 ?>
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src='search.js'></script>
+
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
@@ -53,9 +52,8 @@ if($invoices != NULL){
 					class="detail_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
 				<?php if($_SESSION['customer']->Permission >1) echo '
 				<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Invoice"
-					class="edit_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
-			<tr>
-			<?php	
+					class="edit_img" id="'.$invoice->InvoiceNo.'"/></td>
+			<tr>';	
 			}
 	}
 	echo '</table>
