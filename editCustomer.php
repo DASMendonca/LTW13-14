@@ -16,7 +16,7 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 
 	
 	$params=array(
-			array("CustomerID",array($_GET["CustomerID"]),"equal")
+			array("CustomerID",array($_GET["param"]),"equal")
 	
 	);
 	
@@ -26,7 +26,7 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 
 	 
 	 echo '
-<div class="update_div" name="Customer">
+<div class="update_div" name="Customer" id="false">
 		<br><br>
 		<form action="updateMyuser.php" method="post" class="update_form" name="CustomerID" id="'.$customer->CustomerID.'">
 			<fieldset>

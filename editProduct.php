@@ -1,25 +1,24 @@
 <?php
-include '../classes.php';
-header('Content-type: application/json');
+include './classes.php';
 session_start();
+header('Content-type: text/html');
 
-if(!isset($_SESSION['customer']) || $_SESSION['customer']->permission<2) 
+if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2) 
 	header("Location: onlineInvoiceSystem.php");
 
 
 
-$db = new PDO('sqlite:../database.sqlite');
+$db = new PDO('sqlite:./database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
 $products= array();
 
-try {
-	if(!isset($_REQUEST["ProductCode"])) throw new GeneralException(new Err_MissingParameter("ProductCode"));
+
 
 	$params=array(
-			array("CustomerID",array($_Request["CustomerID"]),"equal")
+			array("ProductCode",array($_REQUEST["param"]),"equal")
 	);
 	
 	$products= Product::getInstancesByFields($db, $params);
@@ -28,31 +27,39 @@ try {
 	$product= $products[0];
 	
 	echo '
-		<div id="product_ediction" name="'.$product->ProductCode.'">
+		<div class="update_div" name="Product" id="false">
 				<br><br>
-			<form action="updateProduct.php" method="post" class="update_form">
+			<form action="updateProduct.php" method="post" class="update_form" name="ProductCode" id="'.$product->ProductCode.'">
 				<fieldset>
 					<legend><h2>Edit Product Information</h2></legend>
-						<label class="to_ident" for="ProducDescription">
-						<input type="text" name="ProductDescription" id="ProductDescription" placeholder="'.$product->ProductDescription.'"><br>
+						<div id="ProductDescription">
+							<label class="to_ident" for="ProductDescription">Product Description</label>
+							<input type="text" name="ProductDescription" id="ProductDescription" 
+							placeholder="'.$product->ProductDescription.'" value="'.$product->ProductDescription.'"><br>
+						</div><br>
 						
-						<label class="to_ident" for="ProductTypeID">
-						<input type="text" name="ProductTypeID" id="ProductTypeID" placeholder="'.$product->ProductTypeID.'"><br>
-
-						<label class="to_ident" for="UnitOfMeasure">
-						<input type="text" name="UnitOfMeasure" id="UnitOfMeasure" placeholder="'.$product->UnitOfMeasure.'"><br>
-								
-						<label class="to_ident" for="UnitPrice">
-						<input type="text" name="UnitPrice" id="UnitPrice" placeholder="'.$product->UnitPrice.'"><br>
-								
-						<input type="button" value="save">
+						<div id="ProductTypeID">
+							<label class="to_ident" for="ProductTypeID">Product Type</label>
+							<input type="text" name="ProductTypeID" id="ProductTypeID" 
+							placeholder="'.$product->ProductTypeID.'" value="'.$product->ProductTypeID.'"><br>
+						</div><br>
+									
+			
+						<div id="UnitOfMeasure">
+							<label class="to_ident" for="UnitOfMeasure"> Unit of measure</label>
+							<input type="text" name="UnitOfMeasure" id="UnitOfMeasure" 
+							placeholder="'.$product->UnitOfMeasure.'" value="'.$product->UnitOfMeasure.'"><br>
+						</div><br>
+									
+						<div id="UnitPrice">
+							<label class="to_ident" for="UnitPrice">Unit Price</label>
+							<input type="text" name="UnitPrice" id="UnitPrice" 
+							placeholder="'.$product->UnitPrice.'" value="'.$product->UnitPrice.'"><br>
+						</div><br>
+						<input type="button" id="save_edit" value="save">
 				</fieldset>
 			</form>
 		</div>';
-	} catch (GeneralException  $e) {
-		echo json_encode($e);
-	}
-	
 ?>
 					
 '

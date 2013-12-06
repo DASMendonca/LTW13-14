@@ -35,11 +35,13 @@ function updateEntry(){
 	}
 	var what_api = $(".update_div").attr("name");
 	var reload_is_true= $(".update_div").attr("id");
-	var reload_session =false;
+	var reload_session ="false";
 	if(what_api=="Customer") {
 		what_api= "./private_api/changeCustomer.php";
-		if(reload_is_true=="true") reload_session = true;
+		if(reload_is_true=="true") reload_session = "true";
 		}
+	else if(what_api == "Product")
+		what_api= "./private_api/changeProduct.php";
 	else return;
 	
 	////console.log(parameters);
@@ -133,8 +135,8 @@ function editAction(id){
 	var url= $("#search_form").attr("name");
 	var column="";
 	var parameter = new Array();
-	var url2= url;
-	if(url=="Products") {url= "./api/getProduct.php"; column="ProductCode";}
+	//var url2= url;
+	if(url=="Products") {url= "./editProduct.php"; column="ProductCode";}
 	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
 	else if(url=="Customer"){ url="./editCustomer.php"; column="CustomerID";}
 	
@@ -144,11 +146,12 @@ function editAction(id){
 	parameter.push(id);
 	params.push(op);
 	 
+	console.log(column);
 	$.ajax({
 		type: "GET",
         url : url ,
         dataType : "html",
-        data : {"CustomerID": id},
+        data : {"param": id},
         success : function(data){
         	//TODO $("#search_results_div").html(data);
         	//editionForm(data, url2);
