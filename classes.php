@@ -71,6 +71,7 @@ class Err_UnknownOp extends ApiError{
 }
 
 
+
 class Err_Not_Found extends SimpleError{
 	
 	function __construct($entityName){
@@ -81,7 +82,22 @@ class Err_Not_Found extends SimpleError{
 }
 
 
+class Err_Autentication extends SimpleError{
+	
+	function __construct(){
+		$this->code="999";
+		$this->reason="Failed Autentication";
+	}
+}
 
+class Err_PermissionDenied extends SimpleError{
+	
+	
+	function __construct(){
+		$this->code="998";
+		$this->reason="Permission Denied";
+	}
+}
 
 
 interface savable
@@ -282,7 +298,10 @@ class Customer implements savable,changable{
 		
 		$this->Email=$email;
 		$this->Password=$pw;
-		$this->Permission=$permissions;//TODO: maybe validate these permissions
+		if($permissions==null)
+			$this->Permission=1;
+		else 
+			$this->Permission=$permissions;//TODO: maybe validate these permissions
 		
 		
 		

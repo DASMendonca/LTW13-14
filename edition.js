@@ -1,7 +1,17 @@
 $(document).ready(function() {
-	$(".update_form input#save_edit" ).click(function() {
-		updateEntry();
-	});
+	$("body").on('click', '#save_edit', 
+			function(){
+				updateEntry();	
+				
+			}
+	);
+	
+	$("body").on('click', '.edit_img', 
+			function(){
+				editAction(jQuery(this).attr("id"));	
+				
+			}
+	);
 });
 
 
@@ -23,15 +33,18 @@ function updateEntry(){
 		alert("No changes detected.");
 		return;
 	}
-	var reloadSession = false;
 	var what_api = $(".update_div").attr("name");
+	var reload_is_true= $(".update_div").attr("id");
+	var reload_session ="false";
 	if(what_api=="Customer") {
 		what_api= "./private_api/changeCustomer.php";
-		reloadSession = true;
+		if(reload_is_true=="true") reload_session = "true";
 		}
+	else if(what_api == "Product")
+		what_api= "./private_api/changeProduct.php";
 	else return;
 	
-	console.log(parameters);
+	////console.log(parameters);
 	
 	
 	
@@ -39,7 +52,7 @@ function updateEntry(){
 		type: "POST",
         url : what_api ,
         dataType : "json",
-        data : {"parameters": parameters, "reloadSession": reloadSession},
+        data : {"parameters": parameters, "reloadSession": reload_session},
         success : function(data){
           alert("Customer information updated.");
           for(i=0; i< form_divs.length; i++){
@@ -98,8 +111,8 @@ function updatePlaceholders(data, div_element){
 	var address_field;
 	var input_field= $(div_element).children("input")[0];
 	
-	console.log(db_column_name);
-	console.log($(input_field).attr("placeholder"));
+	//console.log(db_column_name);
+	//console.log($(input_field).attr("placeholder"));
 	
 	if(db_column_name == "City" || 
 			db_column_name == "Country" || 
@@ -113,5 +126,96 @@ function updatePlaceholders(data, div_element){
 	else{
 		$(input_field).attr('placeholder', data[db_column_name]);
 	}
-	console.log($(input_field).attr("placeholder"));
+	//console.log($(input_field).attr("placeholder"));
 }
+
+
+
+function editAction(id){
+	var url= $("#search_form").attr("name");
+	var column="";
+	var parameter = new Array();
+	//var url2= url;
+	if(url=="Products") {url= "./editProduct.php"; column="ProductCode";}
+	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
+	else if(url=="Customer"){ url="./editCustomer.php"; column="CustomerID";}
+	
+	var params= new Array();
+	params.push(column);
+	var op= "equal";
+	parameter.push(id);
+	params.push(op);
+	 
+	console.log(column);
+	$.ajax({
+		type: "GET",
+        url : url ,
+        dataType : "html",
+        data : {"param": id},
+        success : function(data){
+        	//TODO $("#search_results_div").html(data);
+        	//editionForm(data, url2);
+        	$("#mainDiv").html(data);
+        	
+        },
+        
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+    });
+	
+}
+
+function editionForm(json_obj, url){
+	var column="";
+	
+	if(url=="Products") {url= "./api/getProduct.php"; column="ProductCode";}
+	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
+	else if(url=="Customer"){ url="./editCustomer.php"; column="CustomerID";}
+	
+	$.ajax({
+		type: "POST",
+        url : url ,
+        dataType : "html",
+        data : {"params": json_obj},
+        success : function(data){
+          //TODO $("#search_results_div").html(data);
+        	$("#mainDiv").html(data);
+        },
+        
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+    });
+	
+}
+
+

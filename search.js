@@ -1,8 +1,9 @@
 $(document).ready(function() {
 // inicio uma requisi�‹o
-	$("#search_button").click(
+	$("body").on('click', '#search_button', 
 			function(){
 				searchByFields();	
+				
 			}
 	);
 	$('#search_form input').keydown(function(e) {
@@ -10,7 +11,7 @@ $(document).ready(function() {
 	    	$("#search_button").click();
 	    }
 	});
-	$(".detail_img").click(
+	$("body").on("click", ".detail_img",
 			function(){
 				detailedAction(jQuery(this).attr("id"));
 			});
@@ -36,10 +37,8 @@ function detailedAction(id){
 	var win=window.open(url, '_blank');
 	win.focus();
 	//window.location.href = url;
-	
-	
-	
 }
+
 
 function searchByFields(){
 	var params = new Array();

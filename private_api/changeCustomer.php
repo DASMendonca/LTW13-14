@@ -11,6 +11,7 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 try {
 	
+	if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	
 	
 	
@@ -33,7 +34,7 @@ try {
 	
 	
 	
-	if(isset($_POST["reloadSession"]) && $_POST["reloadSession"]==TRUE){//if the customer we are editing is the one stored in session than update it
+	if(isset($_POST["reloadSession"]) && strcmp ( $_POST["reloadSession"] , "true" )==0){//if the customer we are editing is the one stored in session than update it
 		$_SESSION["customer"]=$customer;//change sessionCustomer
 	}
 	

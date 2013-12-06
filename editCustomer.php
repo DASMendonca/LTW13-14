@@ -1,37 +1,32 @@
 <?php
-include '../classes.php';
-header('Content-type: application/json');
+include './classes.php';
 session_start();
+header('Content-type: text/html');
+?>
 
-if(!isset($_SESSION['customer']) || $_SESSION['customer']->permission<2) 
+<?php 
+
+if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2) 
 	header("Location: onlineInvoiceSystem.php");
-
-
-
-$db = new PDO('sqlite:../database.sqlite');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-
-$costumers=array();
-
-try {
-	if(!isset($_REQUEST["CustomerID"])) throw new GeneralException(new Err_MissingParameter("CustomerID"));
-
-	$params=array(
-			array("CustomerID",array($_REQUEST["CustomerID"]),"equal")
-
-	);
-
-	$customers=Customer::getInstancesByFields($db, $params);
-	if(count($customers)!=1)throw new GeneralException(new Err_Not_Found("customers"));
-	 $customer=$customers[0];
 	
-	 $params=array(array("AddressID", array($customer->addressID), "equal"));
-	 $customer_addr= Address::getInstancesByFields($db, $params);
+
+	$db = new PDO('sqlite:./database.sqlite');
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+	
+	$params=array(
+			array("CustomerID",array($_GET["param"]),"equal")
+	
+	);
+	
+
+	$customers = Customer::getInstancesByFields($db, $params);
+	$customer= $customers[0];
+
 	 
 	 echo '
-<div class="update_div" name="Customer">
+<div class="update_div" name="Customer" id="false">
 		<br><br>
 		<form action="updateMyuser.php" method="post" class="update_form" name="CustomerID" id="'.$customer->CustomerID.'">
 			<fieldset>
@@ -43,7 +38,7 @@ try {
 
 				<div id="Email">
 				<label class="to_ident" for="email">E-mail</label>
-				<input type="text" name="email" id="email" placeholder="'.$customer->email.'" value="'.$customer->email.'"><br>
+				<input type="text" name="email" id="email" placeholder="'.$customer->Email.'" value="'.$customer->Email.'"><br>
 				</div>
 						
 				<div id="CustomerTaxID">
@@ -53,38 +48,34 @@ try {
 
 				<div id="Password">
 				<label class="to_ident" for="password">Password</label>
-				<input type="text" name="password" id="password" placeholder="'.$customer->password.'" value="'.$customer->password.'"><br>
+				<input type="text" name="password" id="password" placeholder="'.$customer->Password.'" value="'.$customer->Password.'"><br>
 				</div>
 						
 				<div id="Country">
 				<label class="to_ident" for="Country">Country</label>
-				<input type="text" name="Country" id="Country" placeholder="'.$customer_addr[0]->country.'" value="'.$customer_addr[0]->country.'"><br>
+				<input type="text" name="Country" id="Country" placeholder="'.$customer->getAddress()->Country.'" value="'.$customer->getAddress()->Country.'"><br>
 				</div>
 				
-				<div id="City>
+				<div id="City">
 				<label class="to_ident" for="City"></label>
-				<input type="text" name="City" id="City" placeholder="'.$customer_addr[0]->city.'" value="'.$customer_addr[0]->city.'"><br>
+				<input type="text" name="City" id="City" placeholder="'.$customer->getAddress()->City.'" value="'.$customer->getAddress()->City.'"><br>
 				</div>
 						
 				<div id="AddressDetail">
 				<label class="to_ident" for="AddressDetail"></label>
-				<input type="text" name="AddressDetail" id="AddressDetail" placeholder="'.$customer_addr[0]->detail.'" value="'.$customer_addr[0]->detail.'"><br>
+				<input type="text" name="AddressDetail" id="AddressDetail" placeholder="'.$customer->getAddress()->AddressDetail.'" value="'.$customer->getAddress()->AddressDetail.'"><br>
 				</div>
 					
 				<div id="PostalCode1">
 				<label class="to_ident" for="PostalCode1"></label>
-				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$customer_addr[0]->postalCode1.'" value="'.$customer_addr[0]->postalCode1.'">-
+				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$customer->getAddress()->PostalCode1.'" value="'.$customer->getAddress()->PostalCode1.'">-
 				</div>
 				<div id ="PostalCode2">
-				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$customer_addr[0]->postalCode2.'" value="'.$customer_addr[0]->postalCode2.'"><br>
+				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$customer->getAddress()->PostalCode2.'" value="'.$customer->getAddress()->PostalCode2.'"><br>
 				</div>
 				<input type="button" id="save_edit" value="Save">				
 			</fieldset>
 		</form>
-</div>'';
-	
-	} catch (GeneralException  $e) {
-		echo json_encode($e);
-	}
+</div>';
 	
 ?>
