@@ -51,6 +51,7 @@ if($invoices != NULL){
 				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
+				<?php if($_SESSION['customer']->Permission >1) echo '
 				<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Invoice"
 					class="edit_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
 			<tr>
