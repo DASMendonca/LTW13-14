@@ -40,6 +40,8 @@ function updateEntry(){
 		what_api= "./private_api/changeCustomer.php";
 		if(reload_is_true=="true") reload_session = "true";
 		}
+	else if(what_api == "Product")
+		what_api= "./private_api/changeProduct.php";
 	else return;
 	
 	////console.log(parameters);

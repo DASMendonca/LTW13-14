@@ -27,35 +27,35 @@ $products= array();
 	$product= $products[0];
 	
 	echo '
-		<div class="update_div" name="Customer">
+		<div class="update_div" name="Product" id="false">
 				<br><br>
-			<form action="updateProduct.php" method="post" class="update_form">
+			<form action="updateProduct.php" method="post" class="update_form" name="ProductCode" id="'.$product->ProductCode.'">
 				<fieldset>
 					<legend><h2>Edit Product Information</h2></legend>
-						<div id="ProductDescription"
-							<label class="to_ident" for="ProducDescription">
+						<div id="ProductDescription">
+							<label class="to_ident" for="ProductDescription">Product Description</label>
 							<input type="text" name="ProductDescription" id="ProductDescription" 
 							placeholder="'.$product->ProductDescription.'" value="'.$product->ProductDescription.'"><br>
-						</div>
+						</div><br>
 						
 						<div id="ProductTypeID">
-							<label class="to_ident" for="ProductTypeID">
+							<label class="to_ident" for="ProductTypeID">Product Type</label>
 							<input type="text" name="ProductTypeID" id="ProductTypeID" 
 							placeholder="'.$product->ProductTypeID.'" value="'.$product->ProductTypeID.'"><br>
-						</div>
+						</div><br>
 									
 			
 						<div id="UnitOfMeasure">
-							<label class="to_ident" for="UnitOfMeasure">
+							<label class="to_ident" for="UnitOfMeasure"> Unit of measure</label>
 							<input type="text" name="UnitOfMeasure" id="UnitOfMeasure" 
 							placeholder="'.$product->UnitOfMeasure.'" value="'.$product->UnitOfMeasure.'"><br>
-						</div>
+						</div><br>
 									
 						<div id="UnitPrice">
-							<label class="to_ident" for="UnitPrice">
+							<label class="to_ident" for="UnitPrice">Unit Price</label>
 							<input type="text" name="UnitPrice" id="UnitPrice" 
 							placeholder="'.$product->UnitPrice.'" value="'.$product->UnitPrice.'"><br>
-						</div>
+						</div><br>
 						<input type="button" id="save_edit" value="save">
 				</fieldset>
 			</form>
