@@ -41,6 +41,8 @@ if($invoices != NULL){
 		</tr>
 <?php
 	foreach ($invoices as $invoice){
+		if(isset($_SESSION['customer']) && $_SESSION['customer']->CustomerID == $invoice->getCustomerId() || 
+			$_SESSION['customer']->Permission >1){
 		echo utf8_encode('<tr>
 				<td>' .$invoice->InvoiceNo .'</td>
 				<td>' .$invoice->InvoiceDate .'</td>
@@ -49,8 +51,11 @@ if($invoices != NULL){
 				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
+				<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Invoice"
+					class="edit_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
 			<tr>
 			<?php	
+			}
 	}
 	echo '</table>
 		</fieldset>';
