@@ -16,12 +16,12 @@ try {
 	if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	
 	
-	if(!isset($_POST["customer"]))throw new GeneralException(new Err_MissingParameter("customer"));
+	if(!isset($_REQUEST["customer"]))throw new GeneralException(new Err_MissingParameter("customer"));
 	
-	$customerPassed=json_decode($_POST["customer"]);
+	$customerPassed=json_decode($_REQUEST["customer"]);
 	$customerPassedAsArray=(array) $customerPassed;
 	
-	if(isset($customerPassed["BillingAddress"])) $addressAsArray=(array) $customerPassed["BillingAddress"];
+	if(isset($customerPassedAsArray["BillingAddress"])) $addressAsArray=(array) $customerPassedAsArray["BillingAddress"];
 	
 	
 	$user=$_SESSION["customer"];
