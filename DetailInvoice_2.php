@@ -24,15 +24,11 @@ $db = new PDO('sqlite:./database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-
-
 try {
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 
 	$params=array(json_decode($_GET["params"]));
-
-
 
 	$invoices=invoice::getInstancesByFields($db, $params);
 	$invoice=$invoices[0];
@@ -64,18 +60,17 @@ try {
 	$invoiceLines=array();
 
 }
-
 	
 	echo '<p class="sheetID">Customer Data</p>
 			<br><br>
 			<p class="rowID">Customer Code: </p>
 			<p>'.$invoiceCustomerID.'</p>
 			<br>
-			<p class="rowID">Name: </p>';
-	echo '<p>'.$invoiceCompanyName.'</p>
+			<p class="rowID">Name: </p>
+			<p>'.$invoiceCompanyName.'</p>
 			<br>
-			<p class="rowID">NIF: </p>';
-	echo '<p>'.$invoiceNif.'</p>
+			<p class="rowID">NIF: </p>
+			<p>'.$invoiceNif.'</p>
 			<br><br>';
 
 	echo '<p class="sheetID">Invoice</p>
@@ -84,8 +79,8 @@ try {
 			<tr>
 			<td class="rowID">Invoice Nr: </td>
 			<td>'.$invoiceCode.'</td>
-			<td class="rowID">Date: </td>';
-	echo '<td>'.$invoiceDate.'</td>
+			<td class="rowID">Date: </td>
+			<td>'.$invoiceDate.'</td>
 			</tr>
 			</table>
 			<br>';
@@ -102,8 +97,6 @@ try {
 			<th width=15%>Total Price</th>
 			</tr>
 			</thead>';
-
-	
 	
 	for($i=0;$i<count($invoiceLines);$i++){
 		$line=$invoiceLines[$i];
@@ -125,7 +118,28 @@ try {
 		echo '<td class="Unit">'.$line->Tax->TaxPercentage.'</td>';
 		echo '<td class="Number">'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
 				</tr>';
+	}
+	
+	for($i=0;$i<count($invoiceLines);$i++){
+		$line=$invoiceLines[$i];
 
+		$productQueryParams=array(
+				array("ProductCode",array($line->ProductCode),"equal")
+		);
+
+		$products=Product::getInstancesByFields($db, $productQueryParams);
+		$product=$products[0];
+
+
+		echo'<tr>';
+		echo '<td class="Number">'.$line->ProductCode.'</td>';
+		echo '<td>'.$product->ProductDescription.'</td>';
+		echo '<td class="Unit">'.$product->UnitOfMeasure.'</td>';
+		echo '<td class="Number">'.$line->Quantity.'</td>';
+		echo '<td class="Number">'.($line->UnitPrice/100).' &euro; </td>';
+		echo '<td class="Unit">'.$line->Tax->TaxPercentage.'</td>';
+		echo '<td class="Number">'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
+				</tr>';
 	}
 	
 	for($i=0;$i<count($invoiceLines);$i++){
@@ -148,7 +162,6 @@ try {
 		echo '<td class="Unit">'.$line->Tax->TaxPercentage.'</td>';
 		echo '<td class="Number">'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
 				</tr>';
-	
 	}
 	
 	?>
