@@ -126,8 +126,6 @@ interface savable
 	static public function getInstancesByFields($db,$fields);
 	//static public function updateInDB($db,$parameters);
 }
-
-
 interface changable{
 	static public function updateInDB($db,$parameters);
 	
@@ -242,6 +240,7 @@ class Invoice implements savable,changable{
 			
 			$instance->Customer=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], null, null);
 			$instance->Customer->BillingAddress=new Address($entry["AddressDetail"], $entry["City"], $entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
+			$instance->GenerationDate=$entry["CustomerID"];
 			$instances[$i]=$instance;
 		}
 		
@@ -586,8 +585,6 @@ class Address implements savable{
 	}
 
 }
-
-
 class Product implements savable,changable{
 	
 	public $ProductCode;
@@ -620,20 +617,20 @@ class Product implements savable,changable{
 		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))throw new GeneralException(new Err_MissingParameter("UnitOfMeasure"));
 		
 		if($this->ProductTypeID==null || !isset($this->ProductTypeID))$this->ProductTypeID=1;
+		$missing=$this->missingParameter();
+		if($missing!=null)throw new GeneralException(new Err_MissingParameter($missing));
+		$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
+		$theprice= ($this->UnitPrice)*100;
+		$query=$db->prepare($stmt);
+		$query->bindParam(1,$this->ProductDescription);
+		$query->bindParam(2, $theprice);
+		$query->bindParam(3,$this->UnitOfMeasure);
+		$query->bindParam(4,$this->ProductTypeID);
 		
-			
-			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
-			$theprice= ($this->UnitPrice)*100;
-			$query=$db->prepare($stmt);
-			$query->bindParam(1,$this->ProductDescription);
-			$query->bindParam(2, $theprice);
-			$query->bindParam(3,$this->UnitOfMeasure);
-			$query->bindParam(4,$this->ProductTypeID);
-			
-			$query->execute();
-			
-			return $db->lastInsertId();
-					
+		$query->execute();
+		
+		return $db->lastInsertId();
+				
 			
 		
 	}
@@ -710,15 +707,16 @@ class Product implements savable,changable{
 		
 		return $product;
 	}
-
 	public function missingParameter(){
 		
 		if($this->ProductDescription==null || !isset($this->ProductDescription))return"ProductDescription";
-		if($this->UnitPrice==null || !isset($this->UnitPrice))return "UnitPrice";
-		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))return "UnitOfMeasure";
+		else if($this->UnitPrice==null || !isset($this->UnitPrice))return "UnitPrice";
+		else if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))return "UnitOfMeasure";
+		return null;
 		
 		
 	}
+	
 	
 	
 	
