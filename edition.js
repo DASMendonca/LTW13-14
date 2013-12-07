@@ -91,20 +91,32 @@ function isToUpdate(div_elem){
 	var db_column_name= $(div_elem).attr('id');
 	var query_array= new Array();
 	
-	var input_field= $(div_elem).children("input");
-	//var input_type= $(input_field[0]).attr('type');
-	var new_val = $(input_field[0]).val();
-	var pre_val= $(input_field[0]).attr('placeholder');
-	
 	query_array.push(db_column_name);
 	
-	if(new_val=="")
-	query_array.push(pre_val);
+	var input_field= $(div_elem).children("input");
+	//var input_type= $(input_field[0]).attr('type');
+	if(input_field.length > 0){
+		var new_val = $(input_field[0]).val();
+		var pre_val= $(input_field[0]).attr('placeholder');
+		
+		
+		if(new_val=="")
+			query_array.push(pre_val);
 	
-	else
-		query_array.push(new_val);
+		else
+			query_array.push(new_val);
 	
 	return query_array;
+	}
+	else{
+		var select_field = $(div_elem).children ("select");
+		select_field = select_field[0];
+		var value = $(select_field).find(":selected").val();
+		query_array.push(value);
+		
+		return query_array;
+		
+	}
 }
 
 

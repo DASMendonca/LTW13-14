@@ -111,6 +111,15 @@ class Err_MalformedField extends SimpleError{
 	
 }
 
+class Err_DBProblem extends SimpleError{
+	
+	public function __construct($exception){
+		$this->code="996";
+		$this->reason="DB error";
+		$this->field=$exception->getMessage();
+	}
+}
+
 interface savable
 {
 	public function insertIntoDB($db);
@@ -130,20 +139,20 @@ interface changable{
 class Invoice implements savable,changable{
 	
 	public $InvoiceNo;
-	public $InvoiceDate;
-	protected $CustomerID;
-	public $CompanyName;
+	public $StartDate;
+	public $EndDate;
+	protected $Customer;
+	public $GenerationDate;
+	public $Status;
 	protected $Lines;
 	public $GrossTotal;
 	
-	function __construct($InvoiceNo,$InvoiceDate,$CustomerID,$CompanyName){
+	function __construct($InvoiceNo,$StartDate,$EndDate,$Status){
 		
 		$this->InvoiceNo=$InvoiceNo;
-		$this->InvoiceDate=$InvoiceDate;
-		$this->CustomerID=$CustomerID;
-		$this->CompanyName=$CompanyName;
-		
-		
+		$this->StartDate=$StartDate;
+		$this->EndDate=$EndDate;
+		$this->Status=$Status;		
 		
 		
 	}
@@ -180,7 +189,9 @@ class Invoice implements savable,changable{
 	}
 	
 	public function insertIntoDB($db){
-		//TODO implement it
+		
+		
+		
 	}
 	static public function getInstancesByFields($db,$fields){
 		
@@ -201,13 +212,16 @@ class Invoice implements savable,changable{
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
 				
-			$instance=new Invoice($entry["InvoiceNo"], $entry["InvoiceDate"], $entry["CustomerID"], $entry["CompanyName"]);
+			$instance=new Invoice($entry["InvoiceNo"],$entry["StartDate"],$entry["EndDate"],$entry["Status"]);
 			
-			$fields=array(
+			$LineFields=array(
 				array("InvoiceNo",array($instance->InvoiceNo),"equal")
 			);
-			$lines=Line::getInstancesByFields($db,$fields);
+			$lines=Line::getInstancesByFields($db,$LineFields);
 			$instance->setLines($lines);
+			
+			$instance->Customer=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], null, null);
+			$instance->Customer->BillingAddress=new Address($entry["AddressDetail"], $entry["City"], $entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
 			$instances[$i]=$instance;
 		}
 		
@@ -222,13 +236,24 @@ class Invoice implements savable,changable{
 	
 	static public function isColumn($candidate){
 	
-		$columns=array("InvoiceNo","InvoiceDate","CustomerID","AddressID","CompanyName");
+		$columns=array("InvoiceNo","StartDate","EndDate","CustomerID","AddressDetail","PostalCode1","PostalCode2","City","Country","GenerationDate","Status","CompanyName","CustomerTaxID","Email");
 		for($i=0;$i<count($columns);$i++){
 			if(strcmp($candidate, $columns[$i])==0)return TRUE;
 		}
 	
 		return FALSE;
 	
+	}
+
+	public function missingParameters(){
+		
+		$missing=array();
+		
+		if($this->StartDate==null || !isset($this->StartDate))array_push($missing,"StartDate");
+		if($this->EndDate==null || !isset($this->EndDate))array_push($missing,"EndDate");
+		if($this->StartDate==null || !isset($this->StartDate))array_push($missing,"StartDate");
+		
+		
 	}
 	
 }
@@ -351,8 +376,10 @@ class Customer implements savable,changable{
 		$query->bindParam(9,$this->Password);
 		$query->bindParam(10,$this->Permission);
 		
+		$query->execute();
 		
-		return $query->execute();
+		
+		return $db->lastInsertId();
 		
 		
 	}
@@ -453,7 +480,7 @@ class Customer implements savable,changable{
 		
 		$customer->BillingAddress=new Address($addressDetail, $city, $postalCode1, $postalCode2, $country);
 		
-		$customer->insertIntoDB($db);
+		$customer->CustomerID=$customer->insertIntoDB($db);
 		
 		
 		return $customer;
@@ -581,11 +608,13 @@ class Product implements savable,changable{
 			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
 			$query=$db->prepare($stmt);
 			$query->bindParam(1,$this->ProductDescription);
-			$query->bindParam(2,$this->UnitPrice);
+			$query->bindParam(2,$this->UnitPrice*100);
 			$query->bindParam(3,$this->UnitOfMeasure);
 			$query->bindParam(4,$this->ProductTypeID);
 			
-			return $query->execute();
+			$query->execute();
+			
+			return $db->lastInsertId();
 					
 			
 		
@@ -612,7 +641,7 @@ class Product implements savable,changable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
+			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"]/100, $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
 			$instances[$i]=$instance;
 			
 		}
@@ -625,6 +654,7 @@ class Product implements savable,changable{
 		
 		for($i=0;$i<count($parameters);$i++){
 			$columnName=$parameters[$i][0];
+			if(strcmp($columnName,"UnitPrice")==0)$parameters[$i][1]*=100;
 			if(!Product::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
 		}
 		
@@ -659,7 +689,7 @@ class Product implements savable,changable{
 		
 		$product=new Product($code, $descrip, $price, $unit, $typeID);
 	
-		$product->insertIntoDB($db);
+		$product->ProductCode=$product->insertIntoDB($db);
 		
 		return $product;
 	}

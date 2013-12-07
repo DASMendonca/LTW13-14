@@ -122,9 +122,9 @@ try {
 		echo '<td>'.$product->ProductDescription.'</td>';
 		echo '<td>'.$product->UnitOfMeasure.'</td>';
 		echo '<td>'.$line->Quantity.'</td>';
-		echo '<td>'.($line->UnitPrice/100).' &euro; </td>';
+		echo '<td>'.($line->UnitPrice).' &euro; </td>';
 		echo'<td>'.$line->Tax->TaxPercentage.'</td>';
-		echo '<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
+		echo '<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))).' &euro;</td>
 		</tr>';
 		
 

@@ -11,7 +11,7 @@ $(document).ready(function() {
 	    	$("#SignInButton").click();
 	    }
 	});
-	$('.top_lis').click(function(){
+	$("body").on('click', '.top_lis',function(){
 			fetchPages($(this).attr("id"));
 	});
 	
@@ -96,13 +96,4 @@ function askIfLoginIsOk(){
             }
         }
     });//termina o ajax	
-}
-
-
-
-function loggedIn(){	
-	$(document).ready(function() {
-		// inicio uma requisi�‹o
-		$(".logged").css('visibility', 'visible');
-		});
 }
