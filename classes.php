@@ -240,7 +240,7 @@ class Invoice implements savable,changable{
 			
 			$instance->Customer=new Customer($entry["CustomerID"], $entry["CustomerTaxID"], $entry["CompanyName"], $entry["Email"], null, null);
 			$instance->Customer->BillingAddress=new Address($entry["AddressDetail"], $entry["City"], $entry["PostalCode1"], $entry["PostalCode2"], $entry["Country"]);
-			$instance->GenerationDate=$entry["CustomerID"];
+			$instance->GenerationDate=$entry["GenerationDate"];
 			$instances[$i]=$instance;
 		}
 		
