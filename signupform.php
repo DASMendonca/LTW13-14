@@ -3,9 +3,8 @@
 
 		<form class="to_db_form" action="signup.php" method="post">
 			<br><br>
-			<label for="CompanyName">Name:</label> <input type="text" placeholder="name" id="CompanyName" name="CompanyName"><br>
-			Tax number:
-			<input type="text" placeholder="customer tax id" name="CustomerTaxID"><br>
+			<label for="CompanyName">Name:</label> 		<input type="text" placeholder="name" id="CompanyName" name="CompanyName"><br>
+			<label for="CustomerTaxID">Tax Number</label>	<input type="text" placeholder="customer tax id" name="CustomerTaxID"><br>
 			<label for="email">E-mail address:</label> 	<input type="email" id="email" placeholder="email" name="Email"><br>
 			<label for="password">Password:</label>		<input type="password" placeholder="password" id="password" name="Password"><br>
 			<label for="Country">Country:</label>		<input type="text" placeholder="Country" id="Country" name="Country"><br>
