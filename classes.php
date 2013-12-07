@@ -134,14 +134,12 @@ interface changable{
 	
 }
 
-
-
 class Invoice implements savable,changable{
 	
 	public $InvoiceNo;
 	public $StartDate;
 	public $EndDate;
-	protected $Customer;
+	public $Customer;
 	public $GenerationDate;
 	public $Status;
 	protected $Lines;
@@ -156,7 +154,6 @@ class Invoice implements savable,changable{
 		
 		
 	}
-	
 	function setLines($Lines){
 		$this->Lines=$Lines;
 		$this->GrossTotal=0;
@@ -168,7 +165,6 @@ class Invoice implements savable,changable{
 	function getCustomerId(){
 		return $this->CustomerID;
 	}
-	
 	static public function updateInDB($db,$parameters){
 	
 		for($i=0;$i<count($parameters);$i++){
@@ -187,8 +183,32 @@ class Invoice implements savable,changable{
 	
 	
 	}
-	
 	public function insertIntoDB($db){
+		
+		if($this->GenerationDate==null || !isset($this->GenerationDate))$this->GenerationDate=(new DateTime())->format('Y-m-d H:i:s');//now time
+		$missing=$this->missingParameter();
+		if($missing!=null)throw new GeneralException(new Err_MissingParameter($missing));
+		
+		$stmt="Insert into Invoice (StartDate,EndDate,CustomerID,CompanyName,CustomerTaxID,Email,AddressDetail,PostalCode1,PostalCode2,City,Country,GenerationDate,Status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query=$db->prepare($stmt);
+		$query->bindParam(1,$this->StartDate);
+		$query->bindParam(2,$this->EndDate);
+		$query->bindParam(3,$this->CustomerID);
+		$query->bindParam(4,$this->CompanyName);
+		$query->bindParam(5,$this->Customer->CustomerTaxID);
+		$query->bindParam(6,$this->Customer->Email);
+		$query->bindParam(7,$this->Customer->BillingAddress->AddressDetail);
+		$query->bindParam(8,$this->Customer->BillingAddress->PostalCode1);
+		$query->bindParam(9,$this->Customer->BillingAddress->PostalCode2);
+		$query->bindParam(10,$this->Customer->BillingAddress->City);
+		$query->bindParam(11,$this->Customer->BillingAddress->Country);
+		$query->bindParam(12,$this->GenerationDate);
+		$query->bindParam(13,$this->Status);
+		
+		$query->execute();
+		
+		return $db->lastInsertId();
+		
 		
 		
 		
@@ -229,11 +249,9 @@ class Invoice implements savable,changable{
 		
 		
 	}
-	
 	function getLines(){
 		return $this->Lines;
 	}
-	
 	static public function isColumn($candidate){
 	
 		$columns=array("InvoiceNo","StartDate","EndDate","CustomerID","AddressDetail","PostalCode1","PostalCode2","City","Country","GenerationDate","Status","CompanyName","CustomerTaxID","Email");
@@ -244,20 +262,20 @@ class Invoice implements savable,changable{
 		return FALSE;
 	
 	}
-
-	public function missingParameters(){
+	public function missingParameter(){
 		
-		$missing=array();
 		
-		if($this->StartDate==null || !isset($this->StartDate))array_push($missing,"StartDate");
-		if($this->EndDate==null || !isset($this->EndDate))array_push($missing,"EndDate");
-		if($this->StartDate==null || !isset($this->StartDate))array_push($missing,"StartDate");
 		
+		if($this->StartDate==null || !isset($this->StartDate))return"StartDate";
+		else if($this->EndDate==null || !isset($this->EndDate))return"EndDate";
+		else if($this->GenerationDate==null || !isset($this->GenerationDate))return"GenerationDate";
+		else if($this->Status==null || !isset($this->Status))return"Status";
+		else if($this->Customer==null || !isset($this->Customer))return"Customer";
+		return $this->Customer->missingParameter();
 		
 	}
 	
 }
-
 class Line implements savable{
 	
 	public $LineNumber;
@@ -311,8 +329,6 @@ class Line implements savable{
 	
 	
 }
-
-
 class Customer implements savable,changable{
 	
 	public $CustomerID;
@@ -322,7 +338,6 @@ class Customer implements savable,changable{
 	public $Email;
 	public $Password;
 	public $Permission;
-	
 	
 	function __construct($ID,$TaxID,$Name,$email,$pw,$permissions){
 		
@@ -346,22 +361,12 @@ class Customer implements savable,changable{
 	function insertIntoDB($db){
 		
 		
-		if($this->CustomerTaxID==null || !isset($this->CustomerTaxID))throw new GeneralException(new Err_MissingParameter("CustomerTaxID"));
-		if($this->CompanyName==null || !isset($this->CompanyName))throw new GeneralException(new Err_MissingParameter("CompanyName"));
-		if($this->BillingAddress==null || !isset($this->BillingAddress))throw new GeneralException(new Err_MissingParameter("BillingAddress"));
-		if($this->Email==null || !isset($this->Email))throw new GeneralException(new Err_MissingParameter("Email"));
-		if($this->Password==null || !isset($this->Password))throw new GeneralException(new Err_MissingParameter("Password"));
-		
-		
-		
-		if($this->BillingAddress->AddressDetail==null || !isset($this->BillingAddress->AddressDetail))throw new GeneralException(new Err_MissingParameter("AddressDetail"));
-		if($this->BillingAddress->PostalCode1==null || !isset($this->BillingAddress->PostalCode1))throw new GeneralException(new Err_MissingParameter("PostalCode1"));
-		if($this->BillingAddress->PostalCode2==null || !isset($this->BillingAddress->PostalCode2))throw new GeneralException(new Err_MissingParameter("PostalCode2"));
-		if($this->BillingAddress->City==null || !isset($this->BillingAddress->City))throw new GeneralException(new Err_MissingParameter("City"));
-		if($this->BillingAddress->Country==null || !isset($this->BillingAddress->Country))throw new GeneralException(new Err_MissingParameter("Country"));
-		
 		
 		if($this->Permission==null || !isset($this->Permission))$this->Permission=0;
+		
+		$missing=$this->missingParameter();
+		
+		if($missing!=null)throw new GeneralException(new Err_MissingParameter($missing));
 		
 		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressDetail,PostalCode1,PostalCode2,City,Country,Password,Permission) Values(?,?,?,?,?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
@@ -491,11 +496,19 @@ class Customer implements savable,changable{
 		return $this->BillingAddress;
 	}
 
+	public function missingParameter(){
+		
+		if($this->CustomerTaxID==null || !isset($this->CustomerTaxID))return"CustomerTaxID";
+		else if($this->CompanyName==null || !isset($this->CompanyName))return"CompanyName";
+		else if($this->Email==null || !isset($this->Email))return"Email";
+		else if($this->Password==null || !isset($this->Password))return"Password";
+		else if($this->Permission==null || !isset($this->Permission))return"Permission";
+		else if($this->BillingAddress==null || !isset($this->BillingAddress))return"BillingAddress";
+		return$this->BillingAddress->missingParameter();
+	}
 
 
 }
-
-//TODO: change isColumn and updateDB as interface methods
 class Address implements savable{
 	
 	public $AddressDetail;
@@ -503,10 +516,6 @@ class Address implements savable{
 	public $PostalCode1;
 	public $PostalCode2;
 	public $Country;
-	
-	
-	
-
 	
 	function __construct($det,$theCity,$zip1,$zip2,$theCountry){
 		
@@ -523,8 +532,6 @@ class Address implements savable{
 		
 		
 	}
-	
-	
 	function insertIntoDB($db){
 		
 		if($this->City==null || $this->AddressDetail==null || $this->City==null || $this->PostalCode1==null || $this->PostalCode2==null || $this->Country==null) return;
@@ -542,7 +549,6 @@ class Address implements savable{
 		
 		
 	}
-
 	static public function getInstancesByFields($db,$fields){
 		
 	/*	$params=array();
@@ -568,6 +574,17 @@ class Address implements savable{
 		return $instances;*/
 		
 	}
+	public function missingParameter(){
+		if($this->AddressDetail==null || !isset($this->AddressDetail))return "AddressDetail";
+		else if($this->PostalCode1==null || !isset($this->PostalCode1))return "PostalCode1";
+		else if($this->PostalCode2==null || !isset($this->PostalCode2))return "PostalCode2";
+		else if($this->City==null || !isset($this->City))return "City";
+		else if($this->Country==null || !isset($this->Country))return "Country";
+		return null;
+		
+		
+	}
+
 }
 
 
@@ -680,7 +697,6 @@ class Product implements savable,changable{
 		for($i=0;$i<count($parameters);$i++){
 			$parameterName=$parameters[$i][0];
 			if(!Customer::isColumn($parameterName))throw new GeneralException(new Err_UnknownField($parameterName));
-			else if (strcmp($parameterName, "ProductCode")==0)$code=$parameters[$i][1];
 			else if (strcmp($parameterName, "ProductDescription")==0)$descript=$parameters[$i][1];
 			else if (strcmp($parameterName, "UnitOfMeasure")==0)$unit=$parameters[$i][1];
 			else if (strcmp($parameterName, "UnitPrice")==0)$price=$parameters[$i][1];
@@ -756,7 +772,6 @@ class ProductType implements savable{
 	}
 }
 
-
 class Tax implements savable{
 	
 	
@@ -814,6 +829,8 @@ class Tax implements savable{
 		
 	}
 }
+
+
 
 
 function getConditionStr($entry){
@@ -915,7 +932,6 @@ function constructInsert($tableName,$parameters,$db){
 	
 	
 }
-
 
 function constructUpdate($tableName,$parameters,$db){
 	
