@@ -6,11 +6,12 @@ $(document).ready(function() {
 				
 			}
 	);
-	$('#search_form input').keydown(function(e) {
-	    if (e.keyCode == 13) {
-	    	$("#search_button").click();
-	    }
-	});
+	$("body").on('keydown','#search_form input',
+			function(e) {
+	    		if (e.keyCode == 13) {
+	    			$("#search_button").click();
+	    		}
+			});
 	$("body").on("click", ".detail_img",
 			function(){
 				detailedAction(jQuery(this).attr("id"));
