@@ -41,8 +41,8 @@ table.Logo {
 	text-align: left;
 	border: 1px solid black;
 	width: 100%;
-	
 	border-collapse: collapse;
+	page-break-inside: auto;
 }
 .products th{
 	border: 1px solid black;
@@ -55,15 +55,35 @@ table.Logo {
 	border-rigth: 1px solid black;
 	height: 0.75cm;
 }
-.products {
-	page-break-inside: auto;
-}
 #head {
 	display: table-header-group;
 }
-.products.numbers {
+.Number {
 	text-align: right;
+	padding-right: 2%;
 }
+.Unit {
+	text-align: center;
+}
+
+table.Result th {
+	font-size: large;
+	border: 1px solid ;
+}
+table.Result {
+	margin-left: 70%;
+	margin-top: 4%;
+	margin-bottom:8%;
+	text-align: center;
+	font-size: large;
+	width: 30%;
+	border: 1px solid;
+	border-collapse: collapse;	
+}
+table.Result td{
+	border: 1px solid;	
+}
+
 
 .Articles {
 	font-size: large;
@@ -77,11 +97,4 @@ td {
 p {
 	display: inline;
 	line-height: 0.7cm;	
-}
-
-
-div.divHeader {
-	top: 0;
-	margin: 0cm;
-	padding: 0cm;
 }
