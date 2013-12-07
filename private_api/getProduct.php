@@ -19,7 +19,7 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
 try {
-	if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
+	//if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 	
