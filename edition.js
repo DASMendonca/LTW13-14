@@ -43,7 +43,7 @@ function updateEntry(){
 	else if(what_api == "Product")
 		what_api= "./private_api/changeProduct.php";
 	else if(what_api== "Invoice") 
-		what_api= "./private_api/changeInvoice.php"
+		what_api= "./private_api/changeInvoice.php";
 	else return;
 	
 	////console.log(parameters);
@@ -139,7 +139,7 @@ function editAction(id){
 	var parameter = new Array();
 	//var url2= url;
 	if(url=="Products") {url= "./editProduct.php"; column="ProductCode";}
-	else if(url=="Invoice"){ url="./api/getInvoice.php?params="; column="InvoiceNo";}
+	else if(url=="Invoice"){ url="./editInvoice.php"; column="InvoiceNo";}
 	else if(url=="Customer"){ url="./editCustomer.php"; column="CustomerID";}
 	
 	var params= new Array();

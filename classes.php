@@ -320,22 +320,36 @@ class Customer implements savable,changable{
 	}
 	function insertIntoDB($db){
 		
-		if($this->CustomerTaxID==null || $this->CompanyName==null || $this->BillingAddress->AddressDetail==null || $this->BillingAddress->PostalCode1==null || $this->BillingAddress->PostalCode2==null || $this->BillingAddress->City==null  || $this->BillingAddress->Country==null || $this->Email==null || $this->Password==null ) return;
 		
-		if($this->Permission==null)$this->Permission=0;
+		if($this->CustomerTaxID==null || !isset($this->CustomerTaxID))throw new GeneralException(new Err_MissingParameter("CustomerTaxID"));
+		if($this->CompanyName==null || !isset($this->CompanyName))throw new GeneralException(new Err_MissingParameter("CompanyName"));
+		if($this->BillingAddress==null || !isset($this->BillingAddress))throw new GeneralException(new Err_MissingParameter("BillingAddress"));
+		if($this->Email==null || !isset($this->Email))throw new GeneralException(new Err_MissingParameter("Email"));
+		if($this->Password==null || !isset($this->Password))throw new GeneralException(new Err_MissingParameter("Password"));
 		
-		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressDetail,PostalCode1,PostalCode2,City,Country,Password,Permission) Values(?,?,?,?,?,?);";
+		
+		
+		if($this->BillingAddress->AddressDetail==null || !isset($this->BillingAddress->AddressDetail))throw new GeneralException(new Err_MissingParameter("AddressDetail"));
+		if($this->BillingAddress->PostalCode1==null || !isset($this->BillingAddress->PostalCode1))throw new GeneralException(new Err_MissingParameter("PostalCode1"));
+		if($this->BillingAddress->PostalCode2==null || !isset($this->BillingAddress->PostalCode2))throw new GeneralException(new Err_MissingParameter("PostalCode2"));
+		if($this->BillingAddress->City==null || !isset($this->BillingAddress->City))throw new GeneralException(new Err_MissingParameter("City"));
+		if($this->BillingAddress->Country==null || !isset($this->BillingAddress->Country))throw new GeneralException(new Err_MissingParameter("Country"));
+		
+		
+		if($this->Permission==null || !isset($this->Permission))$this->Permission=0;
+		
+		$stmt="Insert into Customer (CustomerTaxID,CompanyName,Email,AddressDetail,PostalCode1,PostalCode2,City,Country,Password,Permission) Values(?,?,?,?,?,?,?,?,?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->CustomerTaxID);
 		$query->bindParam(2,$this->CompanyName);
 		$query->bindParam(3,$this->Email);
 		$query->bindParam(4,$this->BillingAddress->AddressDetail);
-		$query->bindParam(4,$this->BillingAddress->PostalCode1);
-		$query->bindParam(4,$this->BillingAddress->PostalCode2);
-		$query->bindParam(4,$this->BillingAddress->City);
-		$query->bindParam(4,$this->BillingAddress->Country);
-		$query->bindParam(5,$this->Password);
-		$query->bindParam(6,$this->Permission);
+		$query->bindParam(5,$this->BillingAddress->PostalCode1);
+		$query->bindParam(6,$this->BillingAddress->PostalCode2);
+		$query->bindParam(7,$this->BillingAddress->City);
+		$query->bindParam(8,$this->BillingAddress->Country);
+		$query->bindParam(9,$this->Password);
+		$query->bindParam(10,$this->Permission);
 		
 		
 		return $query->execute();
@@ -556,19 +570,24 @@ class Product implements savable,changable{
 	
 	function insertIntoDB($db){
 		
-		if($this->ProductDescription==null || $this->UnitPrice==null || $this->UnitOfMeasure==null || $this->ProductTypeID==null){
+		
+		if($this->ProductDescription==null || !isset($this->ProductDescription))throw new GeneralException(new Err_MissingParameter("ProductDescripition"));
+		if($this->UnitPrice==null || !isset($this->UnitPrice))throw new GeneralException(new Err_MissingParameter("UnitPrice"));
+		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))throw new GeneralException(new Err_MissingParameter("UnitOfMeasure"));
+		
+		if($this->ProductTypeID==null || !isset($this->ProductTypeID))$this->ProductTypeID=1;
+		
 			
 			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
 			$query=$db->prepare($stmt);
 			$query->bindParam(1,$this->ProductDescription);
-			$query->bindParam(2,$this->UnitPrice);
+			$query->bindParam(2,$this->UnitPrice*100);
 			$query->bindParam(3,$this->UnitOfMeasure);
 			$query->bindParam(4,$this->ProductTypeID);
 			
 			return $query->execute();
 					
 			
-		}
 		
 	}
 
@@ -593,7 +612,7 @@ class Product implements savable,changable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
+			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"]/100, $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
 			$instances[$i]=$instance;
 			
 		}
@@ -606,6 +625,7 @@ class Product implements savable,changable{
 		
 		for($i=0;$i<count($parameters);$i++){
 			$columnName=$parameters[$i][0];
+			if(strcmp($columnName,"UnitPrice")==0)$parameters[$i][1]*=100;
 			if(!Product::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
 		}
 		

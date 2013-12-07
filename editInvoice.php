@@ -14,7 +14,7 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 
 	
 	$params=array(
-			array("InvoiceNO",array($_GET["param"]),"equal")
+			array("InvoiceNo",array($_GET["param"]),"equal")
 	);
 	
 
@@ -38,7 +38,8 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 		array("CustomerID", array($invoice->getCustomerId()), "equal")
 	);
 	
-	$customer= Customer::getInstancesByFields($db, $params);
+	$customers= Customer::getInstancesByFields($db, $params);
+	$customer=$customers[0];
 	 
 	 echo '
 <div class="update_div" name="Invoice" id="false">
@@ -46,49 +47,64 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 		<form action="updateMyInvoice.php" method="post" class="update_form" name="InvoiceNo" id="'.$invoice->InvoiceNo.'">
 			<fieldset>
 				<legend><h2>Edit Information</h2></legend>
-				<div>
-				<label name="CompanyName" value="'.$invoice->CompanyName.'"></label>
-				</div><br>
-
-				<div>
-				<label class="to_ident" value="'.$invoice->InvoiceDate.'">
-				</div><br>
-						
-				<div id="CustomerTaxID">
-				<label class="to_ident" for="CustomerTaxID">Tax ID</label>
-				<input type="number" name="CustomerTaxID" id="CustomerTaxID" placeholder="'.$customer->CustomerTaxID.'" value="'.$customer->CustomerTaxID.'"><br>
-				</div>		
-
-				<div id="Password">
-				<label class="to_ident" for="password">Password</label>
-				<input type="text" name="password" id="password" placeholder="'.$customer->Password.'" value="'.$customer->Password.'"><br>
-				</div>
-						
-				<div id="Country">
-				<label class="to_ident" for="Country">Country</label>
-				<input type="text" name="Country" id="Country" placeholder="'.$customer->getAddress()->Country.'" value="'.$customer->getAddress()->Country.'"><br>
-				</div>
 				
-				<div id="City">
-				<label class="to_ident" for="City"></label>
-				<input type="text" name="City" id="City" placeholder="'.$customer->getAddress()->City.'" value="'.$customer->getAddress()->City.'"><br>
-				</div>
+				<div class="permanent">
+					<label>Company Name</label>
+					<label class="to_ident">'.$customer->CompanyName.'</label>
+				</div><br>
 						
-				<div id="AddressDetail">
-				<label class="to_ident" for="AddressDetail"></label>
-				<input type="text" name="AddressDetail" id="AddressDetail" placeholder="'.$customer->getAddress()->AddressDetail.'" value="'.$customer->getAddress()->AddressDetail.'"><br>
-				</div>
-					
-				<div id="PostalCode1">
-				<label class="to_ident" for="PostalCode1"></label>
-				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$customer->getAddress()->PostalCode1.'" value="'.$customer->getAddress()->PostalCode1.'">-
-				</div>
-				<div id ="PostalCode2">
-				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$customer->getAddress()->PostalCode2.'" value="'.$customer->getAddress()->PostalCode2.'"><br>
-				</div>
-				<input type="button" id="save_edit" value="Save">				
-			</fieldset>
-		</form>
-</div>';
+				<div class="permanent">
+					<label  class="to_ident">Tax ID</label>
+					<label  class="to_ident">'.$customer->CustomerTaxID.'</label>
+				</div><br>
+
+				<div class="permanent">
+					<label class ="to_ident">Invoice Nr.</label>
+					<label class="to_ident">'.$invoice->InvoiceNo.'</label>
+				</div><br>
+							
+
+				<div class="permanent">
+					<label >Invoice Date</label>
+					<label class="to_ident">'.$invoice->InvoiceDate.'</label>
+				</div><br>
+				
+				<table class="products">
+	<tr>
+	<th>Product Code:</th>
+			<th>Product Description:</th>
+			<th>UN</th>
+			<th>Quantity</th>
+			<th>Unit Price</th>
+			<th>Tax</th>
+			<th>Total Price</th>
+		</tr>';
+
+	
+	
+	for($i=0;$i<count($lines);$i++){
+		$line=$lines[$i];
+		
+		$productQueryParams=array(
+		array("ProductCode",array($line->ProductCode),"equal")
+		);
+		
+		$products=Product::getInstancesByFields($db, $productQueryParams);
+		$product=$products[0];
+		
+		
+		echo'<tr>';
+		echo '<td>'.$line->ProductCode.'</td>';
+		echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
+		echo utf8_encode('<td>'.$product->UnitOfMeasure.'</td>');
+		echo utf8_encode('<td>'.$line->Quantity.'</td>');
+		echo utf8_encode('<td>'.($line->UnitPrice/100).' &euro; </td>');
+		echo utf8_encode('<td>'.$line->Tax->TaxPercentage.'</td>');
+		echo utf8_encode('<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
+		</tr>');
+	}
+
+	echo '</table>
+	</div>';
 	
 ?>
