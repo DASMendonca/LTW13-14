@@ -21,7 +21,7 @@ try {
 	
 	
 	
-	$id=$parameters[1][0];
+	$id=$parameters[0][1];
 	if($id!="") {//update
 		$product =Product::updateInDB($db, $parameters);
 		

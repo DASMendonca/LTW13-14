@@ -24,6 +24,7 @@ function fetchPages(top_lis_id){
 	else if(top_lis_id == "li_customer") page_request="searchCustomer.php";
 	else if(top_lis_id == "li_myProfile") page_request="myAccount.php";
 	else if(top_lis_id == "li_signup") page_request="signupform.php";
+	else if(top_lis_id == "li_add_product") page_request= "createProduct.php";
 	else
 		return;
 	
