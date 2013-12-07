@@ -40,14 +40,16 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 				<div id="Email">
 				<label class="to_ident" for="email">E-mail</label>
 				<input type="text" name="email" id="email" placeholder="'.$customer->Email.'" value="'.$customer->Email.'">
-				</div><br>
+				</div><br>';
 						
-				<div id="CustomerTaxID">
+			/*	<div id="CustomerTaxID">
 				<label class="to_ident" for="CustomerTaxID">Tax ID</label>
 				<input type="number" name="CustomerTaxID" id="CustomerTaxID" placeholder="'.$customer->CustomerTaxID.'" 
 						value="'.$customer->CustomerTaxID.'">
 				</div><br>	
-
+				
+			*/
+		echo '
 				<div id="Password">
 				<label class="to_ident" for="password">Password</label>
 				<input type="text" name="password" id="password" placeholder="'.$customer->Password.'" 

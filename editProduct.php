@@ -26,6 +26,8 @@ $products= array();
 	
 	$product= $products[0];
 	
+	$product_types = ProductType::getInstancesByFields($db, array());
+	
 	echo '
 		<div class="update_div" name="Product" id="false">
 				<br><br>
@@ -39,17 +41,23 @@ $products= array();
 						</div><br>
 						
 						<div id="ProductTypeID">
-							<label class="to_ident" for="ProductTypeID">Product Type</label>
-							<input type="text" name="ProductTypeID" id="ProductTypeID" 
-							placeholder="'.$product->ProductTypeID.'" value="'.$product->ProductTypeID.'"><br>
+						<label class="to_ident" for="ProductTypeID">Product Type</label>
+						<select name="ProductTypeID id="ProductTypeID">';
+							foreach ( $product_types as $p_type ) {
+								$p_type_desc = utf8_encode ( $p_type->typeDescription );
+								$p_type_id = $p_type->typeID;
+								echo '<option id="' . $p_type_id . '" value="'. $p_type_id .'" 
+								label="' . $p_type_desc . '">' . $p_type_desc . '</option>';
+							}
+							echo '</select>
 						</div><br>
 									
-			
-						<div id="UnitOfMeasure">
-							<label class="to_ident" for="UnitOfMeasure"> Unit of measure</label>
-							<input type="text" name="UnitOfMeasure" id="UnitOfMeasure" 
-							placeholder="'.$product->UnitOfMeasure.'" value="'.$product->UnitOfMeasure.'"><br>
-						</div><br>
+								<div id="UnitOfMeasure">
+									<label class="to_ident" for="UnitOfMeasure"> Unit of measure</label>
+									<input type="text" name="UnitOfMeasure" id="UnitOfMeasure" 
+									placeholder="'.$product->UnitOfMeasure.'" value="'.$product->UnitOfMeasure.'">
+								</div><br>
+									
 									
 						<div id="UnitPrice">
 							<label class="to_ident" for="UnitPrice">Unit Price</label>
