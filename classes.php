@@ -274,7 +274,7 @@ class Invoice implements savable,changable{
 		return $this->Customer->missingParameter();
 		
 	}
-	public isColumn($candidate){
+	public function isColumn($candidate){
 		//TODO: implement it
 	}
 }
@@ -714,6 +714,10 @@ class Product implements savable,changable{
 	}
 
 	public function missingParameter(){
+		
+		if($this->ProductDescription==null || !isset($this->ProductDescription))throw new GeneralException(new Err_MissingParameter("ProductDescription"));
+		if($this->UnitPrice==null || !isset($this->UnitPrice))throw new GeneralException(new Err_MissingParameter("UnitPrice"));
+		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))throw new GeneralException(new Err_MissingParameter("UnitOfMeasure"));
 		
 		
 	}
