@@ -4,8 +4,7 @@ include '../classes.php';
 
 header('Content-type: text/html; charset=UTF-8');
 ?>
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src='search.js'></script>
+
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
@@ -41,16 +40,21 @@ if($invoices != NULL){
 		</tr>
 <?php
 	foreach ($invoices as $invoice){
+		if(isset($_SESSION['customer']) && $_SESSION['customer']->CustomerID == $invoice->getCustomerId() || 
+			$_SESSION['customer']->Permission >1){
 		echo utf8_encode('<tr>
 				<td>' .$invoice->InvoiceNo .'</td>
-				<td>' .$invoice->InvoiceDate .'</td>
+				<td>' .$invoice->GenerationDate .'</td>
 				<td>' .$invoice->getCustomerId() .'</td>
-				<td>' .$invoice->CompanyName.'</td>
+				<td>' .$invoice->Customer->CompanyName.'</td>
 				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
-			<tr>
-			<?php	
+				<?php if($_SESSION['customer']->Permission >1) echo '
+				<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Invoice"
+					class="edit_img" id="'.$invoice->InvoiceNo.'"/></td>
+			<tr>';	
+			}
 	}
 	echo '</table>
 		</fieldset>';

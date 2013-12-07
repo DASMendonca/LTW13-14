@@ -38,8 +38,10 @@ try {
 	$invoice=$invoices[0];
 	
 	$invoiceCode=$invoice->InvoiceNo;
-	$invoiceDate=$invoice->InvoiceDate;
-	$invoiceCompanyName=$invoice->CompanyName;
+	$invoiceStartDate=$invoice->StartDate;
+	$invoiceGenerationDate= $invoice->GenerationDate;
+	$invoiceEndDate=$invoice->EndDate;
+	$invoiceCompanyName=$invoice->Customer->CompanyName;
 	$invoiceGrossTotal=$invoice->GrossTotal;
 	$invoiceCustomerID=$invoice->getCustomerId();
 	
@@ -86,7 +88,7 @@ try {
 	echo '<td class="rowID">Invoice Nr:</td>';
 	echo '<td>'.$invoiceCode.'</td>';
 	echo '<td class="rowID">Date:</td>';
-	echo '<td>'.$invoiceDate.'</td>';
+	echo '<td>'.$invoiceGenerationDate.'</td>';
 	echo '</tr>';
 	echo '</table>';
 	echo '<br>';
@@ -122,9 +124,9 @@ try {
 		echo '<td>'.$product->ProductDescription.'</td>';
 		echo '<td>'.$product->UnitOfMeasure.'</td>';
 		echo '<td>'.$line->Quantity.'</td>';
-		echo '<td>'.($line->UnitPrice/100).' &euro; </td>';
+		echo '<td>'.($line->UnitPrice).' &euro; </td>';
 		echo'<td>'.$line->Tax->TaxPercentage.'</td>';
-		echo '<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
+		echo '<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))).' &euro;</td>
 		</tr>';
 		
 

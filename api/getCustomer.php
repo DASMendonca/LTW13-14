@@ -34,6 +34,10 @@ try {
 
 } catch (GeneralException  $e) {
 	echo json_encode($e);
+}catch (PDOException $e) {
+	
+	$exception=new GeneralException(new Err_DBProblem($e));
+	echo json_encode($exception);
 }
 
 ?>

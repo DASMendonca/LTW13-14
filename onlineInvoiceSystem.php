@@ -16,6 +16,7 @@
 <script type="text/javascript" src='login.js'></script>
 <script type="text/javascript" src='search.js'></script>
 <script type="text/javascript" src='edition.js'></script>
+<script type="text/javascript" src='insertions.js'></script>
 </head>
 
 <div id = "home_page">
@@ -45,7 +46,8 @@
 						if (($_SESSION['customer']->Permission)>1) {
 							echo '	<li class="top_lis" id="li_invoice">Search Invoices</li>
 									<li class="top_lis" id="li_customer">Search Clients</li>
-									<li class="top_lis" id="li_administration">Administrative section</li>';
+									<li class="top_lis" id="li_administration">Administrative section</li>
+									<li class="top_lis" id="li_add_product">Add product</li>';
 						}
 					?>
 					<li> <form action="logout.php" method="GET" id="logForm">
@@ -61,7 +63,7 @@
 			</div>
 			
 			<div id="mainDiv">
-			Aqui vai ser usado ajax.
+			
 			</div>
 		
 	</body>

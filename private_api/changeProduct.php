@@ -21,15 +21,18 @@ try {
 	
 	
 	
-	$id=$parameters[1][0];
+	$id=$parameters[0][1];
 	if($id!="") {//update
 		$product =Product::updateInDB($db, $parameters);
 		
 		echo json_encode($product);
 	}
 	else{
+		
+		if($_SESSION["customer"]->Permission<2) throw new GeneralException(new Err_PermissionDenied());
 		$product=Product::instatiate($db,$parameters);
 		echo json_encode($product);
+		$myvar= json_encode($product);
 	}
 	
 
