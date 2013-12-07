@@ -193,8 +193,8 @@ class Invoice implements savable,changable{
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->StartDate);
 		$query->bindParam(2,$this->EndDate);
-		$query->bindParam(3,$this->CustomerID);
-		$query->bindParam(4,$this->CompanyName);
+		$query->bindParam(3,$this->Customer->CustomerID);
+		$query->bindParam(4,$this->Customer->CompanyName);
 		$query->bindParam(5,$this->Customer->CustomerTaxID);
 		$query->bindParam(6,$this->Customer->Email);
 		$query->bindParam(7,$this->Customer->BillingAddress->AddressDetail);
@@ -274,7 +274,9 @@ class Invoice implements savable,changable{
 		return $this->Customer->missingParameter();
 		
 	}
-	
+	public isColumn($candidate){
+		//TODO: implement it
+	}
 }
 class Line implements savable{
 	
@@ -711,7 +713,10 @@ class Product implements savable,changable{
 		return $product;
 	}
 
-	
+	public function missingParameter(){
+		
+		
+	}
 	
 	
 	
