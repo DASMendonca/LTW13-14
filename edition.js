@@ -56,7 +56,7 @@ function updateEntry(){
         dataType : "json",
         data : {"parameters": parameters, "reloadSession": reload_session},
         success : function(data){
-          alert("Customer information updated.");
+          alert("Information updated.");
           for(i=0; i< form_divs.length; i++){
       		var to_update= isToUpdate(form_divs[i]);
       		if(to_update != null)
