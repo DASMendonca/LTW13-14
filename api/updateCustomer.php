@@ -41,10 +41,7 @@ try {
 		
 		array_push($parameters,array("CustomerID",$customerPassedAsArray["CustomerID"]));
 		
-		if($userPermission==3){//if admin
-			if(isset($customerPassedAsArray["Permission"]))array_push($parameters,array("Permission",$customerPassedAsArray["Permission"]));
-				
-		}
+		
 		
 	}
 
@@ -58,13 +55,17 @@ try {
 	if(isset($customerPassedAsArray["CompanyName"]))array_push($parameters,array("CompanyName",$customerPassedAsArray["CompanyName"]));
 	if(isset($customerPassedAsArray["CustomerTaxID"]))array_push($parameters,array("CustomerTaxID",$customerPassedAsArray["CustomerTaxID"]));
 	if(isset($customerPassedAsArray["Email"]))array_push($parameters,array("Email",$customerPassedAsArray["Email"]));
-	if(isset($customerPassedAsArray["Password"]))array_push($parameters,array("CompanyName",$customerPassedAsArray["CompanyName"]));
+	if(isset($customerPassedAsArray["Password"]))array_push($parameters,array("Password",$customerPassedAsArray["Password"]));
 	if(isset($customerPassedAsArray["BillingAddress"])){
 		if(isset($addressAsArray["AddressDetail"]))array_push($parameters,array("AddressDetail",$addressAsArray["AddressDetail"]));
 		if(isset($addressAsArray["PostalCode1"]))array_push($parameters,array("PostalCode1",$addressAsArray["PostalCode1"]));
 		if(isset($addressAsArray["PostalCode2"]))array_push($parameters,array("PostalCode2",$addressAsArray["PostalCode2"]));
 		if(isset($addressAsArray["City"]))array_push($parameters,array("City",$addressAsArray["City"]));
 		if(isset($addressAsArray["Country"]))array_push($parameters,array("Country",$addressAsArray["Country"]));	
+	}
+	if($userPermission==3){//if admin
+		if(isset($customerPassedAsArray["Permission"]))array_push($parameters,array("Permission",$customerPassedAsArray["Permission"]));
+	
 	}
 	
 		
