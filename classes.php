@@ -625,6 +625,7 @@ class Product implements savable,changable{
 		
 		for($i=0;$i<count($parameters);$i++){
 			$columnName=$parameters[$i][0];
+			if(strcmp($columnName,"UnitPrice")==0)$paramers[$i][1]*=100;
 			if(!Product::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
 		}
 		
