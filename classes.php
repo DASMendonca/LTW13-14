@@ -163,7 +163,7 @@ class Invoice implements savable,changable{
 		
 	}
 	function getCustomerId(){
-		return $this->CustomerID;
+		return $this->Customer->CustomerID;
 	}
 	static public function updateInDB($db,$parameters){
 	
@@ -714,8 +714,8 @@ class Product implements savable,changable{
 	public function missingParameter(){
 		
 		if($this->ProductDescription==null || !isset($this->ProductDescription))return"ProductDescription";
-		if($this->UnitPrice==null || !isset($this->UnitPrice))throw new GeneralException(new Err_MissingParameter("UnitPrice"));
-		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))throw new GeneralException(new Err_MissingParameter("UnitOfMeasure"));
+		if($this->UnitPrice==null || !isset($this->UnitPrice))return "UnitPrice";
+		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))return "UnitOfMeasure";
 		
 		
 	}
