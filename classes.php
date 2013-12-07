@@ -581,7 +581,7 @@ class Product implements savable,changable{
 			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
 			$query=$db->prepare($stmt);
 			$query->bindParam(1,$this->ProductDescription);
-			$query->bindParam(2,$this->UnitPrice);
+			$query->bindParam(2,$this->UnitPrice*100);
 			$query->bindParam(3,$this->UnitOfMeasure);
 			$query->bindParam(4,$this->ProductTypeID);
 			
@@ -612,7 +612,7 @@ class Product implements savable,changable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
+			$instance=new Product($entry["ProductCode"],$entry["ProductDescription"], $entry["UnitPrice"]/100, $entry["UnitOfMeasure"], $entry["ProductTypeID"]);
 			$instances[$i]=$instance;
 			
 		}
