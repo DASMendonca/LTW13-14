@@ -32,6 +32,7 @@ try {
 		if($_SESSION["customer"]->Permission<2) throw new GeneralException(new Err_PermissionDenied());
 		$product=Product::instatiate($db,$parameters);
 		echo json_encode($product);
+		$myvar= json_encode($product);
 	}
 	
 

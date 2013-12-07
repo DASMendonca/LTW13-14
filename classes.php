@@ -615,7 +615,7 @@ class Product implements savable,changable{
 	function insertIntoDB($db){
 		
 		
-		if($this->ProductDescription==null || !isset($this->ProductDescription))throw new GeneralException(new Err_MissingParameter("ProductDescripition"));
+		if($this->ProductDescription==null || !isset($this->ProductDescription))throw new GeneralException(new Err_MissingParameter("ProductDescription"));
 		if($this->UnitPrice==null || !isset($this->UnitPrice))throw new GeneralException(new Err_MissingParameter("UnitPrice"));
 		if($this->UnitOfMeasure==null || !isset($this->UnitOfMeasure))throw new GeneralException(new Err_MissingParameter("UnitOfMeasure"));
 		
@@ -623,9 +623,10 @@ class Product implements savable,changable{
 		
 			
 			$stmt="Insert into Product (ProductDescription,UnitPrice,UnitOfMeasure,ProductTypeID) Values(?,?,?,?);";
+			$theprice= ($this->UnitPrice)*100;
 			$query=$db->prepare($stmt);
 			$query->bindParam(1,$this->ProductDescription);
-			$query->bindParam(2,$this->UnitPrice*100);
+			$query->bindParam(2, $theprice);
 			$query->bindParam(3,$this->UnitOfMeasure);
 			$query->bindParam(4,$this->ProductTypeID);
 			
@@ -703,7 +704,7 @@ class Product implements savable,changable{
 			else if (strcmp($parameterName, "ProductTypeID")==0)$typeID=$parameters[$i][1];
 		}
 		
-		$product=new Product($code, $descrip, $price, $unit, $typeID);
+		$product=new Product(null, $descript, $price, $unit, $typeID);
 	
 		$product->ProductCode=$product->insertIntoDB($db);
 		

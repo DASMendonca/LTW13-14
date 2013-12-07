@@ -112,7 +112,7 @@ function callAjax(table_name, parameters){
         dataType : "json",
         data : {"parameters": parameters, "reloadSession": ignore},
         success : function(data){
-          if(typeof data.error != undefined)
+          if(data.hasOwnProperty("error"))
         	  alert(data.error.fields);
           
           //TODO update placeholders
