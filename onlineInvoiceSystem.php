@@ -16,6 +16,7 @@
 <script type="text/javascript" src='login.js'></script>
 <script type="text/javascript" src='search.js'></script>
 <script type="text/javascript" src='edition.js'></script>
+<script type="text/javascript" src='invoiceEdit.js'></script>
 <script type="text/javascript" src='insertions.js'></script>
 </head>
 
