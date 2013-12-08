@@ -17,9 +17,8 @@ $invoice->insertIntoDB($db)
 */
 try{
 	
-	
-	$invoice=Invoice::getInstancesByFields($db, array(array("InvoiceNo",array(1),"equal")))[0];
-	
+
+	$invoice=Invoice::getInstancesByFields($db,	array(array("InvoiceNo",array(1),"equal")))[0];
 	echo $invoice->toXML();
 }
 catch(GeneralException $e){

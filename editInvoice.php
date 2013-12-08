@@ -89,7 +89,7 @@ if(isset($_SESSION['customer']) || $_SESSION['customer']->Permission>1 &&
 		$line=$lines[$i];
 		
 		$productQueryParams=array(
-		array("ProductCode",array($line->ProductCode),"equal")
+		array("ProductCode",array($line->Product->ProductCode),"equal")
 		);
 		
 		$products=Product::getInstancesByFields($db, $productQueryParams);
@@ -97,11 +97,11 @@ if(isset($_SESSION['customer']) || $_SESSION['customer']->Permission>1 &&
 		
 		
 		echo'<tr>';
-		echo '<td>'.$line->ProductCode.'</td>';
+		echo '<td>'.$line->Product->ProductCode.'</td>';
 		echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
 		echo utf8_encode('<td>'.$product->UnitOfMeasure.'</td>');
 		echo utf8_encode('<td>'.$line->Quantity.'</td>');
-		echo utf8_encode('<td>'.($line->UnitPrice/100).' &euro; </td>');
+		echo utf8_encode('<td>'.($line->Product->UnitPrice/100).' &euro; </td>');
 		echo utf8_encode('<td>'.$line->Tax->TaxPercentage.'</td>');
 		echo utf8_encode('<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>');
 		if($invoice->Status==0)
