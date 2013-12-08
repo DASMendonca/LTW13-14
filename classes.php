@@ -207,6 +207,12 @@ class Invoice implements savable,changable{
 		
 		$query->execute();
 		
+		if(isset($this->lines) && $this->lines!=null){
+			for($i=0;$i<count(lines);$i++){
+				$lines[$i]->insertIntoDB($db);
+			}
+		}
+		
 		return $db->lastInsertId();
 		
 		
@@ -275,12 +281,14 @@ class Invoice implements savable,changable{
 		return $this->Customer->missingParameter();
 		
 	}
-
+	public function toXML(){
+		$invoiceTemplate=simplexml_load_file("./invoice_xml/InvoiceTemplate.xml");
+	}
 }
 class Line implements savable{
 	
 	public $InvoiceNo;
-	public $LineNumber;
+	public $LineNo;
 	public $Quantity;
 	public $CreditAmount;
 	public $Tax;
@@ -288,15 +296,35 @@ class Line implements savable{
 	public $LineDate;
 	
 	
-	function __construct($InvoiceNumber,$LineNumber,$Quantity,$LineDate){
+	function __construct($InvoiceNumber,$LineNo,$Quantity,$LineDate){
 		
 		$this->InvoiceNo=$InvoiceNumber;
-		$this->LineNumber=$LineNumber;
+		$this->LineNo=$LineNo;
 		$this->Quantity=$Quantity;
 		$this->LineDate=$LineDate;
 	}
 	public function insertIntoDB($db){
-		//TODO: implement it later
+		
+		if($this->LineDate==null || !isset($this->LineDate))$this->LineDate=(new DateTime())->format('Y-m-d');//now time
+		$missing=$this->missingParameter();
+		if($missing!=null)throw new GeneralException(new Err_MissingParameter($missing));
+		
+		$stmt="Insert into Invoice_Line (InvoiceNo,LineNo,Quantity,LineDate,ProductCode,ProductDescription,UnitPrice,UnitOfMeasure,TaxValue,TaxType) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		$query=$db->prepare($stmt);
+		$query->bindParam(1,$this->InvoiceNo);
+		$query->bindParam(2,$this->LineNo);
+		$query->bindParam(3,$this->Quantity);
+		$query->bindParam(4,$this->LineDate);
+		$query->bindParam(5,$this->Product->ProductCode);
+		$query->bindParam(6,$this->Product->ProductDescription);
+		$query->bindParam(7,$this->Product->UnitPrice);
+		$query->bindParam(8,$this->Product->UnitOfMeasure);
+		$query->bindParam(9,$this->Tax->TaxValue);
+		$query->bindParam(10,$this->Tax->TaxType);
+		$query->execute();
+		
+		return $db->lastInsertId();
+		
 	}
 	static public function getInstancesByFields($db,$fields){
 		
@@ -320,7 +348,7 @@ class Line implements savable{
 
 			$instance=new Line($entry["InvoiceNo"],$entry["LineNo"], $entry["Quantity"],$entry["LineDate"]);
 			$instance->Product=new Product($entry["ProductCode"], $entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], null);
-			$instance->Tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
+			$instance->Tax=new Tax(null, $entry["TaxValue"], $entry["TaxType"]);
 			$instance->calculateCreditAmount();
 			$instances[$i]=$instance;
 		}
@@ -334,7 +362,7 @@ class Line implements savable{
 	public function toXML(){
 		
 		$lineTemplate=simplexml_load_file("./invoice_xml/LineTemplate.xml");
-		$lineTemplate->LineNumber=$this->LineNumber;
+		$lineTemplate->LineNumber=$this->LineNo;
 		$lineTemplate->ProductCode=$this->Product->ProductCode;
 		$lineTemplate->ProductDescription=$this->Product->ProductDescription;
 		$lineTemplate->Quantity=$this->Quantity;
@@ -357,7 +385,7 @@ class Line implements savable{
 		
 	}
 	static public function isColumn($candidate){
-		if(strcmp($candidate, "LineNumber")==0)return true;
+		if(strcmp($candidate, "LineNo")==0)return true;
 		else if(strcmp($candidate,"InvoiceNo")==0)return true;
 		else if(strcmp($candidate,"Quantity")==0)return true;
 		else if(strcmp($candidate,"LineDate")==0)return true;
@@ -366,7 +394,7 @@ class Line implements savable{
 	}
 	public function missingParameter(){
 		if($this->InvoiceNo==null || !isset($this->InvoiceNo))return "InvoiceNo";
-		if($this->LineNumber==null || !isset($this->LineNumber))return "LineNumber";
+		if($this->LineNo==null || !isset($this->LineNo))return "LineNo";
 		if($this->Quantity==null || !isset($this->Quantity))return "Quantity";
 		if($this->Date==null || !isset($this->Date))return "Date";
 		$missingProductParam=$this->Product->missingParameter();
@@ -391,8 +419,9 @@ class Line implements savable{
 			array("LineNo",array($parameters[1][1]),"equal")	
 		);
 		
-		return Line::getInstancesByFields($db,$getBackParams)[0];
-		
+		$lines= Line::getInstancesByFields($db,$getBackParams);
+		if($lines!=null && count($lines)>0)return $lines[0];
+		return null;
 		
 		
 		
@@ -400,18 +429,35 @@ class Line implements savable{
 	public function removeFromDB($db){
 		
 		$stmt="DELETE FROM Invoice_Line where LineNo= ? AND InvoiceNo= ?";
-		$query=$db->prepare();
-		$query->bindParam(1,$this->LineNumber);
+		$query=$db->prepare($stmt);
+		$query->bindParam(1,$this->LineNo);
 		$query->bindParam(2,$this->InvoiceNo);
 		$query->execute();
 		
+		$selectParams=array(
+			array("InvoiceNo",array($this->InvoiceNo),"equal"),
+			array("LineNo",array($this->LineNo),"min")
+				
+				
+		);
 		
+		//decrease number of all lines
+		$lines=Line::getInstancesByFields($db, $selectParams);
+		usort($lines, "lineComparator");
+		for($i=0;$i<count($lines);$i++){
+			$theLine=$lines[$i];
+			$updateParams=array(
+					array("InvoiceNo",$theLine->InvoiceNo),
+					array("LineNo",$theLine->LineNo),
+					array("LineNo",$theLine->LineNo-1)
+			);
+			Line::updateInDB($db, $updateParams);
+		}
 		
 		
 		
 	}
 }
-	
 class Customer implements savable,changable{
 	
 	public $CustomerID;
@@ -907,7 +953,7 @@ class Tax implements savable{
 		
 		for($i=0;$i<count($fields);$i++){
 			$entry=$fields[$i];
-			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"Description")==0)array_push($params, $entry);
+			if(strcmp($entry[0],"TaxID")==0 || strcmp($entry[0],"TaxValue")==0 || strcmp($entry[0],"TaxType")==0)array_push($params, $entry);
 			else throw new GeneralException(new Err_UnknownField($entry[0]));		
 		}
 		
@@ -918,7 +964,7 @@ class Tax implements savable{
 		$instances=array();
 		for($i=0;$i<count($result);$i++){
 			$entry=$result[$i];
-			$instance=new Tax($entry["TaxID"],$entry["TaxValue"],$entry["Description"]);
+			$instance=new Tax($entry["TaxID"],$entry["TaxValue"],$entry["TaxType"]);
 			$instances[$i]=$instance;
 		}
 		
@@ -1076,25 +1122,28 @@ function constructUpdate($tableName,$parameters,$db,$nrMatching=1){
 
 	//starting at 1 because first element will be the id that is the matching parameter
 
-	for($i=$nrMatching;$i<count($parameters)-$nrMatching;$i++) $stmt.=$parameters[$i][0]." = ? ,";
+	for($i=$nrMatching;$i<count($parameters)-1;$i++) $stmt.=$parameters[$i][0]." = ? ,";
 
 	$stmt.=$parameters[$i][0]." = ? ";
 	
 	$stmt.="WHERE ";
 	
 	for($i=0;$i<$nrMatching-1;$i++){
-		$parameters[$i][0]." = ".$parameters[$i][1]." AND ";
+		$stmt.=$parameters[$i][0]." = ".$parameters[$i][1]." AND ";
 	}
 
-	$stmt.=$parameters[0][0]." = ".$parameters[0][1];
+	$stmt.=$parameters[$i][0]." = ".$parameters[$i][1];
 
 	$query=$db->prepare($stmt);
 
-	for($i=1;$i<count($parameters)-$nrMatching+1;$i++) $query->bindParam($i,$parameters[$i][1]);
+	for($i=$nrMatching;$i<count($parameters);$i++) $query->bindParam($i-$nrMatching+1,$parameters[$i][1]);
 
 	return $query;
 
 
 }
 
+function lineComparator($line1,$line2){
+	return $line1->LineNo-$line2->LineNo;
+}
 ?>
