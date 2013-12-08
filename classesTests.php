@@ -18,9 +18,9 @@ $invoice->insertIntoDB($db)
 try{
 	
 	
-	$line=Line::getInstancesByFields($db, array(array("InvoiceNo",array(1),"equal")))[0];
+	$invoice=Invoice::getInstancesByFields($db, array(array("InvoiceNo",array(1),"equal")))[0];
 	
-	$line->removeFromDB($db);
+	echo $invoice->toXML();
 }
 catch(GeneralException $e){
 	echo $e;

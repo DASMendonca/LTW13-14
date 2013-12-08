@@ -285,9 +285,30 @@ class Invoice implements savable,changable{
 	}
 	public function toXML(){
 		$invoiceTemplate=simplexml_load_file("./invoice_xml/InvoiceTemplate.xml");
-		$invoiceTemplate->StartDate=$this->StartDate;
-		$invoiceTemplate->EndDate=$this->EndDate;
-		$invoiceTemplate->FiscalYear=explode("-", $this->StartDate)[0];
+		$invoiceTemplate->InvoiceNo=$this->InvoiceNo;
+		$invoiceTemplate->DocumentStatus->InvoiceStatusDate=$this->GenerationDate;
+		$invoiceTemplate->DocumentStatus->SourceID=$this->Customer->CustomerID;
+		$invoiceTemplate->InvoiceDate=$this->GenerationDate;
+		$invoiceTemplate->SourceID=$this->Customer->CustomerID;
+		$invoiceTemplate->SystemEntryDate=$this->GenerationDate;
+		$invoiceTemplate->CustomerID=$this->CustomerID;
+		$NetTotal=0;
+		for($i=0;$i<count($this->Lines);$i++){
+			$NetTotal+=$thi->Lines[$i]->CreditAmount;
+		}
+		$invoiceTemplate->DocumentTotal->NetTotal=$NetTotal;
+		$invoiceTemplate->DocumentTotal->GrossTotal=$this->GrossTotal;
+		$invoiceTemplate->DocumentTotal->TaxPayable=$this->GrossTotal-$NetTotal;
+		
+		usort($this->Lines,"lineComparator");
+		for($i=count($this->Lines)-1;$i>=0;$i--){
+			$LineToAdd=simplexml_load_string($this->Lines[$i]->toXML());
+			simplexml_insert_after($LineToAdd, $invoiceTemplate->CustomerID);
+		}
+		
+		return $invoiceTemplate->asXML();
+	}
+	static public function fromXML($xmlString){
 		
 	}
 }
