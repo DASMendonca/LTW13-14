@@ -334,10 +334,10 @@ class Line implements savable{
 	public function toXML(){
 		
 		$lineTemplate=simplexml_load_file("./invoice_xml/LineTemplate.xml");
-		$lineTemplate->lineNumber=$this->LineNumber;
+		$lineTemplate->LineNumber=$this->LineNumber;
 		$lineTemplate->ProductCode=$this->Product->ProductCode;
 		$lineTemplate->ProductDescription=$this->Product->ProductDescription;
-		$lineTemplate->ProductQuantity=$this->Quantity;
+		$lineTemplate->Quantity=$this->Quantity;
 		$lineTemplate->UnitOfMeasure=$this->Product->UnitOfMeasure;
 		$lineTemplate->UnitPrice=$this->Product->UnitPrice;
 		$lineTemplate->Description=$this->Product->ProductDescription;
@@ -349,7 +349,7 @@ class Line implements savable{
 	}
 	static public function fromXML($xmlString){
 		$lineXML=simplexml_load_string($xmlString);
-		$line=new Line(null, (string) $lineXML->lineNumber, (string) $lineXML->ProductQuantity,$lineXML->TaxPointDate);
+		$line=new Line(null, (string) $lineXML->LineNumber, (string) $lineXML->Quantity,$lineXML->TaxPointDate);
 		$line->Product=new Product((string) $lineXML->ProductCode, (string) $lineXML->ProductDescription, (string) $lineXML->UnitPrice, (string) $lineXML->UnitOfMeasure, null);
 		$line->Tax=new Tax(null,(string) $lineXML->Tax->TaxPercentage,(string) $lineXML->Tax->TaxType);
 		$line->calculateCreditAmount();
@@ -396,6 +396,12 @@ class Line implements savable{
 		
 		
 		
+	}
+	public function removeFromDB($db){
+		
+		$stmt="DELETE FROM Invoice_Line where LineNo= ? AND InvoiceNo= ?";
+		$query=$db->prepare();
+		//$query->bindParam()
 	}
 }
 	
