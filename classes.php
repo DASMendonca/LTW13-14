@@ -291,10 +291,10 @@ class Invoice implements savable,changable{
 		$invoiceTemplate->InvoiceDate=$this->GenerationDate;
 		$invoiceTemplate->SourceID=$this->Customer->CustomerID;
 		$invoiceTemplate->SystemEntryDate=$this->GenerationDate;
-		$invoiceTemplate->CustomerID=$this->CustomerID;
+		$invoiceTemplate->CustomerID=$this->Customer->CustomerID;
 		$NetTotal=0;
 		for($i=0;$i<count($this->Lines);$i++){
-			$NetTotal+=$thi->Lines[$i]->CreditAmount;
+			$NetTotal+=$this->Lines[$i]->CreditAmount;
 		}
 		$invoiceTemplate->DocumentTotal->NetTotal=$NetTotal;
 		$invoiceTemplate->DocumentTotal->GrossTotal=$this->GrossTotal;

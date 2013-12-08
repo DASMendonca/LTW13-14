@@ -17,13 +17,9 @@ $invoice->insertIntoDB($db)
 */
 try{
 	
-	$parameters=array(
-			array("InvoiceNo",1),
-			array("LineNo",4),
-			array("Quantity",16)
-	);
-	
-	$line=Line::updateInDB($db, $parameters);
+
+	$invoice=Invoice::getInstancesByFields($db,	array(array("InvoiceNo",array(1),"equal")))[0];
+	echo $invoice->toXML();
 }
 catch(GeneralException $e){
 	echo $e;
