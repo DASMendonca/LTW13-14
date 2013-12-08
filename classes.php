@@ -158,6 +158,7 @@ class Invoice implements savable,changable{
 		for($i=0;$i<count($this->Lines);$i++){
 			$this->GrossTotal+=$this->Lines[$i]->CreditAmount*($this->Lines[$i]->Tax->TaxPercentage/100+1);
 		}
+		usort($this->Lines, "lineComparator");
 		
 	}
 	function getCustomerId(){
@@ -278,7 +279,7 @@ class Invoice implements savable,changable{
 		if($this->StartDate==null || !isset($this->StartDate))return"StartDate";
 		else if($this->EndDate==null || !isset($this->EndDate))return"EndDate";
 		else if($this->GenerationDate==null || !isset($this->GenerationDate))return"GenerationDate";
-		else if($this->Status==null || !isset($this->Status))return"Status";
+		else if(!isset($this->Status))return"Status";//not null cause it can be zero
 		else if($this->Customer==null || !isset($this->Customer))return"Customer";
 		return $this->Customer->missingParameter();
 		
@@ -296,9 +297,9 @@ class Invoice implements savable,changable{
 		for($i=0;$i<count($this->Lines);$i++){
 			$NetTotal+=$this->Lines[$i]->CreditAmount;
 		}
-		$invoiceTemplate->DocumentTotal->NetTotal=$NetTotal;
-		$invoiceTemplate->DocumentTotal->GrossTotal=$this->GrossTotal;
-		$invoiceTemplate->DocumentTotal->TaxPayable=$this->GrossTotal-$NetTotal;
+		$invoiceTemplate->DocumentTotals->NetTotal=$NetTotal/100;
+		$invoiceTemplate->DocumentTotals->GrossTotal=$this->GrossTotal/100;
+		$invoiceTemplate->DocumentTotals->TaxPayable=($this->GrossTotal-$NetTotal)/100;
 		
 		usort($this->Lines,"lineComparator");
 		for($i=count($this->Lines)-1;$i>=0;$i--){
@@ -309,8 +310,82 @@ class Invoice implements savable,changable{
 		return $invoiceTemplate->asXML();
 	}
 	static public function fromXML($xmlString){
+		$invoiceXML=simplexml_load_string($xmlString);
+		$invoice=new Invoice((string)$invoiceXML->InvoiceNo, (string)$invoiceXML->InvoiceDate,(string) $invoiceXML->InvoiceDate, 1);
+		$invoice->GenerationDate=(string)$invoiceXML->SystemEntryDate;
+		$invoice->GrossTotal=((string) $invoiceXML->DocumentTotals->GrossTotal)*100;
+		
+		$lines=array();
+		for($i=0;$i<count($invoiceXML->Line);$i++){
+			$lineXML=$invoiceXML->Line[$i];
+			$line=Line::fromXML($lineXML->asXML());
+			array_push($lines, $line);
+			
+		}
+		$invoice->setLines($lines);
+		$invoice->Customer=new Customer((string)$invoiceXML->CustomerID, null,null,null,null,null);
+		return $invoice;
 		
 	}
+	static public function exportSAFT_File($invoices){
+	
+		$customers=array();
+		$products=array();
+		$taxes=array();
+		$minDate;
+		$maxDate;
+	
+		$minDate=$invoices[0]->StartDate;
+		$maxDate=$invoices[0]->EndDate;
+	
+		for($i=0;$i<count($invoices);$i++){
+			$currentInvoice=$invoices[$i];
+				
+			$minDateTimeStamp=strtotime($minDate);
+			$maxDateTimeStamp=strtotime($maxDate);
+			$currentDateTimeStamp=strtotime($currentInvoice->StartDate);
+				
+			if($minDateTimeStamp>$currentDateTimeStamp)$minDate=$currentInvoice->StartDate;
+			if($maxDateTimeStamp<$currentDateTimeStamp)$maxDate=$currentInvoice->EndDate;
+				
+			for($l=0;$l<count($currentInvoice->Lines);$l++){
+				$currentLine=$currentInvoice->Lines[$l];
+				$currentProduct=$currentLine->Product;
+				$currentTax=$currentLine->Tax;
+				addIfNotRepeated($products, $currentProduct);
+				addIfNotRepeated($taxes, $currentTax);
+			}
+			$currentCustomer=$currentInvoice->Customer;
+			addIfNotRepeated($customers,$currentCustomer);
+				
+		}
+	
+		$headerXML=simplexml_load_file("./invoice_xml/HeaderTemplate.xml");
+		$headerXML->FiscalYear=explode("-", $minDate)[0];
+		$headerXML->StartDate=$minDate;
+		$headerXML->EndDate=$maxDate;
+		$headerXML->DateCreated=(new DateTime())->format('Y-m-d');
+	
+		$masterFilesXML=simplexml_load_file("./invoice_xml/MasterFilesTemplate.xml");
+	
+		for($i=0;$i<count($customers);$i++){
+			$customerXMLElement=simplexml_load_string($customers[$i]->toXML());
+			simplexml_insert_before($customerXMLElement, $masterFilesXML->TaxTable);
+		}
+		for($i=0;$i<count($products);$i++){
+			$productXMLElement=simplexml_load_string($products[$i]->toXML());
+			simplexml_insert_before($productXMLElement, $masterFilesXML->TaxTable);
+		}
+		for($i=0;$i<count($customers);$i++){
+			$TaxXMLElement=simplexml_load_string($taxes[$i]->toXML());
+			$masterFilesXML->TaxTable->TaxTableEntry[$i]=$TaxXMLElement;
+				
+		}
+	
+	
+	
+	}
+
 }
 class Line implements savable{
 	
@@ -423,7 +498,7 @@ class Line implements savable{
 		if($this->InvoiceNo==null || !isset($this->InvoiceNo))return "InvoiceNo";
 		if($this->LineNo==null || !isset($this->LineNo))return "LineNo";
 		if($this->Quantity==null || !isset($this->Quantity))return "Quantity";
-		if($this->Date==null || !isset($this->Date))return "Date";
+		if($this->LineDate==null || !isset($this->LineDate))return "LineDate";
 		$missingProductParam=$this->Product->missingParameter();
 		if($missingProductParam)return $missingProductParam;
 		return $this->Tax->missingParameter();
@@ -484,6 +559,8 @@ class Line implements savable{
 		
 		
 	}
+	
+
 }
 class Customer implements savable,changable{
 	
@@ -1014,6 +1091,17 @@ class Tax implements savable{
 		return null;
 		
 	}
+	public function toXML(){
+		$xmlTemplate=simplexml_load_file("./invoice_xml/TaxTableEntryTemplate.xml");
+		$xmlTemplate->TaxType=$this->TaxType;
+		$xmlTemplate->TaxPercentage=$this->TaxPercentage;
+		$xmlTemplate->Description=$this->TaxType;
+		return $xmlTemplate->asXML();
+		
+	}
+	public function getTaxID(){
+		return $this->TaxID;
+	}
 }
 
 
@@ -1183,5 +1271,40 @@ function simplexml_insert_after(SimpleXMLElement $insert, SimpleXMLElement $targ
 	} else {
 		return $target_dom->parentNode->appendChild($insert_dom);
 	}
+}
+function simplexml_insert_before(SimpleXMLElement $insert, SimpleXMLElement $target){
+	$target_dom = dom_import_simplexml($target);
+	$insert_dom = $target_dom->ownerDocument->importNode(dom_import_simplexml($insert), true);
+	return $target_dom->parentNode->insertBefore($insert_dom, $target_dom);
+	
+}
+
+function addIfNotRepeated(&$array,$elementToAdd){
+	
+	if($elementToAdd instanceof Tax){
+		for($i=0;$i<count($array);$i++){
+			if(strcmp($array[$i]->getTaxID(),$elementToAdd->getTaxID())==0){
+				return;
+			}
+		}
+		
+	}
+	else if($elementToAdd instanceof Product){
+		for($i=0;$i<count($array);$i++){
+			if(strcmp($array[$i]->ProductCode,$elementToAdd->ProductCode)==0){
+				return;
+			}
+		}
+		
+	}
+	else if($elementToAdd instanceof  Customer){
+		for($i=0;$i<count($array);$i++){
+			if(strcmp($array[$i]->CustomerID,$elementToAdd->CustomerID)==0){
+				return;
+			}
+		}
+	}
+	array_push($array, $elementToAdd);
+	
 }
 ?>
