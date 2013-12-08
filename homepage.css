@@ -36,7 +36,8 @@ li
 	margin-left: 1%;
 }
 
-#topmenu{
+#topmenu
+{
 	position:absolute;
 	width:100%;
 	top:0;
@@ -66,6 +67,28 @@ input[id="search_button"]
 	margin-top: 20px;
 }
 
+input[id="search_button"]
+{
+	width: 100px;
+	margin-left: 150px;
+	margin-top: 20px;
+}
+
+
+input[id="save_edit"]
+{
+	width: 100px;
+	margin-left: 265px;
+	margin-top: 20px;
+}
+
+
+#PostalCode1
+{
+	float: left;
+}
+
+
 #search_results_div
 {
 	text-align: center;
@@ -77,12 +100,6 @@ input[id="search_button"]
 }
 
 
-table,th
-{
-	border:30px solid black;
-	text-align:center;
-}
-
 
 td:nth-child(2)
 {
@@ -90,8 +107,14 @@ td:nth-child(2)
 	padding-left: 20px;
 }
 
-
-
+h2
+{
+	margin-top: 15%;
+	margin-left: 5%;
+	
+	color: white;
+	width:200px;
+}
 
 label 
 {
@@ -100,4 +123,12 @@ label
 	display: block;
 	width: 150px;
 	float: left;
+}
+
+
+.update_div table, th
+{
+	text-align:center;
+	border:30px solid black;
+	color: white;
 }
