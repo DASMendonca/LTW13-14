@@ -5,6 +5,8 @@ session_start();
 
 if(isset($_SESSION['customer']) && isset($_REQUEST["product_id"])){
 	
+	$this_date= (new DateTime())->format('Y-m-d');
+	
 	$db = new PDO('sqlite:../database.sqlite');
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -43,7 +45,7 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_id"])){
 	}
 	
 	if(count($invoices)==0 || $isopen!=0){
-		$invoice_now = new Invoice(null, (new DateTime()->format('Y-m-d')), (new DateTime()->format('Y-m-d')), 0);
+		$invoice_now = new Invoice(null, $this_date, $this_date, 0);
 		$invoice_now->Customer=$myCustomer;
 		$invoice_now->insertIntoDB($db);
 		
@@ -51,7 +53,7 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_id"])){
 		$invoice_now= $invoices[0];
 		
 		
-		$invoice_line = new Line($invoice_now->InvoiceNo, 1, 1, new DateTime()->format('Y-m-d'));
+		$invoice_line = new Line($invoice_now->InvoiceNo, 1, 1, $this_date);
 		$invoice_line->Product=$product;
 		$invoice_line->Tax = $prod_tax;
 		
@@ -87,8 +89,8 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_id"])){
 		}
 		
 		else{
-			$linha = new Line($InvoiceNumber, $LineNo, $Quantity, $LineDate)
-			$invoice_line = new Line($invoice_now->InvoiceNo, $nr_of_lines, 1, new DateTime()->format('Y-m-d'));
+			$linha = new Line($InvoiceNumber, $LineNo, $Quantity, $LineDate);
+			$invoice_line = new Line($invoice_now->InvoiceNo, $nr_of_lines, 1, $this_date);
 			$invoice_line->Product=$product;
 			$invoice_line->Tax = $prod_tax;
 			
