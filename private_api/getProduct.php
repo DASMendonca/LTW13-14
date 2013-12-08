@@ -42,7 +42,7 @@ try {
 
 if($products != NULL){
 	?>
-	<table id="search_results_tb">
+	<table class="search_results_tb">
 		<tr>
 		<th>Product Code</th><th>Product Description</th><th>Measure Unit</th><th>Price p/ Unit</th>
 		</tr>
@@ -55,9 +55,18 @@ if($products != NULL){
 				<td>' .($product->UnitPrice).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $product->ProductCode;?>" /></td>
-				<td><img src="./pictures/shopping_cart.png" width="16" height="16" border="0" alt="add To Cart"/></td>
-				<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Product"
-					class="edit_img" id="<?php echo $product->ProductCode;?>"/></td>
+					<?php
+				if(isset($_SESSION['customer'])){
+					echo '
+					<td><img src="./pictures/shopping_cart.png" width="16" height="16" border="0" alt="add To Cart"
+					class="to_cart" id="'.$product->ProductCode.'"/></td>';
+					if($_SESSION['customer']->Permission>1){
+					echo '
+					<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Product"
+						class="edit_img" id="'.$product->ProductCode.'"/></td>';	
+					}
+				}?>
+			
 			<tr>
 			<?php	
 	}

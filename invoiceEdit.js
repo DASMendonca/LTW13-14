@@ -16,6 +16,11 @@ $(document).ready(function() {
 				removeLine(vals);	
 			}
 	);
+	
+	$("body").on('click', '.to_cart',
+			function(){
+		addToCurrentInvoice(jQuery(this).attr("id"));
+	});
 });
 
 
@@ -94,3 +99,10 @@ function currentInvoice(id){
 	
 	
 } 
+
+
+
+function addToCurrentInvoice(id){
+	
+	
+}
