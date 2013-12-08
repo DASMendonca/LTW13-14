@@ -4,22 +4,25 @@ session_start();
 header('Content-type: text/html');
 
 
-if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2) 
-	header("Location: onlineInvoiceSystem.php");
+$db = new PDO('sqlite:./database.sqlite');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+
+$params=array(
+		array("InvoiceNo",array($_GET["param"]),"equal")
+);
+
+
+$invoices = Invoice::getInstancesByFields($db, $params);
+$invoice= $invoices[0];
+
+
+if(isset($_SESSION['customer']) || $_SESSION['customer']->Permission>1 &&
+								 $_SESSION['customer']->CustomerID == $invoice->getCustomerId()){ 
 	
 
-	$db = new PDO('sqlite:./database.sqlite');
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-	
-	$params=array(
-			array("InvoiceNo",array($_GET["param"]),"equal")
-	);
-	
-
-	$invoices = Invoice::getInstancesByFields($db, $params);
-	$invoice= $invoices[0];
 	$lines= $invoice->getLines();
 	
 		
@@ -66,7 +69,7 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 
 				<div class="permanent">
 					<label >Invoice Date</label>
-					<label class="to_ident">'.$invoice->InvoiceDate.'</label>
+					<label class="to_ident">'.$invoice->StartDate.'</label>
 				</div><br>
 				
 				<table class="products">
@@ -100,11 +103,39 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 		echo utf8_encode('<td>'.$line->Quantity.'</td>');
 		echo utf8_encode('<td>'.($line->UnitPrice/100).' &euro; </td>');
 		echo utf8_encode('<td>'.$line->Tax->TaxPercentage.'</td>');
-		echo utf8_encode('<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>
-		</tr>');
+		echo utf8_encode('<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>');
+		if($invoice->Status==0)
+			echo '<td><img src="./pictures/minus.png" width="16" height="16" border="0" alt="Remove from cart"
+					class="rem_img"  id="'.$line->LineNo.'" name="'.$invoice->InvoiceNo.'"/></td>';
+		echo '</tr>';
 	}
-
-	echo '</table>
-	</div>';
+	echo '</table>'
+	;
+	
+	if($_SESSION['customer']->Permission >1){
+		
+		$status = $invoice->Status;
+		$statusDesc;
+		$the_other_state=0;
+		$the_other_statusDesc = "Open";
+		
+		if($status == 0){
+			$statusDesc="Open";
+			$the_other_state = 1;
+			$the_other_statusDesc = "Closed";
+		}
+		else{
+			$statusDesc="Closed";
+		}
+		
+		echo '
+		<select name="Status" id="Status">
+			<option id="'.$status.'" value="'.$status.'" label="'.$statusDesc.'">'.$statusDesc.'</option> 
+			<option id="'.$the_other_state.'" value="'.$the_other_state.'" label="'.$the_other_statusDesc.'">'.$the_other_statusDesc.'</option>
+		</select>
+	</div>'
+		;
+		}
+}
 	
 ?>
