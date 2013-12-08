@@ -10,8 +10,9 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
 $params=array(
-		array("InvoiceNo",array($_GET["param"]),"equal")
+		array("InvoiceNo",array($_REQUEST["param"]),"equal")
 );
+
 
 
 $invoices = Invoice::getInstancesByFields($db, $params);
@@ -106,7 +107,7 @@ if(isset($_SESSION['customer']) || $_SESSION['customer']->Permission>1 &&
 		echo utf8_encode('<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))/100).' &euro;</td>');
 		if($invoice->Status==0)
 			echo '<td><img src="./pictures/minus.png" width="16" height="16" border="0" alt="Remove from cart"
-					class="rem_img"  id="'.$line->LineNo.'" name="'.$invoice->InvoiceNo.'"/></td>';
+					class="rem_line"  id="'.$line->LineNo.'" name="'.$invoice->InvoiceNo.'"/></td>';
 		echo '</tr>';
 	}
 	echo '</table>'
