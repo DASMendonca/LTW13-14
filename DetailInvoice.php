@@ -7,24 +7,13 @@
 <link rel="stylesheet" href="Details.css" media="screen">
 <title>DetailInvoice</title>
 </head>
+<?php 
 
-<body>
-	<table class="Logo">
-		<tr>
-			<th>Online Invoice System</th>
-		</tr>
-		<tr>
-			<td>Linguagens e Tecnologias Web</td>
-		</tr>
-	</table>
-
-	<?php 
 include './classes.php';
 $db = new PDO('sqlite:./database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-
+header('Content-type: text/html; charset=UTF-8');
 
 try {
 	if(!isset($_GET['params']))
@@ -32,11 +21,9 @@ try {
 
 	$params=array(json_decode($_GET["params"]));
 
-
-
 	$invoices=invoice::getInstancesByFields($db, $params);
 	$invoice=$invoices[0];
-	
+
 	$invoiceCode=$invoice->InvoiceNo;
 	$invoiceStartDate=$invoice->StartDate;
 	$invoiceGenerationDate= $invoice->GenerationDate;
@@ -44,17 +31,21 @@ try {
 	$invoiceCompanyName=$invoice->Customer->CompanyName;
 	$invoiceGrossTotal=$invoice->GrossTotal;
 	$invoiceCustomerID=$invoice->getCustomerId();
-	
+	$invoiceCutomerAddress=$invoice->Customer->BillingAddress->AddressDetail;
+	$invoiceCutomerCP1=$invoice->Customer->BillingAddress->PostalCode1;
+	$invoiceCutomerCP2=$invoice->Customer->BillingAddress->PostalCode2;
+	$invoiceCutomerCity=$invoice->Customer->BillingAddress->City;
+
 	$customerQueryParams=array(
-		array("CustomerID",array($invoice->getCustomerId()),"equal")
+			array("CustomerID",array($invoice->getCustomerId()),"equal")
 	);
-	
+
 	$customers=Customer::getInstancesByFields($db, $customerQueryParams);
 	$custormer=$customers[0];
-	
+
 	$invoiceNif=$custormer->CustomerTaxID;
 	$invoiceLines =$invoice->getLines();
-	
+
 } catch (GeneralException $e) {
 
 	$invoiceCode="0";
@@ -66,78 +57,116 @@ try {
 	$invoiceLines=array();
 
 }
+echo utf8_encode('<body>
+		<table class="Logo">
+		<tr>
+		<th>ACompany</th>
+		</tr>
+		<tr>
+		<td>Rua Dr. Roberto Frias,127</td>
+		</tr>
+		<tr>
+		<td>4200-465 Porto</td>
+		</tr>
+		<tr>
+		<td>Telefone: +351 22 508 14</td>
+		</tr>
+		<tr>
+		<td>Fax: +351 22 508 14 40</td>
+		</tr>
+		<tr>
+		<td>NIF: 240 022 570</td>
+		</tr>
+		</table>');
 
-	
-	echo '<p class="sheetID">Customer Data</p>';
-	echo '<br><br>';
-	echo '<p class="rowID">Customer Code:</p>';
-	echo '<p>'.$invoiceCustomerID.'</p>';
-	echo '<br>';
-	echo '<p class="rowID">Name:</p>';
-	echo '<p>'.$invoiceCompanyName.'</p>';
-	echo '<br>';
-	echo '<p class="rowID">NIF:</p>';
-	echo '<p>'.$invoiceNif.'</p>';
-	echo '<br>';
-	echo '<br>';
 
-	echo '<p class="sheetID">Invoice</p>';
-	echo '<br>';
-	echo '<table class="invoice">';
-	echo '<tr>';
-	echo '<td class="rowID">Invoice Nr:</td>';
-	echo '<td>'.$invoiceCode.'</td>';
-	echo '<td class="rowID">Date:</td>';
-	echo '<td>'.$invoiceGenerationDate.'</td>';
-	echo '</tr>';
-	echo '</table>';
-	echo '<br>';
+echo utf8_encode('<table class="Customer">
+		<tr>
+		<td>Dear Sir(s)</td>
+		</tr>
+		<tr>
+		<td>'.$invoiceCompanyName.'</td>
+		</tr>
+		<tr>
+		<td>'.$invoiceCutomerAddress.'</td>
+		</tr>
+		<tr>
+		<td>'.$invoiceCutomerCP1.' - '.$invoiceCutomerCP2.' '.$invoiceCutomerCity.'</td>
+		</tr>
+		</table>');
 
-	echo '<p class="Articles">Products</p>
-	<br>
-	<table class="products">
-	<tr>
-	<th>Product Code:</th>
-			<th>Product Description:</th>
-			<th>UN</th>
-			<th>Quantity</th>
-			<th>Unit Price</th>
-			<th>Tax</th>
-			<th>Total Price</th>
-		</tr>';
 
-	
-	
-	for($i=0;$i<count($invoiceLines);$i++){
-		$line=$invoiceLines[$i];
+echo utf8_encode('<table class="InvoiceDetails">
+		<tr>
+		<th class="CNo">Customer Number:</th>
+		<td class="CCod">'.$invoiceCustomerID.'</td>
+		<td class="Empty"></td>
+		<th class="INo">Invoice Nr: </th>
+		<td class="ICod">'.$invoiceCode.'</td>
+		<th class="IDat">Date: </th>
+		<td class="IDate">'.$invoiceEndDate.'</td>
+		</tr>
+		</table>');
+
+echo utf8_encode('<table class="products">
 		
-		$productQueryParams=array(
-		array("ProductCode",array($line->ProductCode),"equal")
-		);
-		
-		$products=Product::getInstancesByFields($db, $productQueryParams);
-		$product=$products[0];
-		
-		
-		echo'<tr>';
-		echo '<td>'.$line->ProductCode.'</td>';
-		echo '<td>'.$product->ProductDescription.'</td>';
-		echo '<td>'.$product->UnitOfMeasure.'</td>';
-		echo '<td>'.$line->Quantity.'</td>';
-		echo '<td>'.($line->UnitPrice).' &euro; </td>';
-		echo'<td>'.$line->Tax->TaxPercentage.'</td>';
-		echo '<td>'.((int)($line->CreditAmount*($line->Tax->TaxPercentage/100+1))).' &euro;</td>
-		</tr>';
-		
+		<thead>
+		<th class="PCode">Product Code:</th>
+		<th class="PDesc">Product Description:</th>
+		<th class="PUn">UN</th>
+		<th class="PQuan">Quantity</th>
+		<th class="PriUnit">Unit Price</th>
+		<th class="PTax">Tax</th>
+		<th class="PPri">Total Price</th>
+		</thead>
+		<tfoot></tfoot>');
 
+$subTotal=0;
+$taxTotal=0;
 
+for($i=0;$i<count($invoiceLines);$i++){
+	$line=$invoiceLines[$i];
 
-	}
-	
-	
-	?>
-			
-	</table>
+	$productQueryParams=array(
+			array("ProductCode",array($line->Product->ProductCode),"equal")
+	);
+
+	$products=Product::getInstancesByFields($db, $productQueryParams);
+	$product=$products[0];
+	$tempTotal= ($line->CreditAmount)/100;
+	$subTotal+=$tempTotal;
+	$taxTotal+=$tempTotal*($line->Tax->TaxPercentage/100);
+
+	echo utf8_encode('<tr>');
+	echo utf8_encode('<td class="Number">'.$line->Product->ProductCode.'</td>');
+	echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
+	echo utf8_encode('<td class="Unit">'.$product->UnitOfMeasure.'</td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2,","," ").'</td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->Product->UnitPrice/100,2,","," ").' &euro; </td>');
+	echo utf8_encode('<td class="Unit">'.$line->Tax->TaxPercentage.'</td>');
+	echo utf8_encode('<td class="Number">'.number_format($tempTotal,2,","," ").' &euro;</td>
+			</tr>');
+
+}
+
+echo '</table>';
+
+echo utf8_encode('<br>
+		<table class="Result">
+		<tr>
+		<th>Subtotal</th>
+		<td width=50% class="Number">'.number_format($subTotal,2,","," ").' &euro;</td>
+		</tr>
+		<tr>
+		<th>Tax Total</th>
+		<td class="Number">'.number_format($taxTotal,2,","," ").' &euro;</td>
+		</tr>
+		<tr>
+		<th>Total</th>
+		<td class="Number">'.number_format(($subTotal+$taxTotal),2,","," ").' &euro;</td>
+		</tr>
+		</table>');
+?>
 
 
 </body>
