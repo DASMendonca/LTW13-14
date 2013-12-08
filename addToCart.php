@@ -3,11 +3,11 @@ include 'classes.php';
 session_start();
 
 
-if(isset($_SESSION['customer']) && isset($_REQUEST["product_id"])){
+if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 	
 	$this_date= (new DateTime())->format('Y-m-d');
 	
-	$db = new PDO('sqlite:../database.sqlite');
+	$db = new PDO('sqlite:./database.sqlite');
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	
@@ -51,6 +51,7 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_id"])){
 		
 		$invoices = Invoice::getInstancesByFields($db, $customerQueryArr);
 		$invoice_now= $invoices[0];
+		
 		
 		
 		$invoice_line = new Line($invoice_now->InvoiceNo, 1, 1, $this_date);

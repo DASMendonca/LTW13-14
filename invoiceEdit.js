@@ -111,7 +111,7 @@ function addToCurrentInvoice(id){
 		type: "POST",
         url : url ,
         dataType : "html",
-        data : {"param": id},
+        data : {"product_code": id},
         success : function(data){
         	//TODO $("#search_results_div").html(data);
         	//editionForm(data, url2);
