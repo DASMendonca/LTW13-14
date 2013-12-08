@@ -276,6 +276,13 @@ class Invoice implements savable,changable{
 		
 	}
 
+	public function toXML(){
+		$invoiceTemplate=simplexml_load_file("./invoice_xml/InvoiceTemplate.xml");
+		$invoiceTemplate->StartDate=$this->StartDate;
+		$invoiceTemplate->EndDate=$this->EndDate;
+		
+	}
+
 }
 class Line implements savable{
 	
@@ -1095,6 +1102,22 @@ function constructUpdate($tableName,$parameters,$db,$nrMatching=1){
 	return $query;
 
 
+}
+
+
+function lineComparator($line1,$line2){
+	return $line1->LineNo-$line2->LineNo;
+}
+
+function simplexml_insert_after(SimpleXMLElement $insert, SimpleXMLElement $target)
+{
+	$target_dom = dom_import_simplexml($target);
+	$insert_dom = $target_dom->ownerDocument->importNode(dom_import_simplexml($insert), true);
+	if ($target_dom->nextSibling) {
+		return $target_dom->parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
+	} else {
+		return $target_dom->parentNode->appendChild($insert_dom);
+	}
 }
 
 ?>

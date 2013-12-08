@@ -63,26 +63,12 @@ li
 
 }
 
-h2
-{
-	color: white;
-	width:175px;
-}
-
 input[id="search_button"]
 {
 	width: 100px;
 	margin-left: 150px;
 	margin-top: 20px;
 }
-
-input[id="save_edit"]
-{
-	width: 100px;
-	margin-left: 250px;
-	margin-top: 20px;
-}
-
 
 #search_results_div
 {
@@ -109,10 +95,6 @@ td:nth-child(2)
 }
 
 
-#PostalCode1
-{
-	float: left;
-}
 
 
 label 
