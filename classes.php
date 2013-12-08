@@ -285,14 +285,15 @@ class Line implements savable{
 	public $CreditAmount;
 	public $Tax;
 	public $Product;
-	public $Date;
+	public $LineDate;
 	
 	
-	function __construct($InvoiceNumber,$LineNumber,$Quantity){
+	function __construct($InvoiceNumber,$LineNumber,$Quantity,$LineDate){
 		
 		$this->InvoiceNo=$InvoiceNumber;
 		$this->LineNumber=$LineNumber;
 		$this->Quantity=$Quantity;
+		$this->LineDate=$LineDate;
 	}
 	public function insertIntoDB($db){
 		//TODO: implement it later
@@ -317,7 +318,7 @@ class Line implements savable{
 			$entry=$result[$i];
 			
 
-			$instance=new Line($entry["InvoiceNo"],$entry["LineNo"], $entry["Quantity"]);
+			$instance=new Line($entry["InvoiceNo"],$entry["LineNo"], $entry["Quantity"],$entry["LineDate"]);
 			$instance->Product=new Product($entry["ProductCode"], $entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], null);
 			$instance->Tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
 			$instance->calculateCreditAmount();
@@ -333,22 +334,22 @@ class Line implements savable{
 	public function toXML(){
 		
 		$lineTemplate=simplexml_load_file("./invoice_xml/LineTemplate.xml");
-		$lineTemplate->lineNumber=$this->LineNumber;
+		$lineTemplate->LineNumber=$this->LineNumber;
 		$lineTemplate->ProductCode=$this->Product->ProductCode;
 		$lineTemplate->ProductDescription=$this->Product->ProductDescription;
-		$lineTemplate->ProductQuantity=$this->Quantity;
+		$lineTemplate->Quantity=$this->Quantity;
 		$lineTemplate->UnitOfMeasure=$this->Product->UnitOfMeasure;
 		$lineTemplate->UnitPrice=$this->Product->UnitPrice;
 		$lineTemplate->Description=$this->Product->ProductDescription;
 		$lineTemplate->CreditAmount=$this->CreditAmount;
 		$lineTemplate->Tax->TaxType=$this->Tax->TaxType;
 		$lineTemplate->Tax->TaxPercentage=$this->Tax->TaxPercentage;
-		
+		$lineTemplate->TaxPointDate=$this->LineDate;
 		return $lineTemplate->asXML();
 	}
 	static public function fromXML($xmlString){
 		$lineXML=simplexml_load_string($xmlString);
-		$line=new Line(null, (string) $lineXML->lineNumber, (string) $lineXML->ProductQuantity);
+		$line=new Line(null, (string) $lineXML->LineNumber, (string) $lineXML->Quantity,$lineXML->TaxPointDate);
 		$line->Product=new Product((string) $lineXML->ProductCode, (string) $lineXML->ProductDescription, (string) $lineXML->UnitPrice, (string) $lineXML->UnitOfMeasure, null);
 		$line->Tax=new Tax(null,(string) $lineXML->Tax->TaxPercentage,(string) $lineXML->Tax->TaxType);
 		$line->calculateCreditAmount();
@@ -359,7 +360,7 @@ class Line implements savable{
 		if(strcmp($candidate, "LineNumber")==0)return true;
 		else if(strcmp($candidate,"InvoiceNo")==0)return true;
 		else if(strcmp($candidate,"Quantity")==0)return true;
-		else if(strcmp($candidate,"Date")==0)return true;
+		else if(strcmp($candidate,"LineDate")==0)return true;
 		else if(Product::isColumn($candidate))return true;
 		else return Tax::isColumn($candidate);
 	}
@@ -379,16 +380,28 @@ class Line implements savable{
 		}
 		
 		if(strcmp($parameters[0][0],"InvoiceNo")!=0)throw new GeneralException(new Err_MissingParameter("InvoiceNo"));
+		if(strcmp($parameters[1][0],"LineNo")!=0)throw new GeneralException(new Err_MissingParameter("LineNo"));
 		
 		
-		$query=constructUpdate("Line", $parameters, $db,2);
+		$query=constructUpdate("Invoice_Line", $parameters, $db,2);
 		$result=$query->execute();
 		
-		$updatedLine=Line::getInstancesByFields($db, "");
+		$getBackParams=array(
+			array("InvoiceNo",array($parameters[0][1]),"equal"),
+			array("LineNo",array($parameters[1][1]),"equal")	
+		);
+		
+		return Line::getInstancesByFields($db,$getBackParams)[0];
 		
 		
 		
 		
+	}
+	public function removeFromDB($db){
+		
+		$stmt="DELETE FROM Invoice_Line where LineNo= ? AND InvoiceNo= ?";
+		$query=$db->prepare();
+		//$query->bindParam()
 	}
 }
 	
@@ -1070,7 +1083,7 @@ function constructUpdate($tableName,$parameters,$db,$nrMatching=1){
 
 	$query=$db->prepare($stmt);
 
-	for($i=1;$i<count($parameters);$i++) $query->bindParam($i,$parameters[$i][1]);
+	for($i=1;$i<count($parameters)-$nrMatching+1;$i++) $query->bindParam($i,$parameters[$i][1]);
 
 	return $query;
 
