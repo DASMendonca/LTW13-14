@@ -285,7 +285,7 @@ class Line implements savable{
 	public $CreditAmount;
 	public $Tax;
 	public $Product;
-	public $Date;
+	public $LineDate;
 	
 	
 	function __construct($InvoiceNumber,$LineNumber,$Quantity){
@@ -359,7 +359,7 @@ class Line implements savable{
 		if(strcmp($candidate, "LineNumber")==0)return true;
 		else if(strcmp($candidate,"InvoiceNo")==0)return true;
 		else if(strcmp($candidate,"Quantity")==0)return true;
-		else if(strcmp($candidate,"Date")==0)return true;
+		else if(strcmp($candidate,"LineDate")==0)return true;
 		else if(Product::isColumn($candidate))return true;
 		else return Tax::isColumn($candidate);
 	}
@@ -379,12 +379,18 @@ class Line implements savable{
 		}
 		
 		if(strcmp($parameters[0][0],"InvoiceNo")!=0)throw new GeneralException(new Err_MissingParameter("InvoiceNo"));
+		if(strcmp($parameters[1][0],"LineNo")!=0)throw new GeneralException(new Err_MissingParameter("LineNo"));
 		
 		
-		$query=constructUpdate("Line", $parameters, $db,2);
+		$query=constructUpdate("Invoice_Line", $parameters, $db,2);
 		$result=$query->execute();
 		
-		$updatedLine=Line::getInstancesByFields($db, "");
+		$getBackParams=array(
+			array("InvoiceNo",array($parameters[0][1]),"equal"),
+			array("LineNo",array($parameters[1][1]),"equal")	
+		);
+		
+		return Line::getInstancesByFields($db,$getBackParams)[0];
 		
 		
 		
@@ -1070,7 +1076,7 @@ function constructUpdate($tableName,$parameters,$db,$nrMatching=1){
 
 	$query=$db->prepare($stmt);
 
-	for($i=1;$i<count($parameters);$i++) $query->bindParam($i,$parameters[$i][1]);
+	for($i=1;$i<count($parameters)-$nrMatching+1;$i++) $query->bindParam($i,$parameters[$i][1]);
 
 	return $query;
 
