@@ -3,7 +3,9 @@ include 'classes.php';
 session_start();
 
 
-
+$db = new PDO('sqlite:./database.sqlite');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 if ($_FILES["xml_portion"]["error"] > 0)
   {
@@ -21,7 +23,16 @@ else
   
   $line = Line::fromXML($str);
   
+  $line->InvoiceNo=1;
+  $line->insertIntoDB($db);
+  
+  $compare = utf8_encode($line->toXML());
+  
   echo $line->toXML();
+  echo '<br> <br>';
+  echo $compare;
+  
+  
   }
   
   
