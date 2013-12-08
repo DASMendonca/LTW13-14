@@ -288,11 +288,12 @@ class Line implements savable{
 	public $LineDate;
 	
 	
-	function __construct($InvoiceNumber,$LineNumber,$Quantity){
+	function __construct($InvoiceNumber,$LineNumber,$Quantity,$LineDate){
 		
 		$this->InvoiceNo=$InvoiceNumber;
 		$this->LineNumber=$LineNumber;
 		$this->Quantity=$Quantity;
+		$this->LineDate=$LineDate;
 	}
 	public function insertIntoDB($db){
 		//TODO: implement it later
@@ -317,7 +318,7 @@ class Line implements savable{
 			$entry=$result[$i];
 			
 
-			$instance=new Line($entry["InvoiceNo"],$entry["LineNo"], $entry["Quantity"]);
+			$instance=new Line($entry["InvoiceNo"],$entry["LineNo"], $entry["Quantity"],$entry["LineDate"]);
 			$instance->Product=new Product($entry["ProductCode"], $entry["ProductDescription"], $entry["UnitPrice"], $entry["UnitOfMeasure"], null);
 			$instance->Tax=new Tax(null, $entry["TaxValue"], $entry["TaxDescription"]);
 			$instance->calculateCreditAmount();
@@ -343,12 +344,12 @@ class Line implements savable{
 		$lineTemplate->CreditAmount=$this->CreditAmount;
 		$lineTemplate->Tax->TaxType=$this->Tax->TaxType;
 		$lineTemplate->Tax->TaxPercentage=$this->Tax->TaxPercentage;
-		
+		$lineTemplate->TaxPointDate=$this->LineDate;
 		return $lineTemplate->asXML();
 	}
 	static public function fromXML($xmlString){
 		$lineXML=simplexml_load_string($xmlString);
-		$line=new Line(null, (string) $lineXML->lineNumber, (string) $lineXML->ProductQuantity);
+		$line=new Line(null, (string) $lineXML->lineNumber, (string) $lineXML->ProductQuantity,$lineXML->TaxPointDate);
 		$line->Product=new Product((string) $lineXML->ProductCode, (string) $lineXML->ProductDescription, (string) $lineXML->UnitPrice, (string) $lineXML->UnitOfMeasure, null);
 		$line->Tax=new Tax(null,(string) $lineXML->Tax->TaxPercentage,(string) $lineXML->Tax->TaxType);
 		$line->calculateCreditAmount();
