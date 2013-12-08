@@ -376,8 +376,17 @@ class Line implements savable{
 		for($i=0;$i<count($parameters);$i++){
 			$columnName=$parameters[$i][0];
 			if(!Line::isColumn($columnName))throw new GeneralException(new Err_UnknownField($columnName));
-			//TODO: continue here
 		}
+		
+		if(strcmp($parameters[0][0],"InvoiceNo")!=0)throw new GeneralException(new Err_MissingParameter("InvoiceNo"));
+			
+		$query=constructUpdate("Line", $parameters, $db);
+		$result=$query->execute();
+		
+		$updatedLine=Line::getInstancesByFields($db, "")
+		
+		
+		
 		
 	}
 }
@@ -1016,7 +1025,7 @@ function constructInsert($tableName,$parameters,$db){
 	
 }
 
-function constructUpdate($tableName,$parameters,$db){
+/*function constructUpdate($tableName,$parameters,$db){
 	
 	if($parameters==NULL|| count($parameters)==0) throw new GeneralException(new Err_MissingParameter("parameters"));
 	
@@ -1037,6 +1046,34 @@ function constructUpdate($tableName,$parameters,$db){
 	return $query;
 	
 	
+}*/
+function constructUpdate($tableName,$parameters,$db,$nrMatching=1){
+
+	if($parameters==NULL|| count($parameters)<$nrMatching) throw new GeneralException(new Err_MissingParameter("parameters"));
+
+	$stmt="UPDATE $tableName SET ";
+
+	//starting at 1 because first element will be the id that is the matching parameter
+
+	for($i=$nrMatching;$i<count($parameters)-$nrMatching;$i++) $stmt.=$parameters[$i][0]." = ? ,";
+
+	$stmt.=$parameters[$i][0]." = ? ";
+	
+	$stmt.="WHERE ";
+	
+	for($i=0;$i<$nrMatching-1;$i++){
+		$parameters[$i][0]." = ".$parameters[$i][1]." AND ";
+	}
+
+	$stmt.=$parameters[0][0]." = ".$parameters[0][1];
+
+	$query=$db->prepare($stmt);
+
+	for($i=1;$i<count($parameters);$i++) $query->bindParam($i,$parameters[$i][1]);
+
+	return $query;
+
+
 }
 
 ?>
