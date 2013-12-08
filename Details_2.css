@@ -1,6 +1,6 @@
 body{
 	width: 70%;
-	margin: 0cm;
+	margin: 0;
 	padding-bottom: 2%;
 	padding-left: 15%%;
 	padding-right: 15%;
@@ -11,21 +11,68 @@ body{
 
 table.Logo th {
 	font-size: xx-large;
-	border: 1px solid white;
+	padding: 0.2cm;
+	padding-left: 5%;
 }
 table.Logo {
 	margin-rigth: 65%;
 	margin-top: 4%;
-	margin-bottom:8%;
-	text-align: center;
+	margin-bottom:0;
+	text-align: left;
 	font-size: large;
 	width: 35%;
-	border: 1px solid white;
+	border: 0;
 	border-collapse: collapse;
 }
 table.Logo td {
+	font-size: small;
+	padding: 0;
+	padding-left: 5%;
+}
+
+table.Customer {
+	width: 40%;
+	border: 0;
+	padding: 0;
+	padding-left: 2%;
+	padding-right: 2%;
+	margin-left: 60%;
+	margin-bottom:4%;
+	margin-top:2%;
+	text-align: left;
+}
+
+table.InvoiceDetails {
+	width: 100%;
+	padding: 0;
+	padding-left: 5%;
+	margin-rigth: 65%;
+	margin-top: 4%;
+	margin-bottom:2%;
+	text-align: left;
+	border-collapse: collapse;
+}
+table.InvoiceDetails th{
 	border: 1px solid white;
-	padding: 0.2cm;
+	border-left: 1px solid white;
+	border-right: 1px solid white;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+}
+table.InvoiceDetails td{
+	border: 1px solid white;
+	border-left: 1px solid white;
+	border-right: 1px solid white;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+}
+#Empty {
+	border-top: 0;
+	border-bottom: 0;
 }
 
 .sheetID {
@@ -57,7 +104,10 @@ table.Logo td {
 	border-left: 1px solid white;
 	border-rigth: 1px solid white;
 	height: 0.75cm;
-	padding: 0.1cm;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
 }
 .Number {
 	text-align: right;
@@ -96,3 +146,4 @@ p {
 	display: inline;
 	line-height: 0.7cm;	
 }
+

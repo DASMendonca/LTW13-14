@@ -25,10 +25,16 @@ try {
 	$invoice=$invoices[0];
 
 	$invoiceCode=$invoice->InvoiceNo;
-	$invoiceDate=$invoice->InvoiceDate;
-	$invoiceCompanyName=$invoice->CompanyName;
+	$invoiceStartDate=$invoice->StartDate;
+	$invoiceGenerationDate= $invoice->GenerationDate;
+	$invoiceEndDate=$invoice->EndDate;
+	$invoiceCompanyName=$invoice->Customer->CompanyName;
 	$invoiceGrossTotal=$invoice->GrossTotal;
 	$invoiceCustomerID=$invoice->getCustomerId();
+	$invoiceCutomerAddress=$invoice->Customer->BillingAddress->AddressDetail;
+	$invoiceCutomerCP1=$invoice->Customer->BillingAddress->PostalCode1;
+	$invoiceCutomerCP2=$invoice->Customer->BillingAddress->PostalCode2;
+	$invoiceCutomerCity=$invoice->Customer->BillingAddress->City;
 
 	$customerQueryParams=array(
 			array("CustomerID",array($invoice->getCustomerId()),"equal")
@@ -54,37 +60,53 @@ try {
 echo utf8_encode('<body>
 		<table class="Logo">
 		<tr>
-		<th>Online Invoice System</th>
+		<th>ACompany</th>
 		</tr>
 		<tr>
-		<td>Linguagens e Tecnologias Web</td>
+		<td>Rua Dr. Roberto Frias,127</td>
+		</tr>
+		<tr>
+		<td>4200-465 Porto</td>
+		</tr>
+		<tr>
+		<td>Telefone: +351 22 508 14</td>
+		</tr>
+		<tr>
+		<td>Fax: +351 22 508 14 40</td>
+		</tr>
+		<tr>
+		<td>NIF: 240 022 570</td>
 		</tr>
 		</table>');
 
 
-echo utf8_encode('<p class="sheetID">Customer Data</p>
-		<br><br>
-		<p class="rowID">Customer Code: </p>
-		<p>'.$invoiceCustomerID.'</p>
-		<br>
-		<p class="rowID">Name: </p>
-		<p>'.$invoiceCompanyName.'</p>
-		<br>
-		<p class="rowID">NIF: </p>
-		<p>'.$invoiceNif.'</p>
-		<br><br>');
-
-echo utf8_encode('<p class="sheetID">Invoice</p>
-		<br>
-		<table>
+echo utf8_encode('<table class="Customer">
 		<tr>
-		<td class="rowID">Invoice Nr: </td>
-		<td>'.$invoiceCode.'</td>
-		<td class="rowID">Date: </td>
-		<td>'.$invoiceDate.'</td>
+		<td>Exmo.(s) Senhor(es)</td>
 		</tr>
-		</table>
-		<br>');
+		<tr>
+		<td>'.$invoiceCompanyName.'</td>
+		</tr>
+		<tr>
+		<td>'.$invoiceCutomerAddress.'</td>
+		</tr>
+		<tr>
+		<td>'.$invoiceCutomerCP1.' - '.$invoiceCutomerCP2.' '.$invoiceCutomerCity.'</td>
+		</tr>
+		</table>');
+
+
+echo utf8_encode('<table class="InvoiceDetails">
+		<tr>
+		<th width=16%>Customer Number:</th>
+		<td width=10% class="Number">'.$invoiceCustomerID.'</td>
+		<td width=34% id="Empty"></td>
+		<th width=10%>Invoice Nr: </th>
+		<td width=10% class="Number">'.$invoiceCode.'</td>
+		<td width=7%>Date: </td>
+		<td width=13% class="Unit">'.$invoiceEndDate.'</td>
+		</tr>
+		</table>');
 
 echo utf8_encode('<table class="products">
 		<thead id="head">
@@ -111,7 +133,7 @@ for($i=0;$i<count($invoiceLines);$i++){
 
 	$products=Product::getInstancesByFields($db, $productQueryParams);
 	$product=$products[0];
-	$tempTotal= number_format(($line->CreditAmount)/100,2);
+	$tempTotal= ($line->CreditAmount)/100;
 	$subTotal+=$tempTotal;
 	$taxTotal+=$tempTotal*($line->Tax->TaxPercentage/100);
 
@@ -119,10 +141,10 @@ for($i=0;$i<count($invoiceLines);$i++){
 	echo utf8_encode('<td class="Number">'.$line->ProductCode.'</td>');
 	echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
 	echo utf8_encode('<td class="Unit">'.$product->UnitOfMeasure.'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2).'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->UnitPrice/100,2).' &euro; </td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2,","," ").'</td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->UnitPrice/100,2,","," ").' &euro; </td>');
 	echo utf8_encode('<td class="Unit">'.$line->Tax->TaxPercentage.'</td>');
-	echo utf8_encode('<td class="Number">'.$tempTotal.' &euro;</td>
+	echo utf8_encode('<td class="Number">'.number_format($tempTotal,2,","," ").' &euro;</td>
 			</tr>');
 
 }
@@ -136,7 +158,7 @@ for($i=0;$i<count($invoiceLines);$i++){
 
 	$products=Product::getInstancesByFields($db, $productQueryParams);
 	$product=$products[0];
-	$tempTotal= number_format(($line->CreditAmount)/100,2);
+	$tempTotal= ($line->CreditAmount)/100;
 	$subTotal+=$tempTotal;
 	$taxTotal+=$tempTotal*($line->Tax->TaxPercentage/100);
 
@@ -144,10 +166,10 @@ for($i=0;$i<count($invoiceLines);$i++){
 	echo utf8_encode('<td class="Number">'.$line->ProductCode.'</td>');
 	echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
 	echo utf8_encode('<td class="Unit">'.$product->UnitOfMeasure.'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2).'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->UnitPrice/100,2).' &euro; </td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2,","," ").'</td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->UnitPrice/100,2,","," ").' &euro; </td>');
 	echo utf8_encode('<td class="Unit">'.$line->Tax->TaxPercentage.'</td>');
-	echo utf8_encode('<td class="Number">'.$tempTotal.' &euro;</td>
+	echo utf8_encode('<td class="Number">'.number_format($tempTotal,2,","," ").' &euro;</td>
 			</tr>');
 }
 
@@ -160,7 +182,7 @@ for($i=0;$i<count($invoiceLines);$i++){
 
 	$products=Product::getInstancesByFields($db, $productQueryParams);
 	$product=$products[0];
-	$tempTotal= number_format(($line->CreditAmount)/100,2);
+	$tempTotal= ($line->CreditAmount)/100;
 	$subTotal+=$tempTotal;
 	$taxTotal+=$tempTotal*($line->Tax->TaxPercentage/100);
 
@@ -168,10 +190,10 @@ for($i=0;$i<count($invoiceLines);$i++){
 	echo utf8_encode('<td class="Number">'.$line->ProductCode.'</td>');
 	echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
 	echo utf8_encode('<td class="Unit">'.$product->UnitOfMeasure.'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2).'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->UnitPrice/100,2).' &euro; </td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2,","," ").'</td>');
+	echo utf8_encode('<td class="Number">'.number_format($line->UnitPrice/100,2,","," ").' &euro; </td>');
 	echo utf8_encode('<td class="Unit">'.$line->Tax->TaxPercentage.'</td>');
-	echo utf8_encode('<td class="Number">'.$tempTotal.' &euro;</td>
+	echo utf8_encode('<td class="Number">'.number_format($tempTotal,2,","," ").' &euro;</td>
 			</tr>');
 }
 echo '</table>';
@@ -180,15 +202,15 @@ echo utf8_encode('<br>
 		<table class="Result">
 		<tr>
 		<th>Subtotal</th>
-		<td width=50% class="Number">'.$subTotal.' &euro;</td>
+		<td width=50% class="Number">'.number_format($subTotal,2,","," ").' &euro;</td>
 		</tr>
 		<tr>
 		<th>Tax Total</th>
-		<td class="Number">'.number_format($taxTotal,2).' &euro;</td>
+		<td class="Number">'.number_format($taxTotal,2,","," ").' &euro;</td>
 		</tr>
 		<tr>
 		<th>Total</th>
-		<td class="Number">'.number_format(($subTotal+$taxTotal),2).' &euro;</td>
+		<td class="Number">'.number_format(($subTotal+$taxTotal),2,","," ").' &euro;</td>
 		</tr>
 		</table>');
 ?>
