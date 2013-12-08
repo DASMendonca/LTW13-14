@@ -73,7 +73,7 @@ if(isset($_SESSION['customer']) || $_SESSION['customer']->Permission>1 &&
 					<label class="to_ident">'.$invoice->StartDate.'</label>
 				</div><br>
 				
-				<table class="products">
+				<table class="search_results_tb">
 	<tr>
 	<th>Product Code:</th>
 			<th>Product Description:</th>
