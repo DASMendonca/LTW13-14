@@ -207,6 +207,8 @@ class Invoice implements savable,changable{
 		
 		$query->execute();
 		
+
+		
 		if(isset($this->lines) && $this->lines!=null){
 			for($i=0;$i<count(lines);$i++){
 				$lines[$i]->insertIntoDB($db);
@@ -285,6 +287,7 @@ class Invoice implements savable,changable{
 		$invoiceTemplate=simplexml_load_file("./invoice_xml/InvoiceTemplate.xml");
 		$invoiceTemplate->StartDate=$this->StartDate;
 		$invoiceTemplate->EndDate=$this->EndDate;
+		$invoiceTemplate->FiscalYear=explode("-", $this->StartDate)[0];
 		
 	}
 }
