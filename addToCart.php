@@ -58,7 +58,7 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 		$invoice_line->Product=$product;
 		$invoice_line->Tax = $prod_tax;
 		
-		$invoice_lines->insertIntoDB($db);
+		$invoice_line->insertIntoDB($db);
 	}
 	else{
 		//ha invoices e pode haver linha com esse produto
