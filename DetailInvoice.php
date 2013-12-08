@@ -148,30 +148,7 @@ for($i=0;$i<count($invoiceLines);$i++){
 			</tr>');
 
 }
-for($i=0;$i<count($invoiceLines);$i++){
-	$line=$invoiceLines[$i];
 
-	$productQueryParams=array(
-			array("ProductCode",array($line->Product->ProductCode),"equal")
-	);
-
-	$products=Product::getInstancesByFields($db, $productQueryParams);
-	$product=$products[0];
-	$tempTotal= ($line->CreditAmount)/100;
-	$subTotal+=$tempTotal;
-	$taxTotal+=$tempTotal*($line->Tax->TaxPercentage/100);
-
-	echo utf8_encode('<tr>');
-	echo utf8_encode('<td class="Number">'.$line->Product->ProductCode.'</td>');
-	echo utf8_encode('<td>'.$product->ProductDescription.'</td>');
-	echo utf8_encode('<td class="Unit">'.$product->UnitOfMeasure.'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->Quantity,2,","," ").'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($line->Product->UnitPrice/100,2,","," ").' &euro; </td>');
-	echo utf8_encode('<td class="Unit">'.$line->Tax->TaxPercentage.'</td>');
-	echo utf8_encode('<td class="Number">'.number_format($tempTotal,2,","," ").' &euro;</td>
-			</tr>');
-
-}
 echo '</table>';
 
 echo utf8_encode('<br>
