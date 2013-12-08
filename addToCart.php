@@ -2,7 +2,7 @@
 include 'classes.php';
 session_start();
 
-
+try{
 if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 	
 	$this_date= (new DateTime())->format('Y-m-d');
@@ -100,5 +100,10 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 	}	
 	
 }
+}
+catch(Exception $e){
+echo $e;
+}
+
 
 ?>
