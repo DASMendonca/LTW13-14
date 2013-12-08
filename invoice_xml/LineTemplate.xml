@@ -2,7 +2,7 @@
 	<LineNumber></LineNumber>
 	<ProductCode></ProductCode>
 	<ProductDescription></ProductDescription>
-	<ProductQuantity></ProductQuantity>
+	<Quantity></Quantity>
 	<UnitOfMeasure></UnitOfMeasure>
 	<UnitPrice></UnitPrice>
 	<TaxPointDate></TaxPointDate>

@@ -16,26 +16,14 @@ $invoice->Customer=$customer;
 $invoice->insertIntoDB($db)
 */
 try{
-//$line=Line::getInstancesByFields($db, array(array("InvoiceNo",array(1),"equal")))[0];
-$xml="<Line>
-	<LineNumber/>
-	<ProductCode>2</ProductCode>
-	<ProductDescription>Argamassa de Revest. ArgTec. - Saco 30kg</ProductDescription>
-	<ProductQuantity>15</ProductQuantity>
-	<UnitOfMeasure>un</UnitOfMeasure>
-	<UnitPrice>1262</UnitPrice>
-	<TaxPointDate/>
-	<Description>Argamassa de Revest. ArgTec. - Saco 30kg</Description>
-	<CreditAmount>18930</CreditAmount>
-	<Tax>
-		<TaxType>IVA Normal</TaxType>
-		<TaxCountryRegion>PT</TaxCountryRegion>
-		<TaxCode>NOR</TaxCode>
-		<TaxPercentage>23</TaxPercentage>
-	</Tax>
-<lineNumber>4</lineNumber></Line>";
-$line=Line::fromXML($xml);
-echo $line->toXML();
+	
+	$parameters=array(
+			array("InvoiceNo",1),
+			array("LineNo",4),
+			array("Quantity",16)
+	);
+	
+	$line=Line::updateInDB($db, $parameters);
 }
 catch(GeneralException $e){
 	echo $e;

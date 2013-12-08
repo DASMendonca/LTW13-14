@@ -114,6 +114,10 @@ function callAjax(table_name, parameters){
         success : function(data){
           if(data.hasOwnProperty("error"))
         	  alert(data.error.fields);
+          else{
+        	  alert("Insertion succeeded!");
+          }
+          
           
           //TODO update placeholders
         },

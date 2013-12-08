@@ -78,7 +78,6 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 						value="'.$customer->getAddress()->PostalCode1.'">-
 				</div>
 				<div id ="PostalCode2">
-				<label class="to_ident" for="PostalCode1"> Postal Code</label>
 				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$customer->getAddress()->PostalCode2.'" value="'.$customer->getAddress()->PostalCode2.'"><br>
 				</div><br>
 				<input type="button" id="save_edit" value="Save">				
