@@ -7,8 +7,8 @@ body{
 	height: 29.7cm;
 	margin: 0cm;
 	padding-bottom: 2cm;
-	padding-left: 3cm;
-	padding-right: 2.5cm;
+	padding-left: 2cm;
+	padding-right: 1.7cm;
 	padding-top: 2cm;
 }
 
@@ -18,12 +18,33 @@ table.Logo th {
 	padding-left: 0.2cm;
 }
 table.Logo {
-	margin-rigth: 12.7cm;
-	margin-top: 2cm;
-	margin-bottom:2cm;
+	margin-rigth: 10cm;
 	text-align: center;
 	font-size: large;
 	width: auto;
+	border: 0;
+}
+table.Logo td {
+	font-size: small;
+	padding: 0;
+	padding-left: 0.1cm;
+}
+
+table.Customer {
+	width: 8.5cm;
+	padding: 0;
+	margin-left: 12.5cm;
+	margin-bottom:.5cm;
+	margin-top: .1cm;
+	text-align: left;
+	border: 0;
+	border-collapse: collapse;
+}
+table.Customer td{
+	width: 100%;
+	padding: 0.1cm;
+	margin: 0;
+	text-align: left;
 	border: 0;
 }
 
@@ -35,8 +56,76 @@ table.Logo {
 	font-weight: bold;
 }
 
-.invoice {
+table.InvoiceDetails {
+	width: 100%;
+	padding: 0;
+	margin-top: 0.2cm;
+	margin-bottom: 0.2cm;
 	text-align: left;
+	border-collapse: collapse;
+}
+.CNo { 
+	width: 3.5cm;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid black;
+	}
+.CCod {
+	width: 1.5cm;
+	text-align: right;
+	padding-right: .2cm;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid black;
+}
+.Empty { 
+	width: 6cm;
+	border-top: 0; 
+	border-bottom: 0;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+}
+.INo { 
+	width:2.2cm;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid black;
+}
+.ICod { 
+	width: 1.5cm;
+	text-align: right;
+	padding-right: 2%;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid black;
+}
+.IDat {
+	width: 1.2cm;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid black;
+}
+.IDate {
+	width: 2cm;
+	text-align: right; 
+	padding-right: 2%;	
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid black;
 }
 
 .products {
@@ -46,9 +135,13 @@ table.Logo {
 	border-collapse: collapse;
 	page-break-inside: auto;
 }
+.products thead {
+	display: table-header-group;
+}
 .products th{
 	border: 1px solid black;
 	height: 1cm;
+	text-align: center;
 }
 .products td {
 	border-bottom: 0;
@@ -57,9 +150,6 @@ table.Logo {
 	border-rigth: 1px solid black;
 	height: 0.75cm;
 }
-#head {
-	display: table-header-group;
-}
 .Number {
 	text-align: right;
 	padding-right: 2%;
@@ -67,6 +157,13 @@ table.Logo {
 .Unit {
 	text-align: center;
 }
+.PCode {width: 3cm;}
+.PDesc {width: 7cm;}
+.PUn {width: 1cm;}
+.PQuan {width: 1.5cm;}
+.PriUnit {width: 2cm;}
+.PTax {width: .5cm;}
+.PPri {width: 2.5cm;}
 
 table.Result th {
 	font-size: large;

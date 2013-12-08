@@ -45,34 +45,74 @@ table.Customer {
 table.InvoiceDetails {
 	width: 100%;
 	padding: 0;
-	padding-left: 5%;
-	margin-rigth: 65%;
 	margin-top: 4%;
 	margin-bottom:2%;
 	text-align: left;
 	border-collapse: collapse;
 }
-table.InvoiceDetails th{
-	border: 1px solid white;
-	border-left: 1px solid white;
-	border-right: 1px solid white;
+
+.CNo { 
+	width: 16%;
 	padding-left: 0.2cm;
 	padding-right: 0.2cm;
 	padding-top: 0.1cm;
 	padding-bottom: 0.1cm;
-}
-table.InvoiceDetails td{
 	border: 1px solid white;
-	border-left: 1px solid white;
-	border-right: 1px solid white;
+	}
+.CCod {
+	width: 10%;
+	text-align: right;
+	padding-right: 2%;
 	padding-left: 0.2cm;
 	padding-right: 0.2cm;
 	padding-top: 0.1cm;
 	padding-bottom: 0.1cm;
+	border: 1px solid white;
 }
-#Empty {
-	border-top: 0;
+.Empty { 
+	width: 34%;
+	border-top: 0; 
 	border-bottom: 0;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+}
+.INo { 
+	width:10%;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid white;
+}
+.ICod { 
+	width: 10%;
+	text-align: right;
+	padding-right: 2%;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid white;
+}
+.IDat {
+	width: 7%;
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid white;
+}
+.IDate {
+	width: 13%;
+	text-align: right; 
+	padding-right: 2%;	
+	padding-left: 0.2cm;
+	padding-right: 0.2cm;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	border: 1px solid white;
 }
 
 .sheetID {
@@ -116,6 +156,13 @@ table.InvoiceDetails td{
 .Unit {
 	text-align: center;
 }
+.PCode {width: 11%;}
+.PDesc {width: 44%;}
+.PUn {width: 5%;}
+.PQuan {width: 10%;}
+.PriUnit {width: 10%;}
+.PTax {width: 5%;}
+.PPri {width: 15%;}
 
 table.Result th {
 	font-size: large;
