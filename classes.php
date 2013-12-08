@@ -379,11 +379,12 @@ class Line implements savable{
 		}
 		
 		if(strcmp($parameters[0][0],"InvoiceNo")!=0)throw new GeneralException(new Err_MissingParameter("InvoiceNo"));
-			
-		$query=constructUpdate("Line", $parameters, $db);
+		
+		
+		$query=constructUpdate("Line", $parameters, $db,2);
 		$result=$query->execute();
 		
-		$updatedLine=Line::getInstancesByFields($db, "")
+		$updatedLine=Line::getInstancesByFields($db, "");
 		
 		
 		
