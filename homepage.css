@@ -126,9 +126,9 @@ label
 }
 
 
-.update_div table, th
+.search_results_tb,th
 {
 	text-align:center;
-	border:30px solid black;
+	border:30px solid transparent;
 	color: white;
 }
