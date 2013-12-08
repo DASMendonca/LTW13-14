@@ -59,12 +59,11 @@ echo '
 				</div><br>
 					
 				<div id="PostalCode1">
-				<label class="to_ident" for="PostalCode1">Postal Code 1</label>
+				<label class="to_ident" for="PostalCode1">Postal Code</label>
 				<input type="text" name="PostalCode1" id="PostalCode1" placeholder="'.$_SESSION['customer']->getAddress()->PostalCode1.'" 
 						value="'.$_SESSION['customer']->getAddress()->PostalCode1.'">
-				</div><br>
+				</div>
 				<div id ="PostalCode2">
-				<label class="to_ident" for="PostalCode1">Postal Code 1</label>
 				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$_SESSION['customer']->getAddress()->PostalCode2.'" 
 						value="'.$_SESSION['customer']->getAddress()->PostalCode2.'">
 				</div><br>

@@ -44,9 +44,9 @@ if($invoices != NULL){
 			$_SESSION['customer']->Permission >1){
 		echo utf8_encode('<tr>
 				<td>' .$invoice->InvoiceNo .'</td>
-				<td>' .$invoice->InvoiceDate .'</td>
+				<td>' .$invoice->GenerationDate .'</td>
 				<td>' .$invoice->getCustomerId() .'</td>
-				<td>' .$invoice->CompanyName.'</td>
+				<td>' .$invoice->Customer->CompanyName.'</td>
 				<td>' .((int)$invoice->GrossTotal/100).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 					class="detail_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
