@@ -421,7 +421,7 @@ class Line implements savable{
 		$query->bindParam(6,$this->Product->ProductDescription);
 		$query->bindParam(7,$this->Product->UnitPrice);
 		$query->bindParam(8,$this->Product->UnitOfMeasure);
-		$query->bindParam(9,$this->Tax->TaxValue);
+		$query->bindParam(9,$this->Tax->TaxPercentage);
 		$query->bindParam(10,$this->Tax->TaxType);
 		$query->execute();
 		
@@ -742,7 +742,12 @@ class Customer implements savable,changable{
 		else if($this->BillingAddress==null || !isset($this->BillingAddress))return"BillingAddress";
 		return$this->BillingAddress->missingParameter();
 	}
-
+	static public function fromXML($xmlStr){
+		
+	}
+	public function toXML(){
+		
+	}
 
 }
 class Address implements savable{
