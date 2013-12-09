@@ -135,7 +135,7 @@ if(isset($_SESSION['customer']) && $_SESSION['customer']->Permission>1 ||
 			<option id="'.$the_other_state.'" value="'.$the_other_state.'" label="'.$the_other_statusDesc.'">'.$the_other_statusDesc.'</option>
 		</select>
 					
-		<input type="button" class="change_inv_state" id="'.$invoice->InvoiceNo.'" name="change_inv_state">
+		<input type="button" class="change_inv_state" id="'.$invoice->InvoiceNo.'" name="change_inv_state" value="save">
 		</form>
 	</div>'
 		;

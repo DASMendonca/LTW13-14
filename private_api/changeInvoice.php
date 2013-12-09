@@ -19,7 +19,7 @@ try {
 	$invoices= Invoice::getInstancesByFields($db, $queryArr);
 	$invoice = $invoices[0];
 	
-	$toUpdate= array(array("Status", $_REQUEST["state"]));
+	$toUpdate= array(array("InvoiceNo", $_REQUEST["invoiceNo"]), array("Status", $_REQUEST["state"]));
 	
 	$invoice->updateInDB($db, $toUpdate);
 		

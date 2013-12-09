@@ -244,9 +244,7 @@ function editionForm(json_obj, url){
 
 
 function updateInvoiceState(invoiceNo){
-	var select_field = $("form").children ("select");
-	select_field = select_field[0];
-	var value = $(select_field).find(":selected").val();
+	var value = $("select").find(":selected").val();
 	
 	var url= './private_api/changeInvoice.php';
 	

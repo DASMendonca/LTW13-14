@@ -22,8 +22,16 @@ else
   
   $str = utf8_encode(file_get_contents($_FILES["xml_portion"]["tmp_name"]));
   
-  Invoice::importSAFT_File($db, $str);
+  header("Location: onlineInvoiceSystem.php");
   
+  try{
+  Invoice::importSAFT_File($db, $str);
+  }
+  catch(GeneralException $e){
+  }
+  catch(PDOException $e){
+  	
+  }
   
  // $file = file_get_contents($_FILES["xml_portion"]["tmp_name"], true);
   
