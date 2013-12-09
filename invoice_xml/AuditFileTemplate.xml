@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AuditFile 
+xmlns="urn:OECD:StandardAuditFile-Tax:PT_1.03_01" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:spi="http://Empresa.pt/invoice1" 
+xmlns:saf="urn:OECD:StandardAuditFile-Tax:PT_1.03_01"
+xsi:schemaLocation="urn:OECD:StandardAuditFile-Tax:PT_1.03_01 http://serprest.pt/tmp/SAFTPT-1.03_01.xsd"
+>
+</AuditFile>

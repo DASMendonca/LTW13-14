@@ -286,12 +286,13 @@ class Invoice implements savable,changable{
 	}
 	public function toXML(){
 		$invoiceTemplate=simplexml_load_file("./invoice_xml/InvoiceTemplate.xml");
-		$invoiceTemplate->InvoiceNo=$this->InvoiceNo;
-		$invoiceTemplate->DocumentStatus->InvoiceStatusDate=$this->GenerationDate;
+		$invoiceTemplate->InvoiceNo="FT Fact/".$this->InvoiceNo;
+		$dates=explode(" ",$this->GenerationDate);
+		$invoiceTemplate->DocumentStatus->InvoiceStatusDate=$dates[0]."T".$dates[1]."+00:00";
 		$invoiceTemplate->DocumentStatus->SourceID=$this->Customer->CustomerID;
-		$invoiceTemplate->InvoiceDate=$this->GenerationDate;
+		$invoiceTemplate->InvoiceDate=$dates[0];
 		$invoiceTemplate->SourceID=$this->Customer->CustomerID;
-		$invoiceTemplate->SystemEntryDate=$this->GenerationDate;
+		$invoiceTemplate->SystemEntryDate=$dates[0]."T".$dates[1]."+00:00";
 		$invoiceTemplate->CustomerID=$this->Customer->CustomerID;
 		$NetTotal=0;
 		for($i=0;$i<count($this->Lines);$i++){
@@ -311,8 +312,11 @@ class Invoice implements savable,changable{
 	}
 	static public function fromXML($xmlString){
 		$invoiceXML=simplexml_load_string($xmlString);
-		$invoice=new Invoice((string)$invoiceXML->InvoiceNo, (string)$invoiceXML->InvoiceDate,(string) $invoiceXML->InvoiceDate, 1);
-		$invoice->GenerationDate=(string)$invoiceXML->SystemEntryDate;
+		$number=explode("/",(string)$invoiceXML->InvoiceNo)[1];
+		$invoice=new Invoice(number, (string)$invoiceXML->DocumentStatus->InvoiceStatusDate,(string) $invoiceXML->InvoiceDate, 1);
+		$dates=explode("T",(string)$invoiceXML->SystemEntryDate);
+		$hours=explode("+",$dates[1]);
+		$invoice->GenerationDate=$dates[0]." ".$hours[0];
 		$invoice->GrossTotal=((string) $invoiceXML->DocumentTotals->GrossTotal)*100;
 		
 		$lines=array();
@@ -378,14 +382,43 @@ class Invoice implements savable,changable{
 		}
 		for($i=0;$i<count($customers);$i++){
 			$TaxXMLElement=simplexml_load_string($taxes[$i]->toXML());
-			$masterFilesXML->TaxTable->TaxTableEntry[$i]=$TaxXMLElement;
+			simplexml_append($masterFilesXML->TaxTable,$TaxXMLElement);
+			
 				
 		}
+		
+		$sourceFilesXML=simplexml_load_file("./invoice_xml/SourceFilesTemplate.xml");
+		
+		$sourceFilesXML->SalesInvoices->NumberOfEntries=count($invoices);
+		$totalCredit=0;
+		for($i=0;$i<count($invoices);$i++){
+			$invoice=$invoices[$i];
+			$invoiceXMLElement=simplexml_load_string($invoice->toXML());
+			simplexml_insert_after($invoiceXMLElement, $sourceFilesXML->SalesInvoices->TotalCredit);
+			$totalCredit+=$invoice->GrossTotal;
+		}
+		$sourceFilesXML->SalesInvoices->TotalCredit=$totalCredit;
+		
+		$saftFileXML=simplexml_load_file("./invoice_xml/AuditFileTemplate.xml");
+		
+		simplexml_append($saftFileXML, $headerXML);
+		simplexml_append($saftFileXML, $masterFilesXML);
+		simplexml_append($saftFileXML, $sourceFilesXML);
+		
+		return $saftFileXML->asXML();
+		
 	
 	
 	
 	}
-
+	static public function importSAFT_File($xmlString){
+		
+		
+		$auditElement=simplexml_load_string($xmlString);
+		$products=$auditElement->MasterFiles;
+		
+		
+	}
 }
 class Line implements savable{
 	
@@ -743,10 +776,25 @@ class Customer implements savable,changable{
 		return$this->BillingAddress->missingParameter();
 	}
 	static public function fromXML($xmlStr){
-		
+		$xmlElement=simplexml_load_string($xmlStr);
+		$customer=new Customer((string) $xmlElement->CustomerID, (string) $xmlElement->CustomerTaxID,(string) $xmlElement->CompanyName, (string) $xmlElement->Email, 1234, null);
+		$postals=explode("-",(string)$xmlElement->BillingAddress->PostalCode);
+		$customer->BillingAddress=new Address((string) $xmlElement->BillingAddress->AddressDetail, (string) $xmlElement->BillingAddress->City, $postals[0], $postals[1], (string) $xmlElement->BillingAddress->Country);
+		return $customer;
 	}
 	public function toXML(){
+		$xmlElement=simplexml_load_file("./invoice_xml/CustomerTemplate.xml");
+		$xmlElement->CustomerID=$this->CustomerID;
+		$xmlElement->AccountID=$this->CustomerID;
+		$xmlElement->CompanyName=$this->CompanyName;
+		$xmlElement->BillingAddress->AddressDetail=$this->BillingAddress->AddressDetail;
+		$xmlElement->BillingAddress->City=$this->BillingAddress->City;
+		$xmlElement->BillingAddress->PostalCode="".$this->BillingAddress->PostalCode1."-".$this->BillingAddress->PostalCode2;
+		$xmlElement->BillingAddress->Country=$this->BillingAddress->Country;
+		$xmlElement->Email=$this->Email;
+		$xmlElement->CustomerTaxID=$this->CustomerTaxID;
 		
+		return $xmlElement->asXML();
 	}
 
 }
@@ -965,7 +1013,19 @@ class Product implements savable,changable{
 		
 		
 	}
-	
+	public function toXML(){
+		$xmlTemplate=simplexml_load_file("./invoice_xml/ProductTemplate.xml");
+		$xmlTemplate->ProductCode=$this->ProductCode;
+		$xmlTemplate->ProductDescription=$this->ProductDescription;
+		$xmlTemplate->ProductNumberCode=$this->ProductCode;
+		return $xmlTemplate->asXML();
+		
+	}
+	static public function fromXML($xmlString){
+		$xmlElement=simplexml_load_string($xmlString);
+		$product=new Product((string)$xmlElement->ProductCode, (string)$xmlElement->ProductDescription, null, null, null);
+		
+	}
 	
 	
 	
@@ -1311,5 +1371,10 @@ function addIfNotRepeated(&$array,$elementToAdd){
 	}
 	array_push($array, $elementToAdd);
 	
+}
+function simplexml_append(SimpleXMLElement $to, SimpleXMLElement $from) {
+	$toDom = dom_import_simplexml($to);
+	$fromDom = dom_import_simplexml($from);
+	$toDom->appendChild($toDom->ownerDocument->importNode($fromDom, true));
 }
 ?>

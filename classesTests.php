@@ -21,7 +21,7 @@ try{
 	$invoice=Invoice::getInstancesByFields($db,	array(array("InvoiceNo",array(1),"equal")))[0];
 	$invoices=array($invoice);
 	
-	Invoice::exportSAFT_File($invoices);
+	echo Invoice::exportSAFT_File($invoices);
 }
 catch(GeneralException $e){
 	echo $e;

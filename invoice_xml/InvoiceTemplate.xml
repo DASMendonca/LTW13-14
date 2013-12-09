@@ -1,7 +1,7 @@
 <Invoice>
 		<InvoiceNo></InvoiceNo>
 		<DocumentStatus>
-			<InvoicesStatus>N</InvoicesStatus>
+			<InvoiceStatus>N</InvoiceStatus>
 			<InvoiceStatusDate></InvoiceStatusDate><!--  data criação do documento -->
 			<SourceID></SourceID>
 			<SourceBilling>P</SourceBilling>
