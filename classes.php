@@ -208,11 +208,12 @@ class Invoice implements savable,changable{
 		
 		$query->execute();
 		
-
+		$invoiceNo=$db->lastInsertId();
 		
-		if(isset($this->lines) && $this->lines!=null){
-			for($i=0;$i<count(lines);$i++){
-				$lines[$i]->insertIntoDB($db);
+		if(isset($this->Lines) && $this->Lines!=null){
+			for($i=0;$i<count($this->Lines);$i++){
+				$this->Lines[$i]->InvoiceNo=$invoiceNo;
+				$this->Lines[$i]->insertIntoDB($db);
 			}
 		}
 		
@@ -313,12 +314,11 @@ class Invoice implements savable,changable{
 	static public function fromXML($xmlString){
 		$invoiceXML=simplexml_load_string($xmlString);
 		$number=explode("/",(string)$invoiceXML->InvoiceNo)[1];
-		$invoice=new Invoice(number, (string)$invoiceXML->DocumentStatus->InvoiceStatusDate,(string) $invoiceXML->InvoiceDate, 1);
+		$invoice=new Invoice(null, (string) $invoiceXML->InvoiceDate,(string) $invoiceXML->InvoiceDate, 1);
 		$dates=explode("T",(string)$invoiceXML->SystemEntryDate);
 		$hours=explode("+",$dates[1]);
 		$invoice->GenerationDate=$dates[0]." ".$hours[0];
 		$invoice->GrossTotal=((string) $invoiceXML->DocumentTotals->GrossTotal)*100;
-		
 		$lines=array();
 		for($i=0;$i<count($invoiceXML->Line);$i++){
 			$lineXML=$invoiceXML->Line[$i];
@@ -411,11 +411,97 @@ class Invoice implements savable,changable{
 	
 	
 	}
-	static public function importSAFT_File($xmlString){
+	static public function importSAFT_File($db,$xmlString){
 		
+		$productsToSave=array();
+		$invoicesToSave=array();
+		$customersToSave=array();
 		
 		$auditElement=simplexml_load_string($xmlString);
-		$products=$auditElement->MasterFiles;
+		$products=$auditElement->MasterFiles->Product;
+		$customers=$auditElement->MasterFiles->Customer;
+		$taxes=$auditElement->MasterFiles->TaxTable->TaxTableEntry;
+		$invoices=$auditElement->SourceDocuments->SalesInvoices->Invoice;
+		
+		if(is_array($products)){
+			for($i=0;$i<count($products);$i++){
+				$product=Product::fromXML($products[$i]->asXML());
+				array_push($productsToSave, $product);
+				
+			}
+		}
+		else{
+			$product=Product::fromXML($products->asXML());
+			array_push($productsToSave, $product);
+		}
+		
+		if(is_array($customers)){
+			for($i=0;$i<count($customers);$i++){
+				$customer=Customer::fromXML($customers[$i]->asXML());
+				array_push($customersToSave, $customer);
+				
+			}
+		}
+		else{
+			$customer=Customer::fromXML($customers->asXML());
+			array_push($customersToSave, $customer);
+		}
+		
+		if(is_array($taxes)){
+			for($i=0;$i<count($taxes);$i++){
+				$tax=Tax::fromXML($taxes[$i]->asXML());
+				$tax->insertIntoDB($db);
+			}
+		}
+		else{
+			$tax=Tax::fromXML($taxes->asXML());
+			$tax->insertIntoDB($db);
+		}
+		
+		
+		if(is_array($invoices)){
+			
+			for($i=0;$i<count($invoices);$i++){
+				$invoice=Invoice::fromXML($invoices[$i]->asXML());
+				array_push($invoicesToSave, $invoice);
+			}
+			
+		}
+		else{
+			$invoice=Invoice::fromXML($invoices->asXML());
+			array_push($invoicesToSave, $invoice);
+		}
+		
+		
+		for($i=0;$i<count($invoicesToSave);$i++){
+			$customerID=$invoicesToSave[$i]->Customer->CustomerID;
+			for($c=0;$c<count($customersToSave);$c++){
+				if(strcmp($customersToSave[$c]->CustomerID,$customerID)==0){
+					$invoicesToSave[$i]->Customer=$customersToSave[$c];
+				}
+			}
+		}
+		
+		
+		
+		for($i=0;$i<count($productsToSave);$i++){
+			$productCode=$productsToSave[$i]->ProductCode;
+			for($f=0;$f<count($invoicesToSave);$f++){
+				for($l=0;$l<count($invoicesToSave[$f]->Lines);$l++){
+					if(strcmp($productCode, $invoicesToSave[$f]->Lines[$l]->Product->ProductCode)==0){
+						$productsToSave[$i]=$invoicesToSave[$f]->Lines[$l]->Product;
+					}
+				}
+			}
+			
+		}
+		
+		
+		for($a=0;$a<count($customersToSave);$a++)$customersToSave[$a]->insertIntoDB($db);
+		for($a=0;$a<count($productsToSave);$a++)$productsToSave[$a]->insertIntoDB($db);
+		for($a=0;$a<count($invoicesToSave);$a++)$invoicesToSave[$a]->insertIntoDB($db);
+		
+		
 		
 		
 	}
@@ -1025,6 +1111,7 @@ class Product implements savable,changable{
 		$xmlElement=simplexml_load_string($xmlString);
 		$product=new Product((string)$xmlElement->ProductCode, (string)$xmlElement->ProductDescription, null, null, null);
 		
+		return $product;
 	}
 	
 	
@@ -1107,7 +1194,7 @@ class Tax implements savable{
 		
 		$missingParam=$this->missingParameter();
 		if($missingParam!=null)throw new GeneralException(new Err_MissingParameter($missingParam));
-		$stmt="Insert into Tax (TaxValue,Description) Values(?,?);";
+		$stmt="Insert into Tax (TaxValue,TaxType) Values(?,?);";
 		$query=$db->prepare($stmt);
 		$query->bindParam(1,$this->TaxPercentage);
 		$query->bindParam(2,$this->TaxType);
@@ -1167,6 +1254,12 @@ class Tax implements savable{
 	public function getTaxID(){
 		return $this->TaxID;
 	}
+	static public function fromXML($xmlStr){
+		$xmlElement=simplexml_load_string($xmlStr);
+		$tax=new Tax(null,(string) $xmlElement->TaxPercentage, (string) $xmlElement->Description);
+		return $tax;
+	}
+
 }
 
 

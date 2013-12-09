@@ -21,7 +21,10 @@ try{
 	$invoice=Invoice::getInstancesByFields($db,	array(array("InvoiceNo",array(1),"equal")))[0];
 	$invoices=array($invoice);
 	
-	echo Invoice::exportSAFT_File($invoices);
+	$profXML=simplexml_load_file("./SAFT-PT_XML_PROF.xml");
+	
+	Invoice::importSAFT_File($db, $profXML->asXML());
+	
 }
 catch(GeneralException $e){
 	echo $e;
