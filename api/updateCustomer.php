@@ -56,10 +56,14 @@ try {
 	if(isset($customerPassedAsArray["CustomerTaxID"]))array_push($parameters,array("CustomerTaxID",$customerPassedAsArray["CustomerTaxID"]));
 	if(isset($customerPassedAsArray["Email"]))array_push($parameters,array("Email",$customerPassedAsArray["Email"]));
 	if(isset($customerPassedAsArray["Password"]))array_push($parameters,array("Password",$customerPassedAsArray["Password"]));
+	if(!isset($customerPassedAsArray["Password"]))array_push($parameters,array("Password","1234"));
 	if(isset($customerPassedAsArray["BillingAddress"])){
 		if(isset($addressAsArray["AddressDetail"]))array_push($parameters,array("AddressDetail",$addressAsArray["AddressDetail"]));
-		if(isset($addressAsArray["PostalCode1"]))array_push($parameters,array("PostalCode1",$addressAsArray["PostalCode1"]));
-		if(isset($addressAsArray["PostalCode2"]))array_push($parameters,array("PostalCode2",$addressAsArray["PostalCode2"]));
+		if(isset($addressAsArray["PostalCode"])){
+			$postalCode = explode('-', $addressAsArray["PostalCode"]);
+			array_push($parameters,array("PostalCode1",$postalCode[0]));
+			array_push($parameters,array("PostalCode2",$postalCode[1]));
+		}
 		if(isset($addressAsArray["City"]))array_push($parameters,array("City",$addressAsArray["City"]));
 		if(isset($addressAsArray["Country"]))array_push($parameters,array("Country",$addressAsArray["Country"]));	
 	}

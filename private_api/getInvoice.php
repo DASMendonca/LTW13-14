@@ -6,7 +6,7 @@ header('Content-type: text/html; charset=UTF-8');
 ?>
 
 <fieldset>
-	<legend></legend><h2>Search Results</h2></legend>
+	<legend><h2>Search Results</h2></legend>
 	
 <?php
 

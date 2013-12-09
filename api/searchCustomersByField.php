@@ -44,7 +44,7 @@ try {
 		$currentBillingPC2 = $customers[$i]->BillingAddress->PostalCode2;
 		
 		$currentBillingPC = $currentBillingPC1;
-		$currentBillingPC .= ' - ';
+		$currentBillingPC .= '-';
 		$currentBillingPC .= $currentBillingPC2;
 		
 		$currentBillingAddress = '{"AddressDetail" : "'.$currentBillingAddressA.'",
@@ -57,7 +57,7 @@ try {
 		$stringFinal .= '{"CustomerID" : "'.$currentCustomerID.'",
 						  "CustomerTaxID" : "'.$currentCustomerTaxID.'",
 						  "CompanyName" : "'.$currentCustomerName.'",
-						  "BillingAddress" : "'.$currentBillingAddress.'",
+						  "BillingAddress" : '.$currentBillingAddress.',
 						  "Email" : "'.$currentCustomerEmail.'"},';
 	}
 	
@@ -71,7 +71,7 @@ try {
 	$currentBillingPC2 = $customers[$i]->BillingAddress->PostalCode2;
 	
 	$currentBillingPC = $currentBillingPC1;
-	$currentBillingPC .= ' - ';
+	$currentBillingPC .= '-';
 	$currentBillingPC .= $currentBillingPC2;
 	
 	$currentBillingAddress = '{"AddressDetail" : "'.$currentBillingAddressA.'",
@@ -84,12 +84,13 @@ try {
 	$stringFinal .= '{"CustomerID" : "'.$currentCustomerID.'",
 						  "CustomerTaxID" : "'.$currentCustomerTaxID.'",
 						  "CompanyName" : "'.$currentCustomerName.'",
-						  "BillingAddress" : "'.$currentBillingAddress.'",
-						  "Email" : "'.$currentCustomerEmail.'"},';
+						  "BillingAddress" : '.$currentBillingAddress.',
+						  "Email" : "'.$currentCustomerEmail.'"}';
 	
-	$stringFinal=']';
+	$stringFinal .=']';
 	
-	echo json_encode($customers);
+	echo $stringFinal;
+	
 } catch (GeneralException $e) {
 	echo json_encode($e);
 }catch (PDOException $e) {

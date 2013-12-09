@@ -45,6 +45,7 @@ try {
 	if(isset($productPassedAsArray["UnitPrice"]))array_push($parameters,array("UnitPrice",$productPassedAsArray["UnitPrice"]));
 	if(isset($productPassedAsArray["UnitOfMeasure"]))array_push($parameters,array("UnitOfMeasure",$productPassedAsArray["UnitOfMeasure"]));
 	if(isset($productPassedAsArray["ProductTypeID"]))array_push($parameters,array("ProductTypeID",$productPassedAsArray["ProductTypeID"]));
+	if(!isset($productPassedAsArray["ProductTypeID"]))array_push($parameters,array("ProductTypeID","1"));
 	
 
 
