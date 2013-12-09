@@ -19,7 +19,7 @@ $invoices = Invoice::getInstancesByFields($db, $params);
 $invoice= $invoices[0];
 
 
-if(isset($_SESSION['customer']) || $_SESSION['customer']->Permission>1 &&
+if(isset($_SESSION['customer']) && $_SESSION['customer']->Permission>1 ||
 								 $_SESSION['customer']->CustomerID == $invoice->getCustomerId()){ 
 	
 
