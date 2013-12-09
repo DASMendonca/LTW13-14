@@ -1,16 +1,17 @@
 <?php
 
 include '../classes.php';
-
+session_start();
 header('Content-type: text/html; charset=UTF-8');
 ?>
 
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src='search.js'></script>
+
 <fieldset>
 	<legend></legend><h2>Search Results</h2></legend>
 	
 <?php
+
+
 
 $db = new PDO('sqlite:../database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -18,6 +19,7 @@ $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
 try {
+	//if(!isset($_SESSION["customer"])) throw new GeneralException(new Err_Autentication());
 	if(!isset($_GET['params']))
 		throw new GeneralException(new Err_MissingParameter("params"));
 	
@@ -40,7 +42,7 @@ try {
 
 if($products != NULL){
 	?>
-	<table id="search_results_tb">
+	<table class="search_results_tb">
 		<tr>
 		<th>Product Code</th><th>Product Description</th><th>Measure Unit</th><th>Price p/ Unit</th>
 		</tr>
@@ -50,10 +52,21 @@ if($products != NULL){
 				<td>' .$product->ProductCode .'</td>
 				<td>' .$product->ProductDescription .'</td>
 				<td>' .$product->UnitOfMeasure .'</td>
-				<td>' .($product->UnitPrice / 100).' &euro; </td>');?>
+				<td>' .($product->UnitPrice).' &euro; </td>');?>
 				<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
-					class="s_cart_img" id="<?php echo $product->ProductCode;?>" /></td>
-				<td><img src="./pictures/shopping_cart.png" width="16" height="16" border="0" alt="add To Cart"/></td>
+					class="detail_img" id="<?php echo $product->ProductCode;?>" /></td>
+					<?php
+				if(isset($_SESSION['customer'])){
+					echo '
+					<td><img src="./pictures/shopping_cart.png" width="16" height="16" border="0" alt="add To Cart"
+					class="to_cart" id="'.$product->ProductCode.'"/></td>';
+					if($_SESSION['customer']->Permission>1){
+					echo '
+					<td><img src="./pictures/edit.png" width="16" height="16" border="0" alt="Edit Product"
+						class="edit_img" id="'.$product->ProductCode.'"/></td>';	
+					}
+				}?>
+			
 			<tr>
 			<?php	
 	}

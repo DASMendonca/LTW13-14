@@ -1,0 +1,17 @@
+<Line>
+	<LineNumber></LineNumber>
+	<ProductCode></ProductCode>
+	<ProductDescription></ProductDescription>
+	<Quantity></Quantity>
+	<UnitOfMeasure></UnitOfMeasure>
+	<UnitPrice></UnitPrice>
+	<TaxPointDate></TaxPointDate>
+	<Description></Description>
+	<CreditAmount></CreditAmount>
+	<Tax>
+		<TaxType></TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage></TaxPercentage>
+	</Tax>
+</Line>

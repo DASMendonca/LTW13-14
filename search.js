@@ -1,16 +1,18 @@
 $(document).ready(function() {
 // inicio uma requisi�‹o
-	$("#search_button").click(
+	$("body").on('click', '#search_button', 
 			function(){
 				searchByFields();	
+				
 			}
 	);
-	$('#search_form input').keydown(function(e) {
-	    if (e.keyCode == 13) {
-	    	$("#search_button").click();
-	    }
-	});
-	$(".s_cart_img").click(
+	$("body").on('keydown','#search_form input',
+			function(e) {
+	    		if (e.keyCode == 13) {
+	    			$("#search_button").click();
+	    		}
+			});
+	$("body").on("click", ".detail_img",
 			function(){
 				detailedAction(jQuery(this).attr("id"));
 			});
@@ -20,6 +22,9 @@ $(document).ready(function() {
 function detailedAction(id){
 	var url = $("#search_form").attr("name");
 	var column="";
+	var check = $("#search_form").length;
+	if(check == 0)
+		url="Invoice";
 	var parameter = new Array();
 	if(url=="Products") {url= "./DetailProduct.php?params="; column="ProductCode";}
 	else if(url=="Invoice"){ url="./DetailInvoice.php?params="; column="InvoiceNo";}
@@ -36,10 +41,8 @@ function detailedAction(id){
 	var win=window.open(url, '_blank');
 	win.focus();
 	//window.location.href = url;
-	
-	
-	
 }
+
 
 function searchByFields(){
 	var params = new Array();

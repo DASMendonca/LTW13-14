@@ -1,11 +1,10 @@
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src='search.js'></script>
+
 		
 		
 		<form id="search_form" class="bySearch" name="Products" method="GET">
 		<h1>Product search:</h1>
 			<div id="ProductCode">
-			 Product Code: 
+			<label> Product Code:</label>
 				 <select onchange="createExtraFields(0)">
 					<option selected="selected">Is</option>
 					<option class="extrafield">Between</option>
@@ -15,11 +14,11 @@
 					name="ProductCode" placeholder="product code"> <br>
 			</div>
 			<div id="ProductDescription">
-				Product Description: <input type="text" name="ProductDescription"
+				<label>Product Description:</label> <input type="text" name="ProductDescription"
 					placeholder="name or description"> <br>
 			</div>
 			<div id="UnitPrice">
-			Price per unit: 
+			<label>Price per unit:</label>
 				<select onchange="createExtraFields(1)">
 					<option selected="selected">Is</option>
 					<option class="extrafield">Between</option>

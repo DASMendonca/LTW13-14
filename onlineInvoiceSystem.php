@@ -1,4 +1,5 @@
 <?php 
+	include 'classes.php';
 	session_start(); 
 ?>
 
@@ -14,6 +15,9 @@
 </script>
 <script type="text/javascript" src='login.js'></script>
 <script type="text/javascript" src='search.js'></script>
+<script type="text/javascript" src='edition.js'></script>
+<script type="text/javascript" src='invoiceEdit.js'></script>
+<script type="text/javascript" src='insertions.js'></script>
 </head>
 
 <div id = "home_page">
@@ -31,13 +35,22 @@
 							<input type="button" value="Sign In" id="SignInButton">
 						</form>
 					</li>
+					<li class="top_lis" id="li_signup">Signup</li>
 						<?php
 						} echo '<li id="li_prod" class="top_lis">Products</li>';
 					?>
 					<?php if(isset($_SESSION['customer']) ){
 					?>
-					<li class="top_lis" id="li_invoice">Invoices</li>
-					<li class="top_lis" id="li_customer">Clients</li>
+					<li class="top_lis" id="li_myInvoices" name="myInvoices">My Invoices</li>
+					<li class="top_lis" id="li_myProfile" name="myProfile">My Profile</li>
+					<?php 
+						if (($_SESSION['customer']->Permission)>1) {
+							echo '	<li class="top_lis" id="li_invoice">Search Invoices</li>
+									<li class="top_lis" id="li_customer">Search Clients</li>
+									<li class="top_lis" id="li_import_xml">Import Xml</li>
+									<li class="top_lis" id="li_add_product">Add product</li>';
+						}
+					?>
 					<li> <form action="logout.php" method="GET" id="logForm">
 							<input type="submit" name="logout" value="logout" id="sair">
 						</form>
@@ -51,7 +64,7 @@
 			</div>
 			
 			<div id="mainDiv">
-			Aqui vai ser usado ajax.
+			
 			</div>
 		
 	</body>

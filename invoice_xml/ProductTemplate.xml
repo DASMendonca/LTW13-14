@@ -1,0 +1,6 @@
+<Product>
+	<ProductType>P</ProductType>
+	<ProductCode></ProductCode>
+	<ProductDescription></ProductDescription>
+	<ProductNumberCode></ProductNumberCode> <!-- Same as ProductCode -->
+</Product>

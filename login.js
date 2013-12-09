@@ -11,7 +11,7 @@ $(document).ready(function() {
 	    	$("#SignInButton").click();
 	    }
 	});
-	$('.top_lis').click(function(){
+	$("body").on('click', '.top_lis',function(){
 			fetchPages($(this).attr("id"));
 	});
 	
@@ -22,6 +22,11 @@ function fetchPages(top_lis_id){
 	if(top_lis_id == "li_prod")	page_request= "searchProduct.php";
 	else if(top_lis_id == "li_invoice") page_request="searchInvoice.php";
 	else if(top_lis_id == "li_customer") page_request="searchCustomer.php";
+	else if(top_lis_id == "li_myProfile") page_request="myAccount.php";
+	else if(top_lis_id == "li_signup") page_request="signupform.php";
+	else if(top_lis_id == "li_add_product") page_request= "createProduct.php";
+	else if(top_lis_id == "li_myInvoices") page_request="myInvoices.php";
+	else if(top_lis_id == "li_import_xml") page_request= "xmlUploadForm.php";
 	else
 		return;
 	
@@ -94,13 +99,4 @@ function askIfLoginIsOk(){
             }
         }
     });//termina o ajax	
-}
-
-
-
-function loggedIn(){	
-	$(document).ready(function() {
-		// inicio uma requisi�‹o
-		$(".logged").css('visibility', 'visible');
-		});
 }

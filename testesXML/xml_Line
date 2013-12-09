@@ -1,0 +1,18 @@
+ <Line>
+          <LineNumber>1</LineNumber>
+          <ProductCode>160</ProductCode>
+          <ProductDescription>Reparação de PC</ProductDescription>
+          <Quantity>1</Quantity>
+          <UnitOfMeasure>Unidade</UnitOfMeasure>
+          <UnitPrice>335</UnitPrice>
+          <TaxPointDate>2013-10-18</TaxPointDate>
+          <Description>Madeita de pinho laminada</Description>
+          <CreditAmount>335</CreditAmount>
+          <Tax>
+            <TaxType>IVA</TaxType>
+            <TaxCountryRegion>PT</TaxCountryRegion>
+            <TaxCode>NOR</TaxCode>
+            <TaxPercentage>23.00</TaxPercentage>
+          </Tax>
+          <SettlementAmount>0</SettlementAmount>
+</Line>

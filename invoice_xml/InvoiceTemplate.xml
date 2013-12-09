@@ -1,0 +1,26 @@
+<Invoice>
+		<InvoiceNo></InvoiceNo>
+		<DocumentStatus>
+			<InvoiceStatus>N</InvoiceStatus>
+			<InvoiceStatusDate></InvoiceStatusDate><!--  data criação do documento -->
+			<SourceID></SourceID>
+			<SourceBilling>P</SourceBilling>
+		</DocumentStatus>
+		<Hash>0</Hash>
+		<InvoiceDate></InvoiceDate><!-- data criação do documento -->
+		<InvoiceType>FT</InvoiceType>
+		<SpecialRegimes>
+			<SelfBillingIndicator>0</SelfBillingIndicator>
+	        <CashVATSchemeIndicator>0</CashVATSchemeIndicator>
+	        <ThirdPartiesBillingIndicator>0</ThirdPartiesBillingIndicator>
+		</SpecialRegimes>
+		<SourceID></SourceID><!--  Same as Customer -->
+		<SystemEntryDate></SystemEntryDate>
+		<CustomerID></CustomerID><!-- Same as in customer -->
+		<DocumentTotals>
+			<TaxPayable></TaxPayable>
+			<NetTotal></NetTotal>
+			<GrossTotal></GrossTotal>
+		</DocumentTotals>
+		
+</Invoice>

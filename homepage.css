@@ -1,8 +1,4 @@
 
-
-html {
-}
-
 body{
 	background-image:url('fundo12.png');
 	background-size: 80%;
@@ -14,7 +10,7 @@ body{
 	background-position:center center;
 	background-color:#000;
 	margin-left: auto;
-    margin-right: auto;
+	margin-right: auto;
 	background-color:black;
 	width:70%;
 }
@@ -30,17 +26,18 @@ form#logform input
 }
 ul
 {
-list-style-type:none;
-margin:0;
-padding:0;
+	list-style-type:none;
+	margin:0;
+	padding:0;
 }
 li
 {
-display:inline;
-margin-left: 1%;
+	display:inline;
+	margin-left: 1%;
 }
 
-#topmenu{
+#topmenu
+{
 	position:absolute;
 	width:100%;
 	top:0;
@@ -60,7 +57,7 @@ margin-left: 1%;
 	font-weight: 900;
 	color: white;
 	width:600px;
-		
+
 }
 
 input[id="search_button"]
@@ -69,6 +66,28 @@ input[id="search_button"]
 	margin-left: 150px;
 	margin-top: 20px;
 }
+
+input[id="search_button"]
+{
+	width: 100px;
+	margin-left: 150px;
+	margin-top: 20px;
+}
+
+
+input[id="save_edit"]
+{
+	width: 100px;
+	margin-left: 265px;
+	margin-top: 20px;
+}
+
+
+#PostalCode1
+{
+	float: left;
+}
+
 
 #search_results_div
 {
@@ -81,10 +100,35 @@ input[id="search_button"]
 }
 
 
-table,th
+
+td:nth-child(2)
 {
-border:20px solid black;
-margin-left: 80px;
-text-align:center;
+	text-align: left;
+	padding-left: 20px;
 }
 
+h2
+{
+	margin-top: 15%;
+	margin-left: 5%;
+	
+	color: white;
+	width:200px;
+}
+
+label 
+{
+	color: white;
+	font-weight: bold;
+	display: block;
+	width: 150px;
+	float: left;
+}
+
+
+.search_results_tb,th
+{
+	text-align:center;
+	border:30px solid transparent;
+	color: white;
+}
