@@ -61,10 +61,31 @@ try {
 		$Lines = Line::getInstancesByFields($db, array(array("InvoiceNo",array($invoice->InvoiceNo),"equal"),array("LineNo",array($line["LineNo"])),"equal"));
 		if (count($Lines)==0) {
 			$lineToInsert= new Line($invoice->InvoiceNo, $line["LineNo"], $line["Quantity"], $line["LineDate"]);
-			$lineToInsert->Product=new Product($line["ProductCode"], $line["ProductDe"], $price, $unit, $typeID);
-			$lineToInsert->Tax=new Tax(null, $value, $description);
+			
+			$productQueryArr = array( array("ProductCode", array($line["ProductCode"]), "equal"));
+			
+			$product = Product::getInstancesByFields($db, $productQueryArr);
+			$product= $product[0];
+			
+			$lineToInsert->Product=new Product($product->ProductCode, $product->ProductDescription, $product->UnitPrice, $product->UnitOfMeasure, $product->ProductTypeID);
+			
+			$productTypeQueryArr= array(array("ProductTypeID", array($product->ProductTypeID), "equal"));
+			
+			$taxId = ProductType::getInstancesByFields($db, $productTypeQueryArr);
+			$taxId= $taxId[0]->taxID;
+			
+			$lineToInsert->Tax=new Tax($taxId->TaxID, $taxId->TaxValue, $taxId->TaxType);
 			$lineToInsert->calculateCreditAmount();
 			$lineToInsert->insertIntoDB($db);
+		} else {
+			
+			if(isset($Lines["ProductCode"])){
+				array_push($parameters,array("ProductCode",$Lines["ProductCode"]));
+			}
+			if(isset($Lines["Quantity"]))array_push($parameters,array("Quantity",$Lines["Quantity"]));
+			
+			
+			
 		}
 	}
 	
