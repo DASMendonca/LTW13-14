@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AuditFile xmlns="urn:OECD:StandardAuditFile-Tax:PT_1.03_01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spi="http://Empresa.pt/invoice1" xmlns:saf="urn:OECD:StandardAuditFile-Tax:PT_1.03_01" xsi:schemaLocation="urn:OECD:StandardAuditFile-Tax:PT_1.03_01 http://serprest.pt/tmp/SAFTPT-1.03_01.xsd">
+<Header>
+	<AuditFileVersion>1.03_01</AuditFileVersion>
+	<CompanyID>240022570</CompanyID><!-- Qualquer nif da -->
+	<TaxRegistrationNumber>240022570</TaxRegistrationNumber>
+	<TaxAccountingBasis>F</TaxAccountingBasis>
+	<CompanyName>ACompany</CompanyName>
+	<CompanyAddress>
+		<AddressDetail>Rua Dr. Roberto Frias,127</AddressDetail>
+		<City>Porto</City>
+		<PostalCode>4200-465</PostalCode>
+		<Region>Porto</Region>
+		<Country>PT</Country>
+	</CompanyAddress>
+	<FiscalYear>2013</FiscalYear><!-- Start Date's Year -->
+	<StartDate>2013-12-12</StartDate>
+	<EndDate>2013-12-12</EndDate>
+	<CurrencyCode>EUR</CurrencyCode>
+	<DateCreated>2013-12-09</DateCreated>
+	<TaxEntity>Global</TaxEntity>
+	<ProductCompanyTaxID>240022570</ProductCompanyTaxID> <!-- Software company is the same thar is emiting invoices right? -->
+	<SoftwareCertificateNumber>0</SoftwareCertificateNumber>
+	<ProductID>ACompany/AwsomeInvoice</ProductID>
+	<ProductVersion>0.9</ProductVersion>
+</Header><MasterFiles>
+	<Customer>
+	<CustomerID>3</CustomerID>
+	<AccountID>3</AccountID>
+	<CustomerTaxID>213654873</CustomerTaxID>
+	<CompanyName>Francisco</CompanyName>
+	<BillingAddress>
+		<AddressDetail>Rua do Lado Direiro</AddressDetail>
+		<City>Matosinhos</City>
+		<PostalCode>4100-345</PostalCode>
+		<Country>PT</Country>
+	</BillingAddress>
+	<Email>ois2@ois.com</Email>
+	<SelfBillingIndicator>0</SelfBillingIndicator>
+</Customer><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>29</ProductCode>
+	<ProductDescription>Tijolo 30x20x15</ProductDescription>
+	<ProductNumberCode>29</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>11</ProductCode>
+	<ProductDescription>Cimento Normal Saco 35kg</ProductDescription>
+	<ProductNumberCode>11</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>110</ProductCode>
+	<ProductDescription>Areia 1</ProductDescription>
+	<ProductNumberCode>110</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>2</ProductCode>
+	<ProductDescription>Argamassa de Revest. ArgTec. - Saco 30kg</ProductDescription>
+	<ProductNumberCode>2</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>105</ProductCode>
+	<ProductDescription>Tinta Plast. Ext. Lisacryl (Cor) Diss. 5L - 01.19</ProductDescription>
+	<ProductNumberCode>105</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>107</ProductCode>
+	<ProductDescription>Bitumen Primer</ProductDescription>
+	<ProductNumberCode>107</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>104</ProductCode>
+	<ProductDescription>Tampa San. Fund 50x50x2.5 cm</ProductDescription>
+	<ProductNumberCode>104</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>118</ProductCode>
+	<ProductDescription>Cinca 20x20 5500 Br Mate 2a</ProductDescription>
+	<ProductNumberCode>118</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>21</ProductCode>
+	<ProductDescription>Reboco Ext. Branco 30kg Diera</ProductDescription>
+	<ProductNumberCode>21</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>127</ProductCode>
+	<ProductDescription>Rede Fibra Vidro 165gr Lifitex Pro</ProductDescription>
+	<ProductNumberCode>127</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>96</ProductCode>
+	<ProductDescription>Plástico Protector  p/Pintar 4x5 M-6215</ProductDescription>
+	<ProductNumberCode>96</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>113</ProductCode>
+	<ProductDescription>Mistura A</ProductDescription>
+	<ProductNumberCode>113</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><TaxTable>
+	<TaxTableEntry>
+	<TaxType>IVA</TaxType>
+	<TaxCountryRegion>PT</TaxCountryRegion>
+	<TaxCode>NOR</TaxCode>
+	<Description>IVA</Description>
+	<TaxPercentage>23</TaxPercentage>
+</TaxTableEntry></TaxTable>
+</MasterFiles><SourceDocuments>
+	<SalesInvoices>
+		<NumberOfEntries>1</NumberOfEntries>
+		<TotalDebit>0.00</TotalDebit>
+		<TotalCredit>62618.07</TotalCredit><Invoice>
+		<InvoiceNo>FT Fact/1</InvoiceNo>
+		<DocumentStatus>
+			<InvoiceStatus>N</InvoiceStatus>
+			<InvoiceStatusDate>2013-12-07T18:30:09+00:00</InvoiceStatusDate><!--  data criação do documento -->
+			<SourceID>3</SourceID>
+			<SourceBilling>P</SourceBilling>
+		</DocumentStatus>
+		<Hash>0</Hash>
+		<InvoiceDate>2013-12-07</InvoiceDate><!-- data criação do documento -->
+		<InvoiceType>FT</InvoiceType>
+		<SpecialRegimes>
+			<SelfBillingIndicator>0</SelfBillingIndicator>
+	        <CashVATSchemeIndicator>0</CashVATSchemeIndicator>
+	        <ThirdPartiesBillingIndicator>0</ThirdPartiesBillingIndicator>
+		</SpecialRegimes>
+		<SourceID>3</SourceID><!--  Same as Customer -->
+		<SystemEntryDate>2013</SystemEntryDate>
+		<CustomerID>3</CustomerID><Line>
+	<LineNumber>1</LineNumber>
+	<ProductCode>29</ProductCode>
+	<ProductDescription>Tijolo 30x20x15</ProductDescription>
+	<Quantity>100</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>17</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Tijolo 30x20x15</Description>
+	<CreditAmount>1700</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>2</LineNumber>
+	<ProductCode>11</ProductCode>
+	<ProductDescription>Cimento Normal Saco 35kg</ProductDescription>
+	<Quantity>10</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>317</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Cimento Normal Saco 35kg</Description>
+	<CreditAmount>3170</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>3</LineNumber>
+	<ProductCode>110</ProductCode>
+	<ProductDescription>Areia 1</ProductDescription>
+	<Quantity>1</Quantity>
+	<UnitOfMeasure>m3</UnitOfMeasure>
+	<UnitPrice>1500</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Areia 1</Description>
+	<CreditAmount>1500</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>4</LineNumber>
+	<ProductCode>2</ProductCode>
+	<ProductDescription>Argamassa de Revest. ArgTec. - Saco 30kg</ProductDescription>
+	<Quantity>15</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>1262</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Argamassa de Revest. ArgTec. - Saco 30kg</Description>
+	<CreditAmount>18930</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>5</LineNumber>
+	<ProductCode>105</ProductCode>
+	<ProductDescription>Tinta Plast. Ext. Lisacryl (Cor) Diss. 5L - 01.19</ProductDescription>
+	<Quantity>4</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>2244</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Tinta Plast. Ext. Lisacryl (Cor) Diss. 5L - 01.19</Description>
+	<CreditAmount>8976</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>6</LineNumber>
+	<ProductCode>107</ProductCode>
+	<ProductDescription>Bitumen Primer</ProductDescription>
+	<Quantity>10</Quantity>
+	<UnitOfMeasure>l</UnitOfMeasure>
+	<UnitPrice>185</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Bitumen Primer</Description>
+	<CreditAmount>1850</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>7</LineNumber>
+	<ProductCode>104</ProductCode>
+	<ProductDescription>Tampa San. Fund 50x50x2.5 cm</ProductDescription>
+	<Quantity>1</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>3038</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Tampa San. Fund 50x50x2.5 cm</Description>
+	<CreditAmount>3038</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>8</LineNumber>
+	<ProductCode>118</ProductCode>
+	<ProductDescription>Cinca 20x20 5500 Br Mate 2a</ProductDescription>
+	<Quantity>10</Quantity>
+	<UnitOfMeasure>m2</UnitOfMeasure>
+	<UnitPrice>490</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Cinca 20x20 5500 Br Mate 2a</Description>
+	<CreditAmount>4900</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>9</LineNumber>
+	<ProductCode>21</ProductCode>
+	<ProductDescription>Reboco Ext. Branco 30kg Diera</ProductDescription>
+	<Quantity>15</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>279</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Reboco Ext. Branco 30kg Diera</Description>
+	<CreditAmount>4185</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>10</LineNumber>
+	<ProductCode>127</ProductCode>
+	<ProductDescription>Rede Fibra Vidro 165gr Lifitex Pro</ProductDescription>
+	<Quantity>20</Quantity>
+	<UnitOfMeasure>m2</UnitOfMeasure>
+	<UnitPrice>55</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Rede Fibra Vidro 165gr Lifitex Pro</Description>
+	<CreditAmount>1100</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>11</LineNumber>
+	<ProductCode>96</ProductCode>
+	<ProductDescription>Plástico Protector  p/Pintar 4x5 M-6215</ProductDescription>
+	<Quantity>4</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>65</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Plástico Protector  p/Pintar 4x5 M-6215</Description>
+	<CreditAmount>260</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><Line>
+	<LineNumber>12</LineNumber>
+	<ProductCode>113</ProductCode>
+	<ProductDescription>Mistura A</ProductDescription>
+	<Quantity>1</Quantity>
+	<UnitOfMeasure>m3</UnitOfMeasure>
+	<UnitPrice>1300</UnitPrice>
+	<TaxPointDate>2013-12-12</TaxPointDate>
+	<Description>Mistura A</Description>
+	<CreditAmount>1300</CreditAmount>
+	<Tax>
+		<TaxType>IVA</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><!-- Same as in customer -->
+		<DocumentTotals>
+			<TaxPayable>117.0907</TaxPayable>
+			<NetTotal>509.09</NetTotal>
+			<GrossTotal>626.1807</GrossTotal>
+		</DocumentTotals>
+		
+</Invoice>
+
+	</SalesInvoices>
+</SourceDocuments></AuditFile>

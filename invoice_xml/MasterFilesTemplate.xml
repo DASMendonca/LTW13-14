@@ -1,32 +1,4 @@
 <MasterFiles>
-	<Customer>
-		<CustomerID></CustomerID>
-		<AccountID></AccountID>
-		<CustomerTaxID></CustomerTaxID>
-		<CompanyName></CompanyName>
-		<BillingAddress>
-			<AddressDetail></AddressDetail>
-			<City></City>
-			<PostalCode></PostalCode>
-			<Country>PT</Country>
-		</BillingAddress>
-		<Email></Email>
-		<SelfBillingIndicator>0</SelfBillingIndicator>
-	</Customer>
-	<Product>
-		<ProductType>P</ProductType>
-		<ProductCode></ProductCode>
-		<ProductGroup>1</ProductGroup>
-		<ProductDescription></ProductDescription>
-		<ProductNumberCode></ProductNumberCode>
-	</Product>
 	<TaxTable>
-		<TaxTableEntry>
-			<TaxType>IVA</TaxType>
-			<TaxCountryRegion>PT</TaxCountryRegion>
-			<TaxCode>NOR</TaxCode>
-			<Description></Description>
-			<TaxPercentage></TaxPercentage>
-		</TaxTableEntry>
 	</TaxTable>
 </MasterFiles>

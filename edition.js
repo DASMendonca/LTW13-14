@@ -12,6 +12,13 @@ $(document).ready(function() {
 				
 			}
 	);
+	
+	$("body").on('click', '.change_inv_state', 
+			function(){
+				updateInvoiceState(jQuery(this).attr("id"));	
+				
+			});
+	
 });
 
 
@@ -233,6 +240,43 @@ function editionForm(json_obj, url){
         }
     });
 	
+}
+
+
+function updateInvoiceState(invoiceNo){
+	var select_field = $("form").children ("select");
+	select_field = select_field[0];
+	var value = $(select_field).find(":selected").val();
+	
+	var url= './private_api/changeInvoice.php';
+	
+	$.ajax({
+		type: "POST",
+        url : url ,
+        dataType : "html",
+        data : {"invoiceNo": invoiceNo, "state": value},
+        success : function(data){
+        	alert("Updated");
+        },
+        
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+	});
 }
 
 

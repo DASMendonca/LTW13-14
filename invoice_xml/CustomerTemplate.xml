@@ -1,0 +1,14 @@
+<Customer>
+	<CustomerID></CustomerID>
+	<AccountID></AccountID>
+	<CustomerTaxID></CustomerTaxID>
+	<CompanyName></CompanyName>
+	<BillingAddress>
+		<AddressDetail></AddressDetail>
+		<City></City>
+		<PostalCode></PostalCode>
+		<Country></Country>
+	</BillingAddress>
+	<Email></Email>
+	<SelfBillingIndicator>0</SelfBillingIndicator>
+</Customer>

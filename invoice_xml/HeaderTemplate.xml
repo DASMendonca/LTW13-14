@@ -18,7 +18,7 @@
 	<DateCreated></DateCreated>
 	<TaxEntity>Global</TaxEntity>
 	<ProductCompanyTaxID>240022570</ProductCompanyTaxID> <!-- Software company is the same thar is emiting invoices right? -->
-	<SoftwareCertificationNumber>0</SoftwareCertificationNumber>
+	<SoftwareCertificateNumber>0</SoftwareCertificateNumber>
 	<ProductID>ACompany/AwsomeInvoice</ProductID>
 	<ProductVersion>0.9</ProductVersion>
 </Header>

@@ -14,9 +14,13 @@ if(isset($_SESSION['customer'])){
 	$params = array(array("CustomerID", array($myCustomer->CustomerID), "equal"));
 	
 	$myInvoices = Invoice::getInstancesByFields($db, $params);
+	$to_xml= array();
+	
 	
 	
 	if($myInvoices != NULL){
+		$xml_file='customer.xml';
+		$current=file_get_contents($xml_file);
 		?>
 		<div id="search_results_div">
 		<fieldset>
@@ -27,6 +31,7 @@ if(isset($_SESSION['customer'])){
 			</tr>
 	<?php
 		foreach ($myInvoices as $invoice){
+			array_push($to_xml, $invoice);
 			$invoiceStat = $invoice->Status;
 			if($invoiceStat==0)
 				$invoiceStat="Open";
@@ -52,7 +57,13 @@ if(isset($_SESSION['customer'])){
 				echo '</tr>';	
 				
 		}
+		$current.=Invoice::exportSAFT_File($to_xml);
+		file_put_contents($xml_file, $current);
 		echo '</table>
+			<form action="xmldownload.php" method="post"
+			enctype="multipart/form-data">
+			<input type="submit" name="submit" value="Download as XML">
+				</form>
 			</fieldset></div>';
 	}
 	
