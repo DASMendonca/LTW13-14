@@ -57,7 +57,7 @@ try {
 		$stringFinal .= '{"CustomerID" : "'.$currentCustomerID.'",
 						  "CustomerTaxID" : "'.$currentCustomerTaxID.'",
 						  "CompanyName" : "'.$currentCustomerName.'",
-						  "BillingAddress" : "'.$currentBillingAddress.'",
+						  "BillingAddress" : '.$currentBillingAddress.',
 						  "Email" : "'.$currentCustomerEmail.'"},';
 	}
 	
@@ -84,12 +84,13 @@ try {
 	$stringFinal .= '{"CustomerID" : "'.$currentCustomerID.'",
 						  "CustomerTaxID" : "'.$currentCustomerTaxID.'",
 						  "CompanyName" : "'.$currentCustomerName.'",
-						  "BillingAddress" : "'.$currentBillingAddress.'",
-						  "Email" : "'.$currentCustomerEmail.'"},';
+						  "BillingAddress" : '.$currentBillingAddress.',
+						  "Email" : "'.$currentCustomerEmail.'"}';
 	
-	$stringFinal=']';
+	$stringFinal .=']';
 	
-	echo json_encode($customers);
+	echo $stringFinal;
+	
 } catch (GeneralException $e) {
 	echo json_encode($e);
 }catch (PDOException $e) {
