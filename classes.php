@@ -366,7 +366,7 @@ class Invoice implements savable,changable{
 		$headerXML->EndDate=$maxDate;
 		$headerXML->DateCreated=(new DateTime())->format('Y-m-d');
 	
-		$masterFilesXML=simplexml_load_string("./invoice_xml/MasterFilesTemplate.xml");
+		$masterFilesXML=simplexml_load_file("./invoice_xml/MasterFilesTemplate.xml");
 	
 		for($i=0;$i<count($customers);$i++){
 			$customerXMLElement=simplexml_load_string($customers[$i]->toXML());
@@ -421,7 +421,7 @@ class Line implements savable{
 		$query->bindParam(6,$this->Product->ProductDescription);
 		$query->bindParam(7,$this->Product->UnitPrice);
 		$query->bindParam(8,$this->Product->UnitOfMeasure);
-		$query->bindParam(9,$this->Tax->TaxValue);
+		$query->bindParam(9,$this->Tax->TaxPercentage);
 		$query->bindParam(10,$this->Tax->TaxType);
 		$query->execute();
 		
@@ -498,7 +498,7 @@ class Line implements savable{
 		if($this->InvoiceNo==null || !isset($this->InvoiceNo))return "InvoiceNo";
 		if($this->LineNo==null || !isset($this->LineNo))return "LineNo";
 		if($this->Quantity==null || !isset($this->Quantity))return "Quantity";
-		if($this->Date==null || !isset($this->Date))return "Date";
+		if($this->LineDate==null || !isset($this->LineDate))return "LineDate";
 		$missingProductParam=$this->Product->missingParameter();
 		if($missingProductParam)return $missingProductParam;
 		return $this->Tax->missingParameter();
@@ -742,7 +742,12 @@ class Customer implements savable,changable{
 		else if($this->BillingAddress==null || !isset($this->BillingAddress))return"BillingAddress";
 		return$this->BillingAddress->missingParameter();
 	}
-
+	static public function fromXML($xmlStr){
+		
+	}
+	public function toXML(){
+		
+	}
 
 }
 class Address implements savable{
@@ -1099,6 +1104,9 @@ class Tax implements savable{
 		return $xmlTemplate->asXML();
 		
 	}
+	public function getTaxID(){
+		return $this->TaxID;
+	}
 }
 
 
@@ -1280,7 +1288,7 @@ function addIfNotRepeated(&$array,$elementToAdd){
 	
 	if($elementToAdd instanceof Tax){
 		for($i=0;$i<count($array);$i++){
-			if(strcmp($array[$i]->TaxID,$elementToAdd->TaxID)==0){
+			if(strcmp($array[$i]->getTaxID(),$elementToAdd->getTaxID())==0){
 				return;
 			}
 		}

@@ -36,7 +36,7 @@ try {
 
 	$stringFinal='[';
 
-	for ($i=0;$i<count($invoices);$i++){
+	for ($i=0;$i<(count($invoices)-1);$i++){
 		$currentInvoiceNo = $invoices[$i]->InvoiceNo;
 		$currentInvoiceDate = $invoices[$i]->EndDate;
 		$currentInvoiceCompany = $invoices[$i]->Customer->CompanyName;
@@ -86,17 +86,77 @@ try {
 
 		$taxPayable = $currentInvoiceTotal-$subTotal;
 
-		$documentsTotal = '[{"TaxPayable" : "'.$taxPayable.'",
+		$documentsTotal = '{"TaxPayable" : "'.$taxPayable.'",
 				"NetTotal" : "'.$subTotal.'",
-						"GrossTotal" : "'.$currentInvoiceTotal.'"}]';
+						"GrossTotal" : "'.$currentInvoiceTotal.'"}';
 			
 		$stringFinal.='{"InvoiceNo" : "'.$currentInvoiceNo.'",
 				"InvoiceDate" : "'.$currentInvoiceDate.'",
 						"CustomerID" : "'.$currentInvoiceCompanyID.'",
 								"CompanyName" : "'.$currentInvoiceCompany.'",
 										"Lines" : '.$currentInvoiceLines.',
-												"DocumentTotals" :  '.$documentsTotal.'}';
+												"DocumentTotals" :  '.$documentsTotal.'},';
 	}
+	
+	$currentInvoiceNo = $invoices[$i]->InvoiceNo;
+	$currentInvoiceDate = $invoices[$i]->EndDate;
+	$currentInvoiceCompany = $invoices[$i]->Customer->CompanyName;
+	$currentInvoiceCompanyID = $invoices[$i]->Customer->CustomerID;
+	$currentInvoiceTotal = number_format($invoices[$i]->GrossTotal/100,2);
+	$InvoiceLines = $invoices[$i]->getLines();
+	
+	$subTotal=0;
+	$taxAmount=0;
+	
+	$currentInvoiceLines = '[';
+	for ($j=0; $j<(count($InvoiceLines)-1); $j++) {
+		$LineNumber = $InvoiceLines[$j]->LineNo;
+		$ProductCode = $InvoiceLines[$j]->Product->ProductCode;
+		$Quantity = $InvoiceLines[$j]->Quantity;
+		$UnitPrice = number_format($InvoiceLines[$j]->Product->UnitPrice/100,2);
+		$CreditAmount = number_format($InvoiceLines[$j]->CreditAmount,2);
+		$Tax = json_encode($InvoiceLines[$j]->Tax);
+	
+		$subTotal+=$CreditAmount;
+	
+		$currentInvoiceLines.='{"LineNumber" : "'.$LineNumber.'",
+					"ProductCode" : "'.$ProductCode.'",
+							"Quantity" : "'.$Quantity.'",
+									"UnitPrice" : "'.$UnitPrice.'",
+											"CreditAmount" : "'.$CreditAmount.'",
+													"Tax" : '.$Tax.'},';
+	}
+	
+	$LineNumber = $InvoiceLines[$j]->LineNo;
+	$ProductCode = $InvoiceLines[$j]->Product->ProductCode;
+	$Quantity = $InvoiceLines[$j]->Quantity;
+	$UnitPrice = number_format($InvoiceLines[$j]->Product->UnitPrice/100,2);
+	$CreditAmount = number_format($InvoiceLines[$j]->CreditAmount,2);
+	$Tax = json_encode($InvoiceLines[$j]->Tax);
+	
+	$subTotal+=$CreditAmount;
+	
+	$currentInvoiceLines.='{"LineNumber" : "'.$LineNumber.'",
+					"ProductCode" : "'.$ProductCode.'",
+							"Quantity" : "'.$Quantity.'",
+									"UnitPrice" : "'.$UnitPrice.'",
+											"CreditAmount" : "'.$CreditAmount.'",
+													"Tax" : '.$Tax.'}';
+	
+	$currentInvoiceLines .= ']';
+	
+	$taxPayable = $currentInvoiceTotal-$subTotal;
+	
+	$documentsTotal = '{"TaxPayable" : "'.$taxPayable.'",
+				"NetTotal" : "'.$subTotal.'",
+						"GrossTotal" : "'.$currentInvoiceTotal.'"}';
+		
+	$stringFinal.='{"InvoiceNo" : "'.$currentInvoiceNo.'",
+				"InvoiceDate" : "'.$currentInvoiceDate.'",
+						"CustomerID" : "'.$currentInvoiceCompanyID.'",
+								"CompanyName" : "'.$currentInvoiceCompany.'",
+										"Lines" : '.$currentInvoiceLines.',
+												"DocumentTotals" :  '.$documentsTotal.'}';
 
 	$stringFinal.=']';
 
