@@ -44,7 +44,7 @@ try {
 		$currentBillingPC2 = $customers[$i]->BillingAddress->PostalCode2;
 		
 		$currentBillingPC = $currentBillingPC1;
-		$currentBillingPC .= ' - ';
+		$currentBillingPC .= '-';
 		$currentBillingPC .= $currentBillingPC2;
 		
 		$currentBillingAddress = '{"AddressDetail" : "'.$currentBillingAddressA.'",
@@ -71,7 +71,7 @@ try {
 	$currentBillingPC2 = $customers[$i]->BillingAddress->PostalCode2;
 	
 	$currentBillingPC = $currentBillingPC1;
-	$currentBillingPC .= ' - ';
+	$currentBillingPC .= '-';
 	$currentBillingPC .= $currentBillingPC2;
 	
 	$currentBillingAddress = '{"AddressDetail" : "'.$currentBillingAddressA.'",

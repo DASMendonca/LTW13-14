@@ -42,7 +42,7 @@ try {
 	$currentBillingPC2 = $customers[0]->BillingAddress->PostalCode2;
 	
 	$currentBillingPC = $currentBillingPC1;
-	$currentBillingPC .= ' - ';
+	$currentBillingPC .= '-';
 	$currentBillingPC .= $currentBillingPC2;
 	
 	$currentBillingAddress = '{"AddressDetail" : "'.$currentBillingAddressA.'",

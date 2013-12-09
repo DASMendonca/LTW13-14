@@ -48,7 +48,7 @@ try {
 		$ProductCode = $InvoiceLines[$j]->Product->ProductCode;
 		$Quantity = $InvoiceLines[$j]->Quantity;
 		$UnitPrice = number_format($InvoiceLines[$j]->Product->UnitPrice/100,2);
-		$CreditAmount = number_format($InvoiceLines[$j]->CreditAmount,2);
+		$CreditAmount = number_format($InvoiceLines[$j]->CreditAmount/100,2);
 		$Tax = json_encode($InvoiceLines[$j]->Tax);
 	
 		$subTotal+=$CreditAmount;
@@ -65,7 +65,7 @@ try {
 	$ProductCode = $InvoiceLines[$j]->Product->ProductCode;
 	$Quantity = $InvoiceLines[$j]->Quantity;
 	$UnitPrice = number_format($InvoiceLines[$j]->Product->UnitPrice/100,2);
-	$CreditAmount = number_format($InvoiceLines[$j]->CreditAmount,2);
+	$CreditAmount = number_format($InvoiceLines[$j]->CreditAmount/100,2);
 	$Tax = json_encode($InvoiceLines[$j]->Tax);
 	
 	$subTotal+=$CreditAmount;
@@ -89,7 +89,7 @@ try {
 				"InvoiceDate" : "'.$currentInvoiceDate.'",
 						"CustomerID" : "'.$currentInvoiceCompanyID.'",
 								"CompanyName" : "'.$currentInvoiceCompany.'",
-										"Lines" : '.$currentInvoiceLines.',
+										"Line" : '.$currentInvoiceLines.',
 												"DocumentTotals" :  '.$documentsTotal.'}';
 	
 	$stringFinal.=']';
