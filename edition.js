@@ -147,6 +147,9 @@ function updatePlaceholders(data, div_element){
 
 function editAction(id){
 	var url= $("#search_form").attr("name");
+	var check = $("#search_form").length;
+	if(check == 0)
+		url="Invoice";
 	var column="";
 	var parameter = new Array();
 	//var url2= url;

@@ -20,20 +20,25 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 	
 	$customerQueryArr = array(array("CustomerID", array($myCustomer->CustomerID), "equal"));
 	$productQueryArr = array( array("ProductCode", array($product_code), "equal"));
+	$productQueryArrTwo = array("ProductCode", array($product_code), "equal");
 	
 	$product = Product::getInstancesByFields($db, $productQueryArr);
-	$product = $product[0];
+	$product= $product[0];
 	
-	$taxQueryArr = array(array("TaxID", array($product->ProductCode), "equal"));
+	$productType= $product->ProductTypeID;
+	
+	$productTypeQueryArr= array(array("ProductTypeID", array($productType), "equal"));
+	
+	$taxId = ProductType::getInstancesByFields($db, $productTypeQueryArr);
+	$taxId= $taxId[0]->taxID;
+	
+	
+	
+	$taxQueryArr = array(array("TaxID", array($taxId), "equal"));
 	
 	$prod_tax= Tax::getInstancesByFields($db, $taxQueryArr);
 	$prod_tax= $prod_tax[0];
-	
-	
-	
-	
-	
-	
+
 	
 	$invoices = Invoice::getInstancesByFields($db, $customerQueryArr);
 	
@@ -69,10 +74,10 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 			$invoice_now = $invoice;
 		}
 		
-		$linesQueryArray= array( $productQueryArr, 
+		$linesQueryArray= array( $productQueryArrTwo, 
 				array("InvoiceNo", array($invoice_now->InvoiceNo), "equal"));
 		$invoice_lines = Line::getInstancesByFields($db, $linesQueryArray);
-		$nr_of_lines= Line::getInstancesByFields($db, array("InvoiceNo", array($invoice_now->InvoiceNo), "equal"));
+		$nr_of_lines= Line::getInstancesByFields($db, array(array("InvoiceNo", array($invoice_now->InvoiceNo), "equal")));
 		
 		$nr_of_lines = count($nr_of_lines) +1;
 		
@@ -86,16 +91,16 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 					array("Quantity", $new_quantity)
 			);
 			
-			Line::updateInDB($db, $update_line);
+			Line::updateInDB($db, $updateQueryArray);
 		}
 		
 		else{
-			$linha = new Line($InvoiceNumber, $LineNo, $Quantity, $LineDate);
-			$invoice_line = new Line($invoice_now->InvoiceNo, $nr_of_lines, 1, $this_date);
-			$invoice_line->Product=$product;
-			$invoice_line->Tax = $prod_tax;
+		
 			
-			$invoice_lines->insertIntoDB($db);
+		$invoice_line = new Line($invoice_now->InvoiceNo, $nr_of_lines, 1, $this_date);
+		$invoice_line->Product=$product;
+		$invoice_line->Tax = $prod_tax;
+		$invoice_line->insertIntoDB($db);
 		}
 	}	
 	

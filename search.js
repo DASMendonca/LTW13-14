@@ -22,6 +22,9 @@ $(document).ready(function() {
 function detailedAction(id){
 	var url = $("#search_form").attr("name");
 	var column="";
+	var check = $("#search_form").length;
+	if(check == 0)
+		url="Invoice";
 	var parameter = new Array();
 	if(url=="Products") {url= "./DetailProduct.php?params="; column="ProductCode";}
 	else if(url=="Invoice"){ url="./DetailInvoice.php?params="; column="InvoiceNo";}
