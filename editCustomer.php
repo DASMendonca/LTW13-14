@@ -79,8 +79,7 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 				</div>
 				<div id ="PostalCode2">
 				<input type="text" name="PostalCode2" id="PostalCode2" placeholder="'.$customer->getAddress()->PostalCode2.'" value="'.$customer->getAddress()->PostalCode2.'"><br>
-				</div><br>
-				<input type="button" id="save_edit" value="Save">';
+				</div><br>';
 
 	 			if($_SESSION['customer']->Permission>2){
 	 				echo'
@@ -91,6 +90,7 @@ if(!isset($_SESSION['customer']) || $_SESSION['customer']->Permission<2)
 				</div>';
 	 			}
 	 			echo '
+				<input type="button" id="save_edit" value="Save">
 			</fieldset>
 		</form>
 </div>';
