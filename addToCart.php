@@ -40,12 +40,6 @@ if(isset($_SESSION['customer']) && isset($_REQUEST["product_code"])){
 	$prod_tax= $prod_tax[0];
 
 	
-	
-	
-	
-	
-	
-	
 	$invoices = Invoice::getInstancesByFields($db, $customerQueryArr);
 	
 	$isopen=0;
