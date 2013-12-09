@@ -47,7 +47,7 @@
 						if (($_SESSION['customer']->Permission)>1) {
 							echo '	<li class="top_lis" id="li_invoice">Search Invoices</li>
 									<li class="top_lis" id="li_customer">Search Clients</li>
-									<li class="top_lis" id="li_administration">Administrative section</li>
+									<li class="top_lis" id="li_import_xml">Import Xml</li>
 									<li class="top_lis" id="li_add_product">Add product</li>';
 						}
 					?>
