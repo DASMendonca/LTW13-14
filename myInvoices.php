@@ -27,11 +27,17 @@ if(isset($_SESSION['customer'])){
 			</tr>
 	<?php
 		foreach ($myInvoices as $invoice){
+			$invoiceStat = $invoice->Status;
+			if($invoiceStat==0)
+				$invoiceStat="Open";
+			else
+				$invoiceStat="Close";
 			echo utf8_encode('
 					<tr>
 					<td>' .$invoice->InvoiceNo .'</td>
 					<td>' .$invoice->StartDate .'</td>
-					<td>' .$invoice->Customer->CompanyName.'</td>');?>
+					<td>' .$invoice->Customer->CompanyName.'</td>
+					<td>' .$invoiceStat.'</td>');?>
 					<td><img src="./pictures/add.png" width="16" height="16" border="0" alt="Detailed"
 						class="detail_img" id="<?php echo $invoice->InvoiceNo;?>"/></td>
 			<?php 
