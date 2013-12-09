@@ -18,6 +18,9 @@ if(isset($_SESSION['customer'])){
 	
 	if($myInvoices != NULL){
 		?>
+		<div id="search_results_div">
+		<fieldset>
+			<legend><h2>My invoices</h2></legend>
 		<table id="search_results_tb">
 			<tr>
 			<th>Invoice Number</th><th>Date</th><th>Company Name</th><th>status</th>
@@ -44,7 +47,7 @@ if(isset($_SESSION['customer'])){
 				
 		}
 		echo '</table>
-			</fieldset>';
+			</fieldset></div>';
 	}
 	
 }
