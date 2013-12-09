@@ -2,7 +2,6 @@
 
 
 include '../classes.php';
-require_once 'curl.php';
 
 session_start();//resume session
 
@@ -28,16 +27,8 @@ try {
 	
 	$url = $urlPassed."/api/searchCustomersByField.php?op=min&field=CustomerID&value[]=1";
 	
-	$ch = curl_init();
-	curl_setopt($ch, CURLOP_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-	$data = curl_exec($ch);
-	curl_close($ch);
-	
-	
-	
-	$customers = json_decode($data);
+	$json = file_get_contents($url);
+	$customers = json_decode($json);
 		
 	for ($i=0;i<count($customers);$i++) {
 		$customerToInsert = new Customer(null, $customers[i]->CustomerTaxID, $customers[i]->CompanyName, $customers[i]->Email, "1234", null);
