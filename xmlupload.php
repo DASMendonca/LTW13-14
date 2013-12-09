@@ -24,20 +24,13 @@ else
   
   
   
+ // $file = file_get_contents($_FILES["xml_portion"]["tmp_name"], true);
   
   
   
   
-  $line = Line::fromXML($str);
-  
-  $line->InvoiceNo=1;
-  $line->insertIntoDB($db);
-  
-  $compare = utf8_encode($line->toXML());
-  
-  echo $line->toXML();
   echo '<br> <br>';
-  echo $compare;
+  echo $str;
   
   
   }

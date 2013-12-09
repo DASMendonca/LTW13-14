@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AuditFile xmlns="urn:OECD:StandardAuditFile-Tax:PT_1.03_01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spi="http://Empresa.pt/invoice1" xmlns:saf="urn:OECD:StandardAuditFile-Tax:PT_1.03_01" xsi:schemaLocation="urn:OECD:StandardAuditFile-Tax:PT_1.03_01 http://serprest.pt/tmp/SAFTPT-1.03_01.xsd">
+<Header>
+	<AuditFileVersion>1.03_01</AuditFileVersion>
+	<CompanyID>240022570</CompanyID><!-- Qualquer nif da -->
+	<TaxRegistrationNumber>240022570</TaxRegistrationNumber>
+	<TaxAccountingBasis>F</TaxAccountingBasis>
+	<CompanyName>ACompany</CompanyName>
+	<CompanyAddress>
+		<AddressDetail>Rua Dr. Roberto Frias,127</AddressDetail>
+		<City>Porto</City>
+		<PostalCode>4200-465</PostalCode>
+		<Region>Porto</Region>
+		<Country>PT</Country>
+	</CompanyAddress>
+	<FiscalYear>2013</FiscalYear><!-- Start Date's Year -->
+	<StartDate>2013-12-09</StartDate>
+	<EndDate>2013-12-09</EndDate>
+	<CurrencyCode>EUR</CurrencyCode>
+	<DateCreated>2013-12-09</DateCreated>
+	<TaxEntity>Global</TaxEntity>
+	<ProductCompanyTaxID>240022570</ProductCompanyTaxID> <!-- Software company is the same thar is emiting invoices right? -->
+	<SoftwareCertificateNumber>0</SoftwareCertificateNumber>
+	<ProductID>ACompany/AwsomeInvoice</ProductID>
+	<ProductVersion>0.9</ProductVersion>
+</Header><MasterFiles>
+	<Customer>
+	<CustomerID>1</CustomerID>
+	<AccountID>1</AccountID>
+	<CustomerTaxID>123456789</CustomerTaxID>
+	<CompanyName>Administrator</CompanyName>
+	<BillingAddress>
+		<AddressDetail>Rua de Cima</AddressDetail>
+		<City>Porto</City>
+		<PostalCode>4000-200</PostalCode>
+		<Country>Angola</Country>
+	</BillingAddress>
+	<Email>admin@ois.com</Email>
+	<SelfBillingIndicator>0</SelfBillingIndicator>
+</Customer><Product>
+	<ProductType>P</ProductType>
+	<ProductCode>9</ProductCode>
+	<ProductDescription>Cimento Cola Diera Branco - 25kg (Flexivel)</ProductDescription>
+	<ProductNumberCode>9</ProductNumberCode> <!-- Same as ProductCode -->
+</Product><TaxTable>
+	<TaxTableEntry>
+	<TaxType>IVA Normal</TaxType>
+	<TaxCountryRegion>PT</TaxCountryRegion>
+	<TaxCode>NOR</TaxCode>
+	<Description>IVA Normal</Description>
+	<TaxPercentage>23</TaxPercentage>
+</TaxTableEntry></TaxTable>
+</MasterFiles><SourceDocuments>
+	<SalesInvoices>
+		<NumberOfEntries>1</NumberOfEntries>
+		<TotalDebit>0.00</TotalDebit>
+		<TotalCredit>18.5607</TotalCredit><Invoice>
+		<InvoiceNo>FT Fact/2</InvoiceNo>
+		<DocumentStatus>
+			<InvoiceStatus>N</InvoiceStatus>
+			<InvoiceStatusDate>2013-12-09T04:14:35+00:00</InvoiceStatusDate><!--  data criação do documento -->
+			<SourceID>1</SourceID>
+			<SourceBilling>P</SourceBilling>
+		</DocumentStatus>
+		<Hash>0</Hash>
+		<InvoiceDate>2013-12-09</InvoiceDate><!-- data criação do documento -->
+		<InvoiceType>FT</InvoiceType>
+		<SpecialRegimes>
+			<SelfBillingIndicator>0</SelfBillingIndicator>
+	        <CashVATSchemeIndicator>0</CashVATSchemeIndicator>
+	        <ThirdPartiesBillingIndicator>0</ThirdPartiesBillingIndicator>
+		</SpecialRegimes>
+		<SourceID>1</SourceID><!--  Same as Customer -->
+		<SystemEntryDate>2013-12-09T04:14:35+00:00</SystemEntryDate>
+		<CustomerID>1</CustomerID><Line>
+	<LineNumber>1</LineNumber>
+	<ProductCode>9</ProductCode>
+	<ProductDescription>Cimento Cola Diera Branco - 25kg (Flexivel)</ProductDescription>
+	<Quantity>1</Quantity>
+	<UnitOfMeasure>un</UnitOfMeasure>
+	<UnitPrice>15.09</UnitPrice>
+	<TaxPointDate>2013-12-09</TaxPointDate>
+	<Description>Cimento Cola Diera Branco - 25kg (Flexivel)</Description>
+	<CreditAmount>15.09</CreditAmount>
+	<Tax>
+		<TaxType>IVA Normal</TaxType>
+		<TaxCountryRegion>PT</TaxCountryRegion>
+		<TaxCode>NOR</TaxCode>
+		<TaxPercentage>23</TaxPercentage>
+	</Tax>
+</Line><!-- Same as in customer -->
+		<DocumentTotals>
+			<TaxPayable>0.034707</TaxPayable>
+			<NetTotal>0.1509</NetTotal>
+			<GrossTotal>0.185607</GrossTotal>
+		</DocumentTotals>
+		
+</Invoice>
+
+	</SalesInvoices>
+</SourceDocuments></AuditFile>
